@@ -1,8 +1,6 @@
 #pragma once
 #include "IScene.h"
 #include "../components/Input.h"
-#include "../Block.h"
-#include "../Cube.h"
 #include "../object/Sphere.h"
 #include "../base/WorldTransform.h"
 #include "../base/ViewProjection.h"

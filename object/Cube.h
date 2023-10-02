@@ -11,17 +11,17 @@
 //#include <dxcapi.h>
 //#pragma comment(lib, "dxcompiler.lib")
 
-#include "base/DirectXCommon.h"
-#include "math/Vector4.h"
-#include "math/Matrix4x4.h"
-#include "Transform.h"
-#include "VertexData.h"
+#include "../base/DirectXCommon.h"
+#include "../math/Vector4.h"
+#include "../math/Matrix4x4.h"
+#include "../Transform.h"
+#include "../VertexData.h"
 //#include "components/camera/Camera.h"
-#include "Material.h"
+#include "../Material.h"
 //#include "TransformationMatrix.h"
 #include <wrl.h>
-#include "base/WorldTransform.h"
-#include "base/ViewProjection.h"
+#include "../base/WorldTransform.h"
+#include "../base/ViewProjection.h"
 
 class Cube
 {

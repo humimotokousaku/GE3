@@ -41,10 +41,6 @@ void GameManager::Initialize() {
 	// 音声再生
 	audio_->SoundPlayWave(xAudio2_.Get(), soundData1_);
 
-	// objManagerの初期化。今はobjファイルの読み込みだけしている
-	objManager_ = ObjManager::GetInstance();
-	objManager_->Initialize();
-
 	// Textureの初期化
 	textureManager_ = TextureManager::GetInstance();
 	textureManager_->TextureManager::GetInstance()->Initialize();
@@ -70,7 +66,7 @@ void GameManager::Initialize() {
 	imGuiManager_->Initialize(winApp_->GetHwnd());
 
 	// ブローバル変数の読み込み
-	GlobalVariables::GetInstance()->LoadFiles();
+	//GlobalVariables::GetInstance()->LoadFiles();
 
 	//初期シーンの設定
 	sceneNum_ = TITLE_SCENE;
@@ -125,6 +121,26 @@ void GameManager::Run() {
 	Finalize();
 }
 
+void GameManager::BeginFrame() {
+	input_->Update();
+	myEngine_->BeginFrame();
+	// デバッグカメラ
+	debugCamera_->Update();
+	// カメラの設定
+	camera_->SettingCamera();
+
+	// ImGui
+	imGuiManager_->PreDraw();
+	// グローバル変数の更新
+	//GlobalVariables::GetInstance()->Update();
+}
+
+void GameManager::EndFrame() {
+	// ImGui
+	imGuiManager_->PostDraw();
+
+	myEngine_->EndFrame();
+}
 void GameManager::Finalize() {
 	sceneArr_[sceneNum_]->Finalize();
 	for (int i = 0; i < 2; i++) {
@@ -143,36 +159,10 @@ void GameManager::Finalize() {
 	textureManager_->ComUninit();
 }
 
-void GameManager::BeginFrame() {
-	input_->Update();
-	myEngine_->BeginFrame();
-	// デバッグカメラ
-	debugCamera_->Update();
-	// カメラの設定
-	camera_->SettingCamera();
-
-	// ImGui
-	imGuiManager_->PreDraw();
-	// グローバル変数の更新
-	GlobalVariables::GetInstance()->Update();
-}
-
-void GameManager::EndFrame() {
-	// ImGui
-	imGuiManager_->PostDraw();
-
-	myEngine_->EndFrame();
-}
-
 void GameManager::ImGuiAdjustParameter() {
 	ImGui::Begin("CommonSettings");
 	if (ImGui::BeginTabBar("CommonTabBar"))
 	{
-		// カメラのImGui
-		if (ImGui::BeginTabItem("Camera")) {
-			camera_->Camera::GetInstance()->DrawDebugParameter();
-			ImGui::EndTabItem();
-		}
 		// ライトのImGui
 		if (ImGui::BeginTabItem("Half Lambert")) {
 			light_->ImGuiAdjustParameter();

@@ -7,7 +7,6 @@
 #include "ImGuiManager.h"
 #include <fstream>
 #include <sstream>
-#include "ObjManager.h"
 
 TextureManager* TextureManager::GetInstance() {
 	static TextureManager instance;
@@ -52,8 +51,6 @@ void TextureManager::TransferTexture(const Microsoft::WRL::ComPtr<ID3D12Descript
 }
 
 void TextureManager::Initialize() {
-	// モデルを読み込み
-	modelData_ = ObjManager::GetInstance()->GetObjModelData();
 	TransferTexture(DirectXCommon::GetInstance()->GetSrvDescriptorHeap());
 }
 

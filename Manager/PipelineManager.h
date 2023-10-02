@@ -7,7 +7,6 @@
 #include "../components/light/Light.h"
 #include "../object/Sprite.h"
 #include "../object/Sphere.h"
-#include "../object/Plane.h"
 
 class MyEngine {
 public:

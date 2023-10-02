@@ -10,7 +10,6 @@
 #include "../scene/GameOver.h"
 
 // Manager
-#include "ObjManager.h"
 #include "../Manager/PipelineManager.h"
 
 // Base
@@ -72,7 +71,6 @@ private:
 	Camera* camera_;
 	DebugCamera* debugCamera_;
 	Light* light_;
-	ObjManager* objManager_;
 	TextureManager* textureManager_;
 	ImGuiManager* imGuiManager_;
 	Input* input_;
