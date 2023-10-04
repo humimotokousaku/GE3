@@ -4,8 +4,6 @@
 #include "DirectXCommon.h"
 #include <d3d12.h>
 #include <wrl.h>
-//#ifndef WORLD_TRANSFORM_H
-//#define WORLD_TRANSFORM_H
 
 // 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
@@ -50,5 +48,3 @@ struct WorldTransform {
 
 	void UpdateMatrix();
 };
-
-//#endif // WORLD_TRANSFORM_H

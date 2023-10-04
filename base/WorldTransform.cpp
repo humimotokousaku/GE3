@@ -1,7 +1,4 @@
 #include "WorldTransform.h"
-//
-//#ifndef WORLD_TRANSFORM_H
-//#define WORLD_TRANSFORM_H
 
 void WorldTransform::Initialize() {
 	matWorld_ = MakeIdentity4x4();
@@ -32,5 +29,3 @@ void WorldTransform::UpdateMatrix() {
 
 	TransferMatrix();
 }
-
-//#endif // WORLD_TRANSFORM_H

@@ -1,10 +1,6 @@
 #include "Model.h"
-#include "components/camera/Camera.h"
-#include "Manager/ImGuiManager.h"
-#include "utility/GlobalVariables.h"
+#include "../Manager/ImGuiManager.h"
 #include <cassert>
-#define _USE_MATH_DEFINES
-#include <math.h>
 
 Microsoft::WRL::ComPtr<ID3D12Resource> Model::CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes) {
 	HRESULT hr;

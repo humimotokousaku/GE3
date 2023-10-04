@@ -1,10 +1,10 @@
 #pragma once
-#include "math/Matrix4x4.h"
-#include "VertexData.h"
-#include "Transform.h"
-#include "base/WorldTransform.h"
-#include "base/ViewProjection.h"
-#include "Material.h"
+#include "../math/Matrix4x4.h"
+#include "../VertexData.h"
+#include "../Transform.h"
+#include "WorldTransform.h"
+#include "ViewProjection.h"
+#include "../Material.h"
 #include "MaterialData.h"
 #include <d3d12.h>
 
@@ -20,8 +20,6 @@ public:
 	void CreateVertexBufferView();
 
 	void CreateMaterialResource();
-
-	//void CreateWvpResource();
 
 	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
 

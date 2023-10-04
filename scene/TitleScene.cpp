@@ -14,7 +14,7 @@ void TitleScene::Initialize() {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 	for (int i = 0; i < kMaxCube; i++) {
-		cubeWorldTransform_[i].translation_.x = (float)i;
+		cubeWorldTransform_[i].translation_.x = (float)i * 3;
 	}
 }
 
@@ -111,7 +111,9 @@ void TitleScene::Update() {
 }
 
 void TitleScene::Draw() {
-	block_->Draw(cubeWorldTransform_[3], viewProjection_);
+	for(int i = 0;i < kMaxCube;i++){
+		block_->Draw(cubeWorldTransform_[i], viewProjection_);
+	}
 	axis_->Draw(worldTransform_, viewProjection_);
 }
 
