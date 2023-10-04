@@ -367,18 +367,6 @@ void DirectXCommon::Release() {
 #pragma region 解放処理
 
 	CloseHandle(fenceEvent_);
-	fence_.Reset();
-	srvDescriptorHeap_.Reset();
-	rtvDescriptorHeap_.Reset();
-	swapChainResources_[0].Reset();
-	swapChainResources_[1].Reset();
-	swapChain_.Reset();
-	commandList_.Reset();
-	commandAllocator_.Reset();
-	commandQueue_.Reset();
-	device_.Reset();
-	useAdapter_.Reset();
-	dxgiFactory_.Reset();
 
 #pragma endregion
 }

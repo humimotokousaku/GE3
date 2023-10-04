@@ -69,7 +69,7 @@ void GameManager::Initialize() {
 	//GlobalVariables::GetInstance()->LoadFiles();
 
 	//初期シーンの設定
-	sceneNum_ = TITLE_SCENE;
+	sceneNum_ = GAME_SCENE;
 	// シーンごとの初期化
 	sceneArr_[sceneNum_]->Initialize();
 }
@@ -143,7 +143,7 @@ void GameManager::EndFrame() {
 }
 void GameManager::Finalize() {
 	sceneArr_[sceneNum_]->Finalize();
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 4; i++) {
 		delete sceneArr_[i];
 	}
 	// ImGui
