@@ -143,7 +143,7 @@ void GameManager::EndFrame() {
 }
 void GameManager::Finalize() {
 	sceneArr_[sceneNum_]->Finalize();
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 4; i++) {
 		delete sceneArr_[i];
 	}
 	// ImGui

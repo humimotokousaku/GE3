@@ -27,7 +27,7 @@ public:
 
 	void Initialize(const std::string& directoryPath, const std::string& filename);
 
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureNumber);
 
 private:
 	// Material

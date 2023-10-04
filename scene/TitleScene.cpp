@@ -2,28 +2,13 @@
 #include "../Manager/ImGuiManager.h"
 
 void TitleScene::Initialize() {
-	block_ = Model::CreateModelFromObj("resources", "block.obj");
-	axis_ = Model::CreateModelFromObj("resources", "axis.obj");
-
 	textureNum_ = UVCHEKER;
 	input_ = Input::GetInstance();
 
-	for (int i = 0; i < kMaxCube; i++) {
-		cubeWorldTransform_[i].Initialize();
-	}
-	worldTransform_.Initialize();
 	viewProjection_.Initialize();
-	for (int i = 0; i < kMaxCube; i++) {
-		cubeWorldTransform_[i].translation_.x = (float)i * 3;
-	}
 }
 
 void TitleScene::Update() {
-	for (int i = 0; i < kMaxCube; i++) {
-		cubeWorldTransform_[i].UpdateMatrix();
-	}
-	worldTransform_.UpdateMatrix();
-
 	//// 追従対象からカメラまでのオフセット
 	//Vector3 offset = { 0.0f, 4.0f, -10.0f };
 	//// カメラの角度から回転行列を計算
@@ -111,20 +96,9 @@ void TitleScene::Update() {
 }
 
 void TitleScene::Draw() {
-	for(int i = 0;i < kMaxCube;i++){
-		block_->Draw(cubeWorldTransform_[i], viewProjection_);
-	}
-	axis_->Draw(worldTransform_, viewProjection_);
+
 }
 
 void TitleScene::Finalize() {
-	delete block_;
-	for (int i = 0; i < kMaxCube; i++) {
-		//delete cube_[i];
-		cubeWorldTransform_[i].constBuff_.ReleaseAndGetAddressOf();
-	}
-	delete axis_;
-
-	worldTransform_.constBuff_.ReleaseAndGetAddressOf();
 	viewProjection_.constBuff_.ReleaseAndGetAddressOf();
 }

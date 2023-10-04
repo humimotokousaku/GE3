@@ -155,7 +155,7 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	materialData_->uvTransform = MakeIdentity4x4();
 }
 
-void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureNumber) {
 	//uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
 	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
 	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
