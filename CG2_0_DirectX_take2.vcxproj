@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="components\camera\DebugCamera.cpp" />
     <ClCompile Include="components\Input.cpp" />
     <ClCompile Include="components\light\Light.cpp" />
+    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\ImGuiManager.cpp" />
     <ClCompile Include="Manager\PipelineManager.cpp" />
@@ -130,6 +131,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="scene\IScene.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
+    <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="utility\ConvertString.cpp" />
     <ClCompile Include="utility\GlobalVariables.cpp" />
   </ItemGroup>
@@ -146,6 +148,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="components\Input.h" />
     <ClInclude Include="components\light\DirectionalLight.h" />
     <ClInclude Include="components\light\Light.h" />
+    <ClInclude Include="Ground.h" />
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\ImGuiManager.h" />
     <ClInclude Include="Manager\PipelineManager.h" />
@@ -176,6 +179,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\IScene.h" />
     <ClInclude Include="scene\TitleScene.h" />
+    <ClInclude Include="Skydome.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TransformationMatrix.h" />
     <ClInclude Include="utility\ConvertString.h" />

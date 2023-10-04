@@ -18,8 +18,8 @@
 
 enum TextureName {
 	UVCHEKER,
-	MONSTERBALL,
-	TESTBLOCK
+	GROUND,
+	SKYDOME
 };
 
 class TextureManager

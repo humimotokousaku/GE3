@@ -149,7 +149,7 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	};
 
 	// Lightingするか
-	materialData_->enableLighting = true;
+	materialData_->enableLighting = false;
 
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
 
@@ -162,7 +162,6 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
 	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
 	//materialData_->uvTransform = uvTransformMatrix_;
-
 
 	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
 	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
