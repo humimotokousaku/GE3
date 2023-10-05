@@ -18,7 +18,7 @@ void GameScene::Initialize() {
 
 	// 自機の生成
 	player_ = std::make_unique<Player>();
-	player_->Initialize(playerModel_.get(), UVCHEKER);
+	player_->Initialize(playerModel_.get());
 	// 地面の生成
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(groundModel_.get(), Vector3{ 0,0,0 });

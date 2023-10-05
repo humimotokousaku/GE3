@@ -1,5 +1,5 @@
 #pragma once
-#include "../math/Matrix4x4.h"
+#include "../math/MyMatrix.h"
 #include "../VertexData.h"
 #include "../Transform.h"
 #include "../TransformationMatrix.h"
@@ -7,7 +7,6 @@
 #include <d3d12.h>
 #include "../Manager/TextureManager.h"
 #include "../base/DirectXCommon.h"
-#include "../components/camera/Camera.h"
 #include "../base/WorldTransform.h"
 #include "../base/ViewProjection.h"
 

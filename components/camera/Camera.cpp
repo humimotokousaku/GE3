@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "../../base/WinApp.h"
 #include "../../Manager/ImGuiManager.h"
-#include "../../math/Matrix4x4.h"
+#include "../../math/MyMatrix.h"
 #include "./DebugCamera.h"
 
 Camera* Camera::GetInstance() {
