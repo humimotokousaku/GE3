@@ -20,6 +20,7 @@ TextureManager::~TextureManager() {
 void TextureManager::TransferTexture(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& srvDescriptorHeap) {
 	// 画像の読み込み
 	mipImages_[UVCHEKER] = LoadTexture("resources/uvChecker.png");
+	mipImages_[BLACK] = LoadTexture("resources/black.png");
 	mipImages_[GROUND] = LoadTexture("resources/Ground/Ground.jpg");
 	mipImages_[SKYDOME] = LoadTexture("resources/Skydome/forest.jpg");
 

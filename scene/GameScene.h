@@ -32,7 +32,14 @@ private:
 	Input* input_;
 
 	// 3Dモデルデータ
+
+	// 自機の3Dモデル
 	std::unique_ptr<Model> playerModel_;
+	std::unique_ptr<Model> modelFighterBody_;
+	std::unique_ptr<Model> modelFighterHead_;
+	std::unique_ptr<Model> modelFighterL_arm_;
+	std::unique_ptr<Model> modelFighterR_arm_;
+
 	std::unique_ptr<Model> groundModel_;
 	std::unique_ptr<Model> skydomeModel_;
 

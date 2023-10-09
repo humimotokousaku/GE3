@@ -12,13 +12,17 @@ void GameScene::Initialize() {
 	viewProjection_.translation_.y = 2.0f;
 
 	// 3Dモデルの生成
-	playerModel_.reset(Model::CreateModelFromObj("resources/Player", "player.obj"));
+	modelFighterBody_.reset(Model::CreateModelFromObj("resources/float_Body", "float_Body.obj"));
+	modelFighterHead_.reset(Model::CreateModelFromObj("resources/float_Head", "float_Head.obj"));
+	modelFighterL_arm_.reset(Model::CreateModelFromObj("resources/float_L_arm", "float_L_arm.obj"));
+	modelFighterR_arm_.reset(Model::CreateModelFromObj("resources/float_R_arm", "float_R_arm.obj"));
+	//playerModel_.reset(Model::CreateModelFromObj("resources/Player", "player.obj"));
 	groundModel_.reset(Model::CreateModelFromObj("resources/Ground", "ground.obj"));
 	skydomeModel_.reset(Model::CreateModelFromObj("resources/Skydome", "skydome.obj"));
 
 	// 自機の生成
 	player_ = std::make_unique<Player>();
-	player_->Initialize(playerModel_.get());
+	player_->Initialize(modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(), modelFighterR_arm_.get());
 
 	// 地面の生成
 	ground_ = std::make_unique<Ground>();
@@ -29,7 +33,7 @@ void GameScene::Initialize() {
 	// 追従カメラの生成
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
-	followCamera_->SetTarget(&player_->GetWorldTransform());
+	followCamera_->SetTarget(&player_->GetWorldTransformBase());
 
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
 }
