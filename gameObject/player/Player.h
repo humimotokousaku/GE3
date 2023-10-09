@@ -40,5 +40,8 @@ private:
 	Model* model_ = nullptr;
 	// テクスチャハンドル
 	uint32_t playerTexture_ = 0u;
+
+	// 目標角度
+	float goalAngle_;
 };
 

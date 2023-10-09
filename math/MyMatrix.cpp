@@ -1,7 +1,7 @@
 #include "MyMatrix.h"
-#define USE_DEFINES_MATH
-#include <math.h>
 #include "../Manager/ImGuiManager.h"
+#define USE_MATH_DEFINES
+#include <math.h>
 
 #pragma region Matrix4x4
 
@@ -613,4 +613,37 @@ Matrix4x4 MakeViewportMatrix(
 	result.m[3][3] = 1;
 
 	return result;
+}
+
+float Lerp(const float& a, const float& b, float t) {
+	float result{};
+
+	result = a + b * t;
+
+	return result;
+}
+
+float LerpShortAngle(float a, float b, float t) {
+	// 角度差分を求める
+	float diff = b - a;
+
+	float M_PI = 3.14f;
+
+	diff = std::fmod(diff, 2 * (float)M_PI);
+	if (diff < 2 * (float)-M_PI) {
+		diff += 2 * (float)M_PI;
+	}
+	else if (diff >= 2 * M_PI) {
+		diff -= 2 * (float)M_PI;
+	}
+
+	diff = std::fmod(diff, 2 * (float)M_PI);
+	if (diff < (float)-M_PI) {
+		diff += 2 * (float)M_PI;
+	}
+	else if (diff >= (float)M_PI) {
+		diff -= 2 * (float)M_PI;
+	}
+
+	return Lerp(a, diff, t);
 }

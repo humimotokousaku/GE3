@@ -84,3 +84,9 @@ Vector3 Normalize(const Vector3& v);
 // ベクトル変換
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 float Determinant(Matrix4x4 matrix);
+
+// bには差分を入れる
+float Lerp(const float& a, const float& b, float t);
+
+// 最短角度補間
+float LerpShortAngle(float a, float b, float t);

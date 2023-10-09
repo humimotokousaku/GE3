@@ -2,7 +2,6 @@
 #include "../Input.h"
 
 void FollowCamera::Initialize() {
-
 	viewProjection_.Initialize();
 }
 
