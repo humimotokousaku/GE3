@@ -19,64 +19,31 @@ void GameScene::Initialize() {
 	// 自機の生成
 	player_ = std::make_unique<Player>();
 	player_->Initialize(playerModel_.get());
+
 	// 地面の生成
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(groundModel_.get(), Vector3{ 0,0,0 });
 	// 天球の生成
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get(), Vector3{ 0,0,0 });
+	// 追従カメラの生成
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize();
+	followCamera_->SetTarget(&player_->GetWorldTransform());
+
+	player_->SetViewProjection(&followCamera_->GetViewProjection());
 }
 
 void GameScene::Update() {
-	// Keyboard
-	if (Input::GetInstance()->PressKey(DIK_LEFT)) {
-		const float speed = -0.2f;
-
-		Vector3 move = { speed,0,0 };
-
-		viewProjection_.translation_ = Add(viewProjection_.translation_, move);
-	}
-	if (Input::GetInstance()->PressKey(DIK_RIGHT)) {
-		const float speed = 0.1f;
-
-		Vector3 move = { speed,0,0 };
-
-		viewProjection_.translation_ = Add(viewProjection_.translation_, move);
-	}
-	if (Input::GetInstance()->PressKey(DIK_UP)) {
-		const float speed = 0.1f;
-
-		Vector3 move = { 0,0, speed };
-
-		viewProjection_.translation_ = Add(viewProjection_.translation_, move);
-	}
-	if (Input::GetInstance()->PressKey(DIK_DOWN)) {
-		const float speed = -0.1f;
-
-		Vector3 move = { 0,0, speed };
-
-		viewProjection_.translation_ = Add(viewProjection_.translation_, move);
-	}
-
-	// keyboard
-	if (Input::GetInstance()->PressKey(DIK_W)) {
-		viewProjection_.rotation_ = Add(viewProjection_.rotation_, { -0.01f,0,0 });
-	}
-	if (Input::GetInstance()->PressKey(DIK_A)) {
-		viewProjection_.rotation_ = Add(viewProjection_.rotation_, { 0,-0.01f,0 });
-	}
-	if (Input::GetInstance()->PressKey(DIK_S)) {
-		viewProjection_.rotation_ = Add(viewProjection_.rotation_, { 0.01f,0,0 });
-	}
-	if (Input::GetInstance()->PressKey(DIK_D)) {
-		viewProjection_.rotation_ = Add(viewProjection_.rotation_, { 0,0.01f,0 });
-	}
-
 	player_->Update();
 	ground_->Update();
 	skydome_->Update();
 
-	viewProjection_.UpdateMatrix();
+	// カメラ
+	followCamera_->Update();
+	viewProjection_.matView = followCamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+	viewProjection_.TransferMatrix();
 }
 
 void GameScene::Draw() {

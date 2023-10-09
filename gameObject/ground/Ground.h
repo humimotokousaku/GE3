@@ -1,10 +1,9 @@
 #pragma once
-#include "base/Model.h"
-#include "math/Vector3.h"
-#include "base/WorldTransform.h"
-#include <memory>
+#include "../../base/Model.h"
+#include "../../math/Vector3.h"
+#include "../../base/WorldTransform.h"
 
-class Skydome
+class Ground
 {
 public:
 	/// <summary>
@@ -27,7 +26,7 @@ private:
 	WorldTransform worldTransform_;
 	// モデル
 	Model* model_ = nullptr;
-	// テクスチャ番号
+	// テクスチャハンドル
 	uint32_t textureNum_;
 };
 

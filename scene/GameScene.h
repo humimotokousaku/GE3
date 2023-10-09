@@ -6,9 +6,10 @@
 // components
 #include "../components/Input.h"
 // GameObject
-#include "../Player.h"
-#include "../Ground.h"
-#include "../Skydome.h"
+#include "../gameObject/player/Player.h"
+#include "../gameObject/ground/Ground.h"
+#include "../gameObject/skydome/Skydome.h"
+#include "../components/camera/FollowCamera.h"
 // c
 #include <memory>
 
@@ -38,6 +39,8 @@ private:
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
+	// 追従カメラ
+	std::unique_ptr<FollowCamera> followCamera_;
 	// 自キャラ
 	std::unique_ptr<Player> player_;
 	// 地面

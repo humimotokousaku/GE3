@@ -105,9 +105,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="components\Audio.cpp" />
     <ClCompile Include="components\camera\Camera.cpp" />
     <ClCompile Include="components\camera\DebugCamera.cpp" />
+    <ClCompile Include="components\camera\FollowCamera.cpp" />
     <ClCompile Include="components\Input.cpp" />
     <ClCompile Include="components\light\Light.cpp" />
-    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="gameObject\ground\Ground.cpp" />
+    <ClCompile Include="gameObject\player\Player.cpp" />
+    <ClCompile Include="gameObject\skydome\Skydome.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\ImGuiManager.cpp" />
     <ClCompile Include="Manager\PipelineManager.cpp" />
@@ -126,13 +129,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="object\Sprite.cpp" />
     <ClCompile Include="object\Triangle.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\GameClear.cpp" />
     <ClCompile Include="scene\GameOver.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="scene\IScene.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
-    <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="utility\ConvertString.cpp" />
     <ClCompile Include="utility\GlobalVariables.cpp" />
   </ItemGroup>
@@ -146,10 +147,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="components\Audio.h" />
     <ClInclude Include="components\camera\Camera.h" />
     <ClInclude Include="components\camera\DebugCamera.h" />
+    <ClInclude Include="components\camera\FollowCamera.h" />
     <ClInclude Include="components\Input.h" />
     <ClInclude Include="components\light\DirectionalLight.h" />
     <ClInclude Include="components\light\Light.h" />
-    <ClInclude Include="Ground.h" />
+    <ClInclude Include="gameObject\ground\Ground.h" />
+    <ClInclude Include="gameObject\player\Player.h" />
+    <ClInclude Include="gameObject\skydome\Skydome.h" />
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\ImGuiManager.h" />
     <ClInclude Include="Manager\PipelineManager.h" />
@@ -174,14 +178,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="object\Sphere.h" />
     <ClInclude Include="object\Sprite.h" />
     <ClInclude Include="object\Triangle.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="scene\GameClear.h" />
     <ClInclude Include="scene\GameOver.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\IScene.h" />
     <ClInclude Include="scene\TitleScene.h" />
-    <ClInclude Include="Skydome.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TransformationMatrix.h" />
     <ClInclude Include="utility\ConvertString.h" />

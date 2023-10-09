@@ -1,7 +1,7 @@
 #include "Player.h"
-#include "Manager/ImGuiManager.h"
-#include "math/MyMatrix.h"
-#include "components/Input.h"
+#include "../../Manager/ImGuiManager.h"
+#include "../../math/MyMatrix.h"
+#include "../../components/Input.h"
 #include <cassert>
 
 Vector3 Player::GetWorldPosition() {
@@ -38,12 +38,15 @@ void Player::Update() {
 	XINPUT_STATE joyState;
 	// ゲームパッド状態取得
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		// デッドゾーンの設定
+		SHORT leftThumbX = Input::GetInstance()->ApplyDeadzone(joyState.Gamepad.sThumbLX);
+		SHORT leftThumbZ = Input::GetInstance()->ApplyDeadzone(joyState.Gamepad.sThumbLY);
 		// 速さ
 		const float speed = 0.3f;
 		// 移動量
 		Vector3 move{
-			(float)joyState.Gamepad.sThumbLX / SHRT_MAX, 0.0f,
-			(float)joyState.Gamepad.sThumbLY / SHRT_MAX
+			(float)leftThumbX / SHRT_MAX, 0.0f,
+			(float)leftThumbZ / SHRT_MAX
 		};
 		// 移動量の速さを反映
 		move = Multiply(speed, Normalize(move));
