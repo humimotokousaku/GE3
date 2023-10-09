@@ -18,9 +18,11 @@ void GameScene::Initialize() {
 	modelFighterHead_.reset(Model::CreateModelFromObj("resources/float_Head", "float_Head.obj"));
 	modelFighterL_arm_.reset(Model::CreateModelFromObj("resources/float_L_arm", "float_L_arm.obj"));
 	modelFighterR_arm_.reset(Model::CreateModelFromObj("resources/float_R_arm", "float_R_arm.obj"));
+	modelFighterHammer_.reset(Model::CreateModelFromObj("resources/Hammer", "Hammer.obj"));
+	// 自機モデル
 	std::vector<Model*> playerModels = {
-	modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(),
-	modelFighterR_arm_.get() };
+		modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(),
+		modelFighterR_arm_.get(), modelFighterHammer_.get() };
 	// 敵モデル
 	modelEnemy_.reset(Model::CreateModelFromObj("resources/Enemy", "Enemy.obj"));
 	std::vector<Model*> enemyModels = {

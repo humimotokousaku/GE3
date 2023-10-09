@@ -40,6 +40,8 @@ private:
 	std::unique_ptr<Model> modelFighterHead_;
 	std::unique_ptr<Model> modelFighterL_arm_;
 	std::unique_ptr<Model> modelFighterR_arm_;
+	// 自機の武器
+	std::unique_ptr<Model> modelFighterHammer_;
 
 	// 敵の3Dモデル
 	std::unique_ptr<Model> modelEnemy_;
