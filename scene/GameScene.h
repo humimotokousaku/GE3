@@ -5,11 +5,12 @@
 #include "../base/ViewProjection.h"
 // components
 #include "../components/Input.h"
+#include "../components/camera/FollowCamera.h"
 // GameObject
 #include "../gameObject/player/Player.h"
 #include "../gameObject/ground/Ground.h"
 #include "../gameObject/skydome/Skydome.h"
-#include "../components/camera/FollowCamera.h"
+#include "../gameObject/enemy/Enemy.h"
 // c
 #include <memory>
 
@@ -40,6 +41,9 @@ private:
 	std::unique_ptr<Model> modelFighterL_arm_;
 	std::unique_ptr<Model> modelFighterR_arm_;
 
+	// 敵の3Dモデル
+	std::unique_ptr<Model> modelEnemy_;
+
 	std::unique_ptr<Model> groundModel_;
 	std::unique_ptr<Model> skydomeModel_;
 
@@ -50,6 +54,8 @@ private:
 	std::unique_ptr<FollowCamera> followCamera_;
 	// 自キャラ
 	std::unique_ptr<Player> player_;
+	// 敵
+	std::unique_ptr<Enemy> enemy_;
 	// 地面
 	std::unique_ptr<Ground> ground_;
 	// 天球

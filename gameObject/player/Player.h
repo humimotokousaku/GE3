@@ -1,24 +1,26 @@
 #pragma once
 #include "../../base/Model.h"
 #include "../../base/WorldTransform.h"
-class Player {
+#include "../ICharacter.h"
+
+class Player : public ICharacter{
 public:
 	Player();
 	~Player();
 	/// <summary>
 	/// 初期化
 	/// <summary>
-	void Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm);
+	void Initialize(const std::vector<Model*>& models) override;
 
 	/// <summary>
 	/// 更新
 	/// <summary>
-	void Update();
+	void Update() override;
 
 	/// <summary>
 	/// 描画
 	/// <summary>
-	void Draw(ViewProjection& viewProjection);
+	void Draw(const ViewProjection& viewProjection, uint32_t textureHandle) override;
 
 	// 浮遊ギミック初期化
 	void InitializeFloatingGimmick();
@@ -40,6 +42,8 @@ public:
 	void SetParent(const WorldTransform* parent);
 
 private:
+	// カメラのビュープロジェクション
+	const ViewProjection* viewProjection_ = nullptr;
 	// ワールド変換データ
 	WorldTransform worldTransformBase_;
 	WorldTransform worldTransformBody_;
@@ -50,15 +54,7 @@ private:
 	// テクスチャ
 	uint32_t playerTexture_;
 
-	// カメラのビュープロジェクション
-	const ViewProjection* viewProjection_ = nullptr;
-
-	// モデル
-	Model* modelBody_;
-	Model* modelHead_;
-	Model* modelL_arm_;
-	Model* modelR_arm_;
-
+	const uint16_t kMaxMoveModelParts = 2;
 	// 浮遊ギミックの媒介変数
-	float floatingParameter_ = 0.0f;
+	float floatingParameter_[2];
 };

@@ -108,7 +108,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="components\camera\FollowCamera.cpp" />
     <ClCompile Include="components\Input.cpp" />
     <ClCompile Include="components\light\Light.cpp" />
+    <ClCompile Include="gameObject\enemy\Enemy.cpp" />
     <ClCompile Include="gameObject\ground\Ground.cpp" />
+    <ClCompile Include="gameObject\ICharacter.cpp" />
     <ClCompile Include="gameObject\player\Player.cpp" />
     <ClCompile Include="gameObject\skydome\Skydome.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />
@@ -151,7 +153,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="components\Input.h" />
     <ClInclude Include="components\light\DirectionalLight.h" />
     <ClInclude Include="components\light\Light.h" />
+    <ClInclude Include="gameObject\enemy\Enemy.h" />
     <ClInclude Include="gameObject\ground\Ground.h" />
+    <ClInclude Include="gameObject\ICharacter.h" />
     <ClInclude Include="gameObject\player\Player.h" />
     <ClInclude Include="gameObject\skydome\Skydome.h" />
     <ClInclude Include="Manager\GameManager.h" />

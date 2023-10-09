@@ -26,44 +26,48 @@ void Player::SetParent(const WorldTransform* parent) {
 }
 
 void Player::InitializeFloatingGimmick() {
-	floatingParameter_ = 0.0f;
+	for (int i = 0; i < kMaxMoveModelParts; i++) {
+		floatingParameter_[i] = 0.0f;
+	}
 }
 
 void Player::UpdateFloatingGimmick() {
 	// 浮遊移動のサイクル<frame>
-	const uint16_t T = 120;
+	uint16_t floatingCycle[2]{};
+	floatingCycle[0] = 30;
+	floatingCycle[1] = 60;
 	// 1フレームでのパラメータ加算値
-	const float step = 2.0f * (float)M_PI / T;
-	// パラメータを1ステップ分加算
-	floatingParameter_ += step;
-	// 2πを超えたら0に戻す
-	floatingParameter_ = (float)std::fmod(floatingParameter_, 2.0f * M_PI);
+	float step[2]{};
+	for (int i = 0; i < kMaxMoveModelParts; i++) {
+		step[i] = 2.0f * (float)M_PI / floatingCycle[i];
+		// パラメータを1ステップ分加算
+		floatingParameter_[i] += step[i];
+		// 2πを超えたら0に戻す
+		floatingParameter_[i] = (float)std::fmod(floatingParameter_[i], 2.0f * M_PI);
+	}
 	// 浮遊の振幅<m>
-	const float floatingAmplitude = 1.0f;
+	const float floatingAmplitude = 0.5f;
 	// 浮遊を座標に反映
-	worldTransformBody_.translation_.y = std::sin(floatingParameter_) * floatingAmplitude;
+	worldTransformBody_.translation_.y = std::sin(floatingParameter_[0]) * floatingAmplitude;
 
 	// 腕の動き
-	worldTransformL_arm_.rotation_.x = std::sin(floatingParameter_) * 0.75f;
-	worldTransformR_arm_.rotation_.x = std::sin(floatingParameter_) * 0.75f;
+	worldTransformL_arm_.rotation_.x = std::sin(floatingParameter_[1]) * 0.75f;
+	worldTransformR_arm_.rotation_.x = -std::sin(floatingParameter_[1]) * 0.75f;
 }
 
 Player::Player() {}
 Player::~Player() {}
 
 // Initializeの関数定義
-void Player::Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm) {
-	// NULLポインタチェック
-	assert(modelBody);
-	assert(modelHead);
-	assert(modelL_arm);
-	assert(modelR_arm);
+void Player::Initialize(const std::vector<Model*>& models) {
+	// 基底クラスの初期化
+	ICharacter::Initialize(models);
 
 	// 引数として受け取ったデータをメンバ変数に記録する
-	modelBody_ = modelBody;
-	modelHead_ = modelHead;
-	modelL_arm_ = modelL_arm;
-	modelR_arm_ = modelR_arm;
+	models_[kModelIndexBody] = models[kModelIndexBody];
+	models_[kModelIndexHead] = models[kModelIndexHead];
+	models_[kModelIndexL_arm] = models[kModelIndexL_arm];
+	models_[kModelIndexR_arm] = models[kModelIndexR_arm];
 
 	// 登録したテクスチャの番号
 	playerTexture_ = BLACK;
@@ -74,14 +78,14 @@ void Player::Initialize(Model* modelBody, Model* modelHead, Model* modelL_arm, M
 	worldTransformL_arm_.translation_.y = 5.0f;
 	worldTransformR_arm_.translation_.y = 5.0f;
 
-	// 身体のパーツの親子関係を結ぶ	
+	// 身体のパーツの親子関係を結ぶ
 	SetParent(&GetWorldTransformBody());
+	worldTransformBody_.parent_ = worldTransform_.parent_;
 
 	// 浮遊ギミックの初期化
 	InitializeFloatingGimmick();
 
-	// ワールド変換の初期化
-	worldTransformBase_.Initialize();
+	worldTransform_.Initialize();
 	worldTransformBody_.Initialize();
 	worldTransformHead_.Initialize();
 	worldTransformL_arm_.Initialize();
@@ -119,12 +123,11 @@ void Player::Update() {
 		worldTransformBase_.rotation_.y = std::atan2(move.x, move.z);
 		worldTransformBody_.rotation_.y = worldTransformBase_.rotation_.y;
 	}
-
 	// 浮遊ギミックの更新処理
 	UpdateFloatingGimmick();
 
-	// 行列を定数バッファに転送
-	worldTransformBase_.UpdateMatrix();
+	// 基底クラスの更新処理
+	ICharacter::Update();
 	worldTransformBody_.UpdateMatrix();
 	worldTransformHead_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();
@@ -132,9 +135,9 @@ void Player::Update() {
 }
 
 // Drawの関数定義
-void Player::Draw(ViewProjection& viewProjection) {
-	modelBody_->Draw(worldTransformBody_, viewProjection, playerTexture_);
-	modelHead_->Draw(worldTransformHead_, viewProjection, playerTexture_);
-	modelL_arm_->Draw(worldTransformL_arm_, viewProjection, playerTexture_);
-	modelR_arm_->Draw(worldTransformR_arm_, viewProjection, playerTexture_);
+void Player::Draw(const ViewProjection& viewProjection, uint32_t textureHandle) {
+	models_[kModelIndexBody]->Draw(worldTransformBody_, viewProjection, textureHandle);
+	models_[kModelIndexHead]->Draw(worldTransformHead_, viewProjection, textureHandle);
+	models_[kModelIndexL_arm]->Draw(worldTransformL_arm_, viewProjection, textureHandle);
+	models_[kModelIndexR_arm]->Draw(worldTransformR_arm_, viewProjection, textureHandle);
 }
