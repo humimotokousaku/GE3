@@ -145,44 +145,6 @@ void Player::Update() {
 	worldTransformHead_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
-	//XINPUT_STATE joyState;
-	//// ゲームパッド状態取得
-	//if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-	//	// デッドゾーンの設定
-	//	SHORT leftThumbX = Input::GetInstance()->ApplyDeadzone(joyState.Gamepad.sThumbLX);
-	//	SHORT leftThumbZ = Input::GetInstance()->ApplyDeadzone(joyState.Gamepad.sThumbLY);
-	//	// 速さ
-	//	const float speed = 0.3f;
-	//	// 移動量
-	//	Vector3 move{
-	//		(float)leftThumbX / SHRT_MAX, 0.0f,
-	//		(float)leftThumbZ / SHRT_MAX
-	//	};
-	//	// 移動量の速さを反映
-	//	move = Multiply(speed, Normalize(move));
-
-	//	// 回転行列
-	//	Matrix4x4 rotateMatrix = MakeRotateMatrix(viewProjection_->rotation_);
-	//	// 移動ベクトルをカメラの角度だけ回転
-	//	move = TransformNormal(move, rotateMatrix);
-
-	//	// 移動量
-	//	worldTransformBase_.translation_ = Add(worldTransformBase_.translation_, move);
-	//	worldTransformBody_.translation_ = worldTransformBase_.translation_;
-
-	//	// playerのY軸周り角度(θy)
-	//	worldTransformBase_.rotation_.y = std::atan2(move.x, move.z);
-	//	worldTransformBody_.rotation_.y = worldTransformBase_.rotation_.y;
-	//}
-	//// 浮遊ギミックの更新処理
-	//UpdateFloatingGimmick();
-
-	//// 基底クラスの更新処理
-	//ICharacter::Update();
-	//worldTransformBody_.UpdateMatrix();
-	//worldTransformHead_.UpdateMatrix();
-	//worldTransformL_arm_.UpdateMatrix();
-	//worldTransformR_arm_.UpdateMatrix();
 }
 
 // Drawの関数定義
