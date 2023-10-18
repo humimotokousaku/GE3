@@ -145,6 +145,10 @@ void Player::Update() {
 	worldTransformHead_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
+
+	ImGui::Begin("Player");
+	ImGui::Text("R_TRIGGER:Attack");
+	ImGui::End();
 }
 
 // Drawの関数定義
