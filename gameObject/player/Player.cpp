@@ -2,6 +2,7 @@
 #include "../../Manager/ImGuiManager.h"
 #include "../../math/MyMatrix.h"
 #include "../../components/Input.h"
+#include "../../utility/GlobalVariables.h"
 #include <cassert>
 #define _USE_MATH_DEFINES
 #include "math.h"
@@ -97,6 +98,14 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	worldTransformL_arm_.Initialize();
 	worldTransformR_arm_.Initialize();
 	worldTransformHammer_.Initialize();
+
+	float s = 10;
+	GlobalVariables* globalVariables{};
+	globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+	// グループを追加
+	GlobalVariables::GetInstance()->CreateGroup(groupName);
+	globalVariables->SetValue(groupName, "Test", s);
 }
 
 // Updateの関数定義
@@ -223,10 +232,6 @@ void Player::BehaviorRootUpdate() {
 
 			// 移動量
 			worldTransform_.translation_ = Add(worldTransform_.translation_, move);
-			//// 追従カメラはtranslationの数値を見て追ってきているのでBodyの計算結果を代入
-			//worldTransform_.translation_ = worldTransformBody_.translation_;
-			//// Bodyは上下に揺れているのでyを0にする
-			//worldTransform_.translation_.y = 0;
 
 			// 目標角度の算出
 			goalAngle_ = std::atan2(move.x, move.z);

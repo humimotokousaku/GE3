@@ -132,7 +132,7 @@ void GameManager::BeginFrame() {
 	// ImGui
 	imGuiManager_->PreDraw();
 	// グローバル変数の更新
-	//GlobalVariables::GetInstance()->Update();
+	GlobalVariables::GetInstance()->Update();
 }
 
 void GameManager::EndFrame() {

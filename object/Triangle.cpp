@@ -56,24 +56,9 @@ void Triangle::Initialize() {
 	materialData_->uvTransform = MakeIdentity4x4();
 
 	materialData_->enableLighting = false;
-
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
-	const char* groupName = "Triangle";
-	GlobalVariables::GetInstance()->CreateGroup(groupName);
-	globalVariables->AddItem(groupName, "translation", transform_.translate);
-	globalVariables->AddItem(groupName, "scale", transform_.scale);
-	globalVariables->AddItem(groupName, "rotate", transform_.rotate);
-	globalVariables->AddItem(groupName, "Color", materialData_->color);
 }
 
 void Triangle::Draw() {
-	ApplyGlobalVariables();
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
-	// ボタンを押したらsave
-	if (globalVariables->GetInstance()->GetIsSave()) {
-		globalVariables->SaveFile("Triangle");
-	}
-
 	uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
 	uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
 	uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
@@ -95,15 +80,6 @@ void Triangle::Draw() {
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, *TextureManager::GetInstance()->GetTextureSrvHandleGPU());
 	// 描画(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 	DirectXCommon::GetInstance()->GetCommandList()->DrawInstanced(3, 1, 0, 0);
-}
-
-void Triangle::ApplyGlobalVariables() {
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
-	const char* groupName = "Triangle";
-	transform_.translate = globalVariables->GetVector3Value(groupName, "translation");
-	transform_.scale = globalVariables->GetVector3Value(groupName, "scale");
-	transform_.rotate = globalVariables->GetVector3Value(groupName, "rotate");
-	materialData_->color = globalVariables->GetVector4Value(groupName, "Color");
 }
 
 void Triangle::ImGuiAdjustParameter() {
