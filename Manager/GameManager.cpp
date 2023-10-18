@@ -22,7 +22,7 @@ void GameManager::Initialize() {
 
 	// DirectXの初期化
 	directXCommon_ = DirectXCommon::GetInstance();
-	directXCommon_->DirectXCommon::GetInstance()->Initialize(winApp_->GetHwnd());
+	directXCommon_->Initialize(winApp_->GetHwnd());
 
 	// 入力(キーボードとゲームパッド)
 	input_ = Input::GetInstance();

@@ -19,11 +19,15 @@ Vector3 Player::GetWorldPosition() {
 
 void Player::SetParent(const WorldTransform* parent) {
 	// 親子関係を結ぶ
-//	worldTransformBase_.parent_ = parent;
 	worldTransformHead_.parent_ = parent;
 	worldTransformL_arm_.parent_ = parent;
 	worldTransformR_arm_.parent_ = parent;
 	worldTransformHammer_.parent_ = parent;
+}
+
+void Player::SetCameraParent(const WorldTransform* parent) {
+	// 親子関係を結ぶ
+	worldTransformBody_.parent_ = parent;
 }
 
 void Player::InitializeFloatingGimmick() {
@@ -80,8 +84,9 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	worldTransformR_arm_.translation_.y = 5.0f;
 
 	// 身体のパーツの親子関係を結ぶ
+	SetCameraParent(&worldTransform_);
+	//world
 	SetParent(&GetWorldTransformBody());
-	worldTransformBody_.parent_ = worldTransform_.parent_;
 
 	// 浮遊ギミックの初期化
 	InitializeFloatingGimmick();
@@ -96,20 +101,6 @@ void Player::Initialize(const std::vector<Model*>& models) {
 
 // Updateの関数定義
 void Player::Update() {
-	// 基底クラスの更新処理
-	ICharacter::Update();
-
-	XINPUT_STATE joyState;
-	// ゲームパッド状態取得
-	if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
-		return;
-	}
-
-	// Rトリガーを押したら攻撃
-	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
-		behaviorRequest_ = Behavior::kAttack;
-	}
-
 	// 初期化
 	if (behaviorRequest_) {
 		//  振るまいを変更
@@ -122,6 +113,10 @@ void Player::Update() {
 			// 攻撃行動
 		case Behavior::kAttack:
 			BehaviorAttackInitialize();
+			break;
+			// ダッシュ
+		case Behavior::kDash:
+			BehaviorDashInitialize();
 			break;
 		}
 		// 振るまいリクエストをリセット
@@ -138,6 +133,10 @@ void Player::Update() {
 	case Behavior::kAttack:
 		BehaviorAttackUpdate();
 		break;
+		// ダッシュ
+	case Behavior::kDash:
+		BehaviorDashUpdate();
+		break;
 	}
 
 	worldTransformHammer_.UpdateMatrix();
@@ -145,6 +144,14 @@ void Player::Update() {
 	worldTransformHead_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
+	// 基底クラスの更新処理
+	ICharacter::Update();
+
+
+	ImGui::Begin("Player");
+	ImGui::Text("pos:%f", worldTransform_.matWorld_.m[3][0]);
+	ImGui::Text("body_.rotation.y:%f", worldTransformBody_.rotation_.y);
+	ImGui::End();
 }
 
 // Drawの関数定義
@@ -175,36 +182,64 @@ void Player::BehaviorRootInitialize() {
 void Player::BehaviorRootUpdate() {
 	XINPUT_STATE joyState;
 	// ゲームパッド状態取得
+	if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
+		return;
+	}
+	// Lトリガーを押したらダッシュ
+	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+		behaviorRequest_ = Behavior::kDash;
+	}
+	// Rトリガーを押したら攻撃
+	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+		behaviorRequest_ = Behavior::kAttack;
+	}
+
+	// ゲームパッド状態取得
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		// デッドゾーンの設定
 		SHORT leftThumbX = Input::GetInstance()->ApplyDeadzone(joyState.Gamepad.sThumbLX);
 		SHORT leftThumbZ = Input::GetInstance()->ApplyDeadzone(joyState.Gamepad.sThumbLY);
 		// 速さ
 		const float speed = 0.3f;
+		// しきい値
+		const float threshold = 0.7f;
+		bool isMoving = false;
 		// 移動量
 		Vector3 move{
-			(float)leftThumbX / SHRT_MAX, 0.0f,
-			(float)leftThumbZ / SHRT_MAX
-		};
-		// 移動量の速さを反映
-		move = Multiply(speed, Normalize(move));
+			(float)joyState.Gamepad.sThumbLX / SHRT_MAX, 0.0f,
+			(float)joyState.Gamepad.sThumbLY / SHRT_MAX };
+		if (Length(move) > threshold) {
+			isMoving = true;
+		}
 
-		// 回転行列
-		Matrix4x4 rotateMatrix = MakeRotateMatrix(viewProjection_->rotation_);
-		// 移動ベクトルをカメラの角度だけ回転
-		move = TransformNormal(move, rotateMatrix);
+		if (isMoving) {
+			// 移動量の速さを反映
+			move = Multiply(speed, Normalize(move));
 
-		// 移動量
-		worldTransform_.translation_ = Add(worldTransform_.translation_, move);
-		worldTransformBody_.translation_ = worldTransform_.translation_;
+			// 回転行列
+			Matrix4x4 rotateMatrix = MakeRotateMatrix(viewProjection_->rotation_);
+			// 移動ベクトルをカメラの角度だけ回転
+			move = TransformNormal(move, rotateMatrix);
 
-		// playerのY軸周り角度(θy)
-		worldTransform_.rotation_.y = std::atan2(move.x, move.z);
-		worldTransformBody_.rotation_.y = worldTransform_.rotation_.y;
+			// 移動量
+			worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+			//// 追従カメラはtranslationの数値を見て追ってきているのでBodyの計算結果を代入
+			//worldTransform_.translation_ = worldTransformBody_.translation_;
+			//// Bodyは上下に揺れているのでyを0にする
+			//worldTransform_.translation_.y = 0;
+
+			// 目標角度の算出
+			goalAngle_ = std::atan2(move.x, move.z);
+		}
 	}
+	// 最短角度補間
+	worldTransformBody_.rotation_.y = LerpShortAngle(worldTransformBody_.rotation_.y, goalAngle_, 0.1f);
 
 	// 浮遊ギミックの更新処理
 	UpdateFloatingGimmick();
+
+	// 行列を定数バッファに転送
+	worldTransform_.UpdateMatrix();
 }
 
 void Player::BehaviorAttackInitialize() {
@@ -235,4 +270,25 @@ void Player::BehaviorAttackUpdate() {
 		behaviorRequest_ = Behavior::kRoot;
 	}
 	attackAnimationFrame++;
+}
+
+void Player::BehaviorDashInitialize() {
+	workDash_.dashParameter_ = 0;
+	// 移動量
+	dashMove_ = { 0,0,5 };
+	// 移動ベクトルをplayerの身体のの角度だけ回転
+	dashMove_ = TransformNormal(dashMove_, worldTransformBody_.matWorld_);
+}
+
+void Player::BehaviorDashUpdate() {
+	// 移動
+	worldTransform_.translation_ = Add(worldTransform_.translation_, dashMove_);
+
+	// ダッシュ時間
+	const uint32_t behaviorDashTime = 30;
+
+	// 既定の時間経過で通常行動に戻る
+	if (++workDash_.dashParameter_ >= behaviorDashTime) {
+		behaviorRequest_ = Behavior::kRoot;
+	}
 }

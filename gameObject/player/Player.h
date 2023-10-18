@@ -36,6 +36,10 @@ public:
 	void BehaviorAttackInitialize();
 	// 攻撃行動更新
 	void BehaviorAttackUpdate();
+	// ダッシュ行動初期化
+	void BehaviorDashInitialize();
+	// ダッシュ行動更新
+	void BehaviorDashUpdate();
 
 	// 自機のワールド座標
 	Vector3 GetWorldPosition();
@@ -49,6 +53,8 @@ public:
 
 	// パーツの親子関係
 	void SetParent(const WorldTransform* parent);
+
+	void SetCameraParent(const WorldTransform* parent);
 
 private:
 	// カメラのビュープロジェクション
@@ -64,16 +70,25 @@ private:
 
 	// 振るまい
 	enum class Behavior {
-		kRoot,	// 通常状態
-		kAttack // 攻撃中
+		kRoot,	 // 通常状態
+		kAttack, // 攻撃中
+		kDash	 // ダッシュ中
 	};
 	Behavior behavior_ = Behavior::kRoot;
 	// 次の振るまいリクエスト
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
+	
+	// ダッシュ用ワーク
+	struct WorkDash {
+		// ダッシュ用の媒介変数
+		uint32_t dashParameter_ = 0;
+	};
+	WorkDash workDash_;
+	// ダッシュの移動量
+	Vector3 dashMove_;
 
 	// 攻撃フレーム
 	int attackAnimationFrame;
-
 
 	// テクスチャ
 	uint32_t playerTexture_;
@@ -81,4 +96,9 @@ private:
 	const uint16_t kMaxMoveModelParts = 2;
 	// 浮遊ギミックの媒介変数
 	float floatingParameter_[2];
+
+
+	// 目標角度
+	float goalAngle_;
+
 };

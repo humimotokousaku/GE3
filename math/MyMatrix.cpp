@@ -614,3 +614,44 @@ Matrix4x4 MakeViewportMatrix(
 
 	return result;
 }
+
+float Lerp(const float& a, const float& b, float t) {
+	float result{};
+
+	result = a + b * t;
+
+	return result;
+}
+
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t) {
+	Vector3 P;
+	P.x = v1.x + t * (v2.x - v1.x);
+	P.y = v1.y + t * (v2.y - v1.y);
+	P.z = v1.z + t * (v2.z - v1.z);
+	return P;
+}
+
+float LerpShortAngle(float a, float b, float t) {
+	// 角度差分を求める
+	float diff = b - a;
+
+	float M_PI = 3.14f;
+
+	diff = std::fmod(diff, 2 * (float)M_PI);
+	if (diff < 2 * (float)-M_PI) {
+		diff += 2 * (float)M_PI;
+	}
+	else if (diff >= 2 * M_PI) {
+		diff -= 2 * (float)M_PI;
+	}
+
+	diff = std::fmod(diff, 2 * (float)M_PI);
+	if (diff < (float)-M_PI) {
+		diff += 2 * (float)M_PI;
+	}
+	else if (diff >= (float)M_PI) {
+		diff -= 2 * (float)M_PI;
+	}
+
+	return Lerp(a, diff, t);
+}

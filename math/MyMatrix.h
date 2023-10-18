@@ -66,11 +66,11 @@ Vector3 Subtract(const Vector3& pos1, const Vector3& pos2);
 // ベクトルと行列の積
 Vector3 Multiply(Vector3 v, Matrix4x4 m);
 
+// スカラー倍
 Vector3 Multiply(const float& scalar, const Vector3& v);
 
-// スカラー倍
+// ベクトルとベクトルの掛け算
 Vector3 Multiply(const Vector3& v1, const Vector3& v2);
-
 
 // 内積
 float Dot(const Vector3& v1, const Vector3& v2);
@@ -84,3 +84,11 @@ Vector3 Normalize(const Vector3& v);
 // ベクトル変換
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 float Determinant(Matrix4x4 matrix);
+
+// bには差分を入れる
+float Lerp(const float& a, const float& b, float t);
+
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t);
+
+// 最短角度補間
+float LerpShortAngle(float a, float b, float t);
