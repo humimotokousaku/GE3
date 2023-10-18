@@ -66,7 +66,7 @@ void GameManager::Initialize() {
 	imGuiManager_->Initialize(winApp_->GetHwnd());
 
 	// ブローバル変数の読み込み
-	//GlobalVariables::GetInstance()->LoadFiles();
+	GlobalVariables::GetInstance()->LoadFiles();
 
 	//初期シーンの設定
 	sceneNum_ = GAME_SCENE;

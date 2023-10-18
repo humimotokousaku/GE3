@@ -39,7 +39,6 @@ void Player::InitializeFloatingGimmick() {
 
 void Player::UpdateFloatingGimmick() {
 	// 浮遊移動のサイクル<frame>
-	uint16_t floatingCycle[2]{};
 	floatingCycle[0] = 30;
 	floatingCycle[1] = 60;
 	// 1フレームでのパラメータ加算値
@@ -52,7 +51,7 @@ void Player::UpdateFloatingGimmick() {
 		floatingParameter_[i] = (float)std::fmod(floatingParameter_[i], 2.0f * M_PI);
 	}
 	// 浮遊の振幅<m>
-	const float floatingAmplitude = 0.5f;
+
 	// 浮遊を座標に反映
 	worldTransformBody_.translation_.y = std::sin(floatingParameter_[0]) * floatingAmplitude;
 
@@ -68,12 +67,6 @@ Player::~Player() {}
 void Player::Initialize(const std::vector<Model*>& models) {
 	// 基底クラスの初期化
 	ICharacter::Initialize(models);
-
-	// 引数として受け取ったデータをメンバ変数に記録する
-	//models_[kModelIndexBody] = models[kModelIndexBody];
-	//models_[kModelIndexHead] = models[kModelIndexHead];
-	//models_[kModelIndexL_arm] = models[kModelIndexL_arm];
-	//models_[kModelIndexR_arm] = models[kModelIndexR_arm];
 
 	// 登録したテクスチャの番号
 	playerTexture_ = BLACK;
@@ -99,12 +92,16 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	worldTransformR_arm_.Initialize();
 	worldTransformHammer_.Initialize();
 
-	float s = 10;
-	globalVariables_ = GlobalVariables::GetInstance();
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
 	// グループを追加
 	GlobalVariables::GetInstance()->CreateGroup(groupName);
-	globalVariables_->SetValue(groupName, "Test", s);
+	globalVariables->AddItem(groupName, "Head Translation", worldTransformHead_.translation_);
+	globalVariables->AddItem(groupName, "ArmL Translation", worldTransformL_arm_.translation_);
+	globalVariables->AddItem(groupName, "ArmR Translation", worldTransformR_arm_.translation_);
+	globalVariables->AddItem(groupName, "floatingCycle_Arms", floatingCycle[0]);
+	globalVariables->AddItem(groupName, "floatingCycleBody", floatingCycle[1]);
+	globalVariables->AddItem(groupName, "floatingAmplitude", floatingAmplitude);
 }
 
 // Updateの関数定義
@@ -155,13 +152,14 @@ void Player::Update() {
 	// 基底クラスの更新処理
 	ICharacter::Update();
 
-
-	ImGui::Begin("Player");
-	ImGui::Text("pos:%f", worldTransform_.matWorld_.m[3][0]);
-	ImGui::Text("body_.rotation.y:%f", worldTransformBody_.rotation_.y);
-	ImGui::End();
-
-	globalVariables_->SaveFile("Player");
+	/// jsonによる数値の変更
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	// 調整項目をまとめた関数
+	ApplyGlobalVariables();
+	// ボタンを押したらsave
+	if (globalVariables->GetInstance()->GetIsSave()) {
+		globalVariables->SaveFile("Player");
+	}
 }
 
 // Drawの関数定義
@@ -297,4 +295,15 @@ void Player::BehaviorDashUpdate() {
 	if (++workDash_.dashParameter_ >= behaviorDashTime) {
 		behaviorRequest_ = Behavior::kRoot;
 	}
+}
+
+void Player::ApplyGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+	worldTransformHead_.translation_ = globalVariables->GetVector3Value(groupName, "Head Translation");
+	worldTransformL_arm_.translation_ = globalVariables->GetVector3Value(groupName, "ArmL Translation");
+	worldTransformR_arm_.translation_ = globalVariables->GetVector3Value(groupName, "ArmR Translation");
+	floatingCycle[0] = globalVariables->GetIntValue(groupName, "floatingCycle_Arms");
+	floatingCycle[1] = globalVariables->GetIntValue(groupName, "floatingCycleBody");
+	floatingAmplitude = globalVariables->GetFloatValue(groupName, "floatingAmplitude");
 }

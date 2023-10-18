@@ -2,7 +2,6 @@
 #include "../../base/Model.h"
 #include "../../base/WorldTransform.h"
 #include "../ICharacter.h"
-#include "../../utility/GlobalVariables.h"
 
 #include <optional>
 
@@ -57,6 +56,9 @@ public:
 
 	void SetCameraParent(const WorldTransform* parent);
 
+	// 調整項目の適用
+	void ApplyGlobalVariables();
+
 private:
 	// カメラのビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
@@ -94,13 +96,12 @@ private:
 	// テクスチャ
 	uint32_t playerTexture_;
 
-	const uint16_t kMaxMoveModelParts = 2;
+	static const uint16_t kMaxMoveModelParts = 2;
 	// 浮遊ギミックの媒介変数
-	float floatingParameter_[2];
-
+	float floatingParameter_[kMaxMoveModelParts];
+	int floatingCycle[kMaxMoveModelParts];
+	float floatingAmplitude;
 
 	// 目標角度
 	float goalAngle_;
-
-	GlobalVariables* globalVariables_;
 };
