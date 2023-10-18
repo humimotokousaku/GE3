@@ -147,10 +147,9 @@ void Player::Update() {
 	// 基底クラスの更新処理
 	ICharacter::Update();
 
-
 	ImGui::Begin("Player");
-	ImGui::Text("pos:%f", worldTransform_.matWorld_.m[3][0]);
-	ImGui::Text("body_.rotation.y:%f", worldTransformBody_.rotation_.y);
+	ImGui::Text("R_TRIGGER:Attack");
+	ImGui::Text("L_TRIGGER:Dash");
 	ImGui::End();
 }
 
