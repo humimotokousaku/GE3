@@ -100,12 +100,11 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	worldTransformHammer_.Initialize();
 
 	float s = 10;
-	GlobalVariables* globalVariables{};
-	globalVariables = GlobalVariables::GetInstance();
+	globalVariables_ = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
 	// グループを追加
 	GlobalVariables::GetInstance()->CreateGroup(groupName);
-	globalVariables->SetValue(groupName, "Test", s);
+	globalVariables_->SetValue(groupName, "Test", s);
 }
 
 // Updateの関数定義
@@ -161,6 +160,8 @@ void Player::Update() {
 	ImGui::Text("pos:%f", worldTransform_.matWorld_.m[3][0]);
 	ImGui::Text("body_.rotation.y:%f", worldTransformBody_.rotation_.y);
 	ImGui::End();
+
+	globalVariables_->SaveFile("Player");
 }
 
 // Drawの関数定義

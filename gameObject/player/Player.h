@@ -2,6 +2,7 @@
 #include "../../base/Model.h"
 #include "../../base/WorldTransform.h"
 #include "../ICharacter.h"
+#include "../../utility/GlobalVariables.h"
 
 #include <optional>
 
@@ -101,4 +102,5 @@ private:
 	// 目標角度
 	float goalAngle_;
 
+	GlobalVariables* globalVariables_;
 };
