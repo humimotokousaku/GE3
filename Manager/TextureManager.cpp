@@ -22,6 +22,9 @@ void TextureManager::TransferTexture(const Microsoft::WRL::ComPtr<ID3D12Descript
 	mipImages_[UVCHEKER] = LoadTexture("resources/uvChecker.png");
 	mipImages_[MONSTERBALL] = LoadTexture("resources/monsterBall.png");
 	mipImages_[TESTBLOCK] = LoadTexture("resources/block.png");
+	mipImages_[ENEMY] = LoadTexture("resources/red.png");
+	mipImages_[PLAYER] = LoadTexture("resources/white.png");
+	mipImages_[BULLET] = LoadTexture("resources/black.png");
 
 	DirectX::TexMetadata metadata[kMaxImages]{};
 	for (uint32_t i = 0; i < kMaxImages; i++) {

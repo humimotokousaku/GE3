@@ -31,15 +31,15 @@ void GameManager::Initialize() {
 	// Audioの初期化
 	audio_ = Audio::GetInstance();
 
-	HRESULT result;
-	// Xaudio2エンジンのインスタンスを生成
-	result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
-	// マスターボイスを生成
-	result = xAudio2_->CreateMasteringVoice(&masterVoice_);
-	// 音声読み込み
-	soundData1_ = audio_->SoundLoadWave("resources/fanfare.wav");
-	// 音声再生
-	audio_->SoundPlayWave(xAudio2_.Get(), soundData1_);
+	//HRESULT result;
+	//// Xaudio2エンジンのインスタンスを生成
+	//result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	//// マスターボイスを生成
+	//result = xAudio2_->CreateMasteringVoice(&masterVoice_);
+	//// 音声読み込み
+	//soundData1_ = audio_->SoundLoadWave("resources/fanfare.wav");
+	//// 音声再生
+	//audio_->SoundPlayWave(xAudio2_.Get(), soundData1_);
 
 	// Textureの初期化
 	textureManager_ = TextureManager::GetInstance();
@@ -69,7 +69,7 @@ void GameManager::Initialize() {
 	//GlobalVariables::GetInstance()->LoadFiles();
 
 	//初期シーンの設定
-	sceneNum_ = TITLE_SCENE;
+	sceneNum_ = GAME_SCENE;
 	// シーンごとの初期化
 	sceneArr_[sceneNum_]->Initialize();
 }
