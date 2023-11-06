@@ -5,7 +5,7 @@
 #include <dxgidebug.h>
 #include "../Manager/TextureManager.h"
 #include <wrl.h>
-
+#include <chrono>
 
 class DirectXCommon
 {
@@ -13,13 +13,23 @@ public:
 
 	static DirectXCommon* GetInstance();
 
-	~DirectXCommon();
+	~DirectXCommon() = default;
 
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	// メインループ前の初期化
+	void Initialize(HWND hwnd);
 
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	// 描画前の処理
+	void PreDraw(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& dsvDescriptorHeap);
+
+	// 描画後の処理
+	void PostDraw();
+
+	// 解放処理とリソースチェック
+	void Release();
 
 	// Getter
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	Microsoft::WRL::ComPtr<ID3D12Device> GetDevice() { return this->device_.Get(); }
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> GetCommandList() { return this->commandList_.Get(); }
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetSrvDescriptorHeap() { return this->srvDescriptorHeap_.Get(); }
@@ -55,17 +65,11 @@ public:
 	// RTVを作る
 	void CreateRTV();
 
-	// メインループ前の初期化
-	void Initialize(HWND hwnd);
-
-	// 描画前の処理
-	void PreDraw(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& dsvDescriptorHeap);
-
-	// 描画後の処理
-	void PostDraw();
-
-	// 解放処理とリソースチェック
-	void Release();
+private:
+	// FPS固定初期化
+	void InitFixFPS();
+	// FPS固定更新
+	void UpdateFixFPS();
 
 private:
 	UINT backBufferIndex_;
@@ -87,5 +91,8 @@ private:
 	uint64_t fenceValue_;
 	HANDLE fenceEvent_;
 	D3D12_RESOURCE_BARRIER barrier_;
+
+	// 記録時間(FPS固定用)
+	std::chrono::steady_clock::time_point reference_;
 };
 

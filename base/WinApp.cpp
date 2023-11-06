@@ -9,6 +9,8 @@
 #include "../externals/ImGui/imgui_impl_win32.h"
 #include <wrl.h>
 
+#pragma comment(lib, "winmm.lib")
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 WinApp* WinApp::GetInstance() {
@@ -87,6 +89,9 @@ void WinApp::DebugLayer() {
 
 // Windowsの初期化
 void WinApp::Initialize(const wchar_t* title, int32_t kClientWidth, int32_t kClientHeight) {
+	// システムタイマーの分解能を上げる
+	timeBeginPeriod(1);
+
 	CreateGameWindow(title, kClientWidth, kClientHeight);
 	DebugLayer();
 }
