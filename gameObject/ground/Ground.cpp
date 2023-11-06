@@ -15,9 +15,9 @@ void Ground::Initialize(Model* model, const Vector3& pos) {
 	worldTransform_.translation_ = pos;
 
 	// 地面の大きさ(大きさによってはカメラのfarZをSetterで設定しよう)
-	worldTransform_.scale_.x = 100.0f;
-	worldTransform_.scale_.y = 100.0f;
-	worldTransform_.scale_.z = 100.0f;
+	worldTransform_.scale_.x = 1.0f;
+	worldTransform_.scale_.y = 1.0f;
+	worldTransform_.scale_.z = 1.0f;
 }
 
 void Ground::Update() {
