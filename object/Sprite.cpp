@@ -59,20 +59,28 @@ void Sprite::Initialize() {
 
 	// uvTransform行列の初期化
 	materialData_->uvTransform = MakeIdentity4x4();
+
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
 }
 
-void Sprite::Draw(Vector3 pos,int textureNum) {
-	transform_.translate = pos;
-	uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
-	uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
-	uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
-	materialData_->uvTransform = uvTransformMatrix_;
+void Sprite::Draw(int textureNum) {
+	//transform_.translate = pos;
+	//uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
+	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
+	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
+	//materialData_->uvTransform = uvTransformMatrix_;
 
-	transformationMatrixData_->World = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	viewMatrix_ = MakeIdentity4x4();
-	projectionMatrix_ = MakeOrthographicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f);
-	worldViewProjectionMatrix_ = Multiply(transformationMatrixData_->World, Multiply(viewMatrix_, projectionMatrix_));
-	transformationMatrixData_->WVP = worldViewProjectionMatrix_;
+	//transformationMatrixData_->World = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	//viewMatrix_ = MakeIdentity4x4();
+	//projectionMatrix_ = MakeOrthographicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f);
+	// 	//worldViewProjectionMatrix_ = Multiply(transformationMatrixData_->World, Multiply(viewMatrix_, projectionMatrix_));
+	//transformationMatrixData_->WVP = worldViewProjectionMatrix_;
+	viewProjection_.matView = MakeIdentity4x4();
+	viewProjection_.matProjection = MakeOrthographicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f);
+
+	viewProjection_.UpdateMatrix();
+	worldTransform_.UpdateMatrix();
 
 	// コマンドを積む
 	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
@@ -83,8 +91,9 @@ void Sprite::Draw(Vector3 pos,int textureNum) {
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, Light::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	// マテリアルCBufferの場所を設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
-	// wvp陽男のCBufferの場所を設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_.Get()->GetGPUVirtualAddress());
+	
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform_.constBuff_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection_.constBuff_->GetGPUVirtualAddress());
 
 	// DescriptorTableの設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[textureNum]);
@@ -94,7 +103,8 @@ void Sprite::Draw(Vector3 pos,int textureNum) {
 }
 
 void Sprite::Release() {
-
+	worldTransform_.constBuff_.ReleaseAndGetAddressOf();
+	viewProjection_.constBuff_.ReleaseAndGetAddressOf();
 }
 
 void Sprite::ImGuiAdjustParameter() {

@@ -24,6 +24,7 @@ enum TextureName {
 	PLAYER,
 	BULLET,
 	SKYDOME,
+	RETICLE,
 	NULL_TEXTURE // 使わないで
 };
 

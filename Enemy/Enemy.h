@@ -20,7 +20,6 @@ public:
 	/// </summary>
 	void Initialize(Model* model, const Vector3& pos);
 
-
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -36,7 +35,6 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw(ViewProjection& viewProjection);
-
 
 	void Move(const Vector3 velocity);
 
@@ -57,7 +55,10 @@ public:
 	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
 
 	void SetPlayer(Player* player) { player_ = player; }
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	// 完了ならtrueを返す
+	bool IsDead() const { return isDead_; }
 
 private:
 	// 状態遷移
@@ -76,5 +77,10 @@ private:
 
 	// 自キャラ
 	Player* player_ = nullptr;
+
+	// ゲームシーン
+	GameScene* gameScene_ = nullptr;
+
+	bool isDead_ = false;
 };
 

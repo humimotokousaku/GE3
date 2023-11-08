@@ -6,17 +6,6 @@
 
 class EnemyBullet : public Collider {
 public: // メンバ関数
-	// ワールド行列の平行移動成分を取得
-	Vector3 GetWorldPosition() override;
-
-	void SetPlayer(Player* player) { player_ = player; }
-
-public:
-	/// <summary>
-	/// 形状を設定
-	/// </summary>
-	void SettingScale();
-
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -24,22 +13,32 @@ public:
 	/// <param name="pos">初期座標</param>
 	void Initialize(Model* model, const Vector3& pos, const Vector3& velocity);
 
-	// 衝突を検出したら呼び出されるコールバック関数
-	void OnCollision() override;
-
 	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update();
-
-	// 完了ならtrueを返す
-	bool isDead() const { return isDead_; }
 
 	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection">ビュープロジェクション</param>
 	void Draw(const ViewProjection& viewProjection);
+
+	// 衝突を検出したら呼び出されるコールバック関数
+	void OnCollision() override;
+
+	// ワールド行列の平行移動成分を取得
+	Vector3 GetWorldPosition() override;
+
+	void SetPlayer(Player* player) { player_ = player; }
+
+	// 完了ならtrueを返す
+	bool isDead() const { return isDead_; }
+
+	/// <summary>
+	/// 形状を設定
+	/// </summary>
+	void SettingScale();
 
 public: // メンバ変数
 	// ワールド変換データ

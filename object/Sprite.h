@@ -4,6 +4,8 @@
 #include "../Transform.h"
 #include "../TransformationMatrix.h"
 #include "../base/DirectXCommon.h"
+#include "../base/WorldTransform.h"
+#include "../base/ViewProjection.h"
 #include "../Material.h"
 #include <d3d12.h>
 #include <wrl.h>
@@ -20,7 +22,7 @@ public:
 	/// </summary>
 	/// <param name="pos">座標を入力</param>
 	/// <param name="textureNum">textureManagerで登録したenum型の番号を入れる</param>
-	void Draw(Vector3 pos, int textureNum);
+	void Draw(int textureNum);
 
 	void Release();
 
@@ -35,6 +37,11 @@ public:
 	void CreateMaterialResource();
 
 	void CreateWvpResource();
+
+	void SetPosition(Vector2 position) { 
+		worldTransform_.translation_.x = position.x;
+		worldTransform_.translation_.y = position.y;
+	}
 private:	
 	// Material
 	Material* materialData_;
@@ -56,5 +63,8 @@ private:
 	Matrix4x4 viewMatrix_;
 	Matrix4x4 projectionMatrix_;
 	Matrix4x4 worldViewProjectionMatrix_;
+
+	WorldTransform worldTransform_;
+	ViewProjection viewProjection_;
 };
 

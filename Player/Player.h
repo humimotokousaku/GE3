@@ -5,7 +5,10 @@
 #include "../base/Model.h"
 #include "../base/WorldTransform.h"
 #include "../math/Vector4.h"
+#include "../object/Sprite.h"
 #include <list>
+
+class GameScene;
 
 class Player : public Collider {
 public:
@@ -19,12 +22,12 @@ public:
 	/// <summary>
 	/// 初期化
 	/// <summary>
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model, uint32_t textureHandle, const Vector3& pos);
 
 	/// <summary>
 	/// 更新
 	/// <summary>
-	void Update();
+	void Update(const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 描画
@@ -34,6 +37,16 @@ public:
 	///
 	/// User Method
 	/// 
+
+	/// <summary>
+	/// UI描画
+	/// </summary>
+	void DrawUI();
+
+	/// <summary>
+	/// レティクルの配置
+	/// </summary>
+	void DeployReticle();
 
 	// playerの回転
 	void Rotate();
@@ -48,9 +61,18 @@ public:
 
 	// ワールド行列の平行移動成分を取得
 	Vector3 GetWorldPosition() override;
-
 	// 弾リストを取得
 	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
+	// レティクルの座標
+	Vector3 GetWorld3DReticlePosition();
+
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
+	/// <summary>
+	/// 親となるワールドトランスフォームをセット
+	/// </summary>
+	/// <param name="parent">親となるワールドトランスフォーム</param>
+	void SetParent(const WorldTransform* parent);
 
 public:
 	// キーボード入力
@@ -58,12 +80,23 @@ public:
 
 	// ワールド変換データ
 	WorldTransform worldTransform_;
+	// 3Dレティクル用ワールドトランスフォーム
+	WorldTransform worldTransform3DReticle_;
 
 	// モデル
 	Model* model_ = nullptr;
+	// 2Dレティクル用のスプライト
+	Sprite* sprite2DReticle_ = nullptr;
+
 	// テクスチャハンドル
 	uint32_t playerTexture_ = 0u;
+	// レティクルハンドル
+	uint32_t reticleTexture_ = 0u;
 
 	// 弾
 	std::list<PlayerBullet*> bullets_;
+
+	GameScene* gameScene_;
+
+	bool isDead_ = true;
 };

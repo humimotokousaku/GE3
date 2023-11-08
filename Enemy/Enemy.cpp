@@ -52,18 +52,8 @@ void Enemy::Move(const Vector3 velocity) {
 }
 
 void Enemy::Update() { 
-	// 終了した弾を削除
-	bullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->isDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-		});
-	// 弾の更新
-	for (EnemyBullet* bullet : bullets_) {
-		bullet->Update();
-	}
+	// 状態遷移
+	state_->Update(this); 
 
 	// 行列の更新
 	worldTransform_.UpdateMatrix();
@@ -71,8 +61,6 @@ void Enemy::Update() {
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
 
-	// 状態遷移
-	state_->Update(this); 
 }
 
 void Enemy::ChangeState(IEnemyState* pState) {
@@ -83,11 +71,6 @@ void Enemy::ChangeState(IEnemyState* pState) {
 void Enemy::Draw(ViewProjection& viewProjection) {
 	// enemy
 	model_->Draw(worldTransform_, viewProjection, enemyTexture_);
-
-	// 弾
-	for (EnemyBullet* bullet : bullets_) {
-		bullet->Draw(viewProjection);
-	}
 }
 
 void Enemy::Fire() {
@@ -109,7 +92,7 @@ void Enemy::Fire() {
 	bullets_.push_back(newBullet);
 }
 
-void Enemy::OnCollision() {}
+void Enemy::OnCollision() { isDead_ = true; }
 
 Vector3 Enemy::GetWorldPosition() {
 	// ワールド座標を入れる変数
