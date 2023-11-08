@@ -25,6 +25,7 @@ void TextureManager::TransferTexture(const Microsoft::WRL::ComPtr<ID3D12Descript
 	mipImages_[ENEMY] = LoadTexture("resources/red.png");
 	mipImages_[PLAYER] = LoadTexture("resources/white.png");
 	mipImages_[BULLET] = LoadTexture("resources/black.png");
+	mipImages_[SKYDOME] = LoadTexture("resources/Skydome/forest.png");
 
 	DirectX::TexMetadata metadata[kMaxImages]{};
 	for (uint32_t i = 0; i < kMaxImages; i++) {

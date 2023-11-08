@@ -1,13 +1,21 @@
 #pragma once
 #include "IScene.h"
-#include "../components/Audio.h"
-#include "../components/Input.h"
+
 #include "../base/Model.h"
-#include "../Player/Player.h"
-#include "../Enemy/Enemy.h"
-#include "../object/Sprite.h"
 #include "../base/ViewProjection.h"
 #include "../base/WorldTransform.h"
+
+#include "../components/Audio.h"
+#include "../components/Input.h"
+
+#include "../Collision/Collider.h"
+#include "../Collision/CollisionManager.h"
+
+#include "../object/Sprite.h"
+
+#include "../Enemy/Enemy.h"
+#include "../Player/Player.h"
+#include "../skydome/Skydome.h"
 
 class GameManager;
 /// <summary>
@@ -52,6 +60,10 @@ private: // メンバ変数
 	// 3Dモデルデータ
 	Model* model_ = nullptr;
 
+	// 天球の3Dモデル
+	Model* modelSkydome_ = nullptr;
+	Skydome* skydome_ = nullptr;
+
 	// ワールドトランスフォーム
 	WorldTransform worldTransform_;
 	// ビュープロジェクション
@@ -62,5 +74,8 @@ private: // メンバ変数
 
 	// enemy
 	Enemy* enemy_ = nullptr;
+
+	// 衝突マネージャー
+	CollisionManager* collisionManager_ = nullptr;
 };
 

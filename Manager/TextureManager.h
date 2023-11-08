@@ -23,6 +23,7 @@ enum TextureName {
 	ENEMY,
 	PLAYER,
 	BULLET,
+	SKYDOME,
 	NULL_TEXTURE // 使わないで
 };
 

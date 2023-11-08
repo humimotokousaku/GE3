@@ -102,12 +102,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="base\ViewProjection.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="base\WorldTransform.cpp" />
+    <ClCompile Include="Collision\Collider.cpp" />
+    <ClCompile Include="Collision\CollisionConfig.cpp" />
+    <ClCompile Include="Collision\CollisionManager.cpp" />
     <ClCompile Include="components\Audio.cpp" />
     <ClCompile Include="components\camera\Camera.cpp" />
     <ClCompile Include="components\camera\DebugCamera.cpp" />
     <ClCompile Include="components\Input.cpp" />
     <ClCompile Include="components\light\Light.cpp" />
     <ClCompile Include="Enemy\Enemy.cpp" />
+    <ClCompile Include="Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Enemy\EnemyStateApproach.cpp" />
     <ClCompile Include="Enemy\EnemyStateLeave.cpp" />
     <ClCompile Include="Enemy\IEnemyState.cpp" />
@@ -115,6 +119,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="Manager\ImGuiManager.cpp" />
     <ClCompile Include="Manager\PipelineManager.cpp" />
     <ClCompile Include="Manager\TextureManager.cpp" />
+    <ClCompile Include="math\Lerp.cpp" />
     <ClCompile Include="math\Matrix4x4.cpp" />
     <ClCompile Include="externals\ImGui\imgui.cpp" />
     <ClCompile Include="externals\ImGui\imgui_demo.cpp" />
@@ -135,8 +140,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="scene\IScene.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
+    <ClCompile Include="skydome\Skydome.cpp" />
     <ClCompile Include="utility\ConvertString.cpp" />
     <ClCompile Include="utility\GlobalVariables.cpp" />
+    <ClCompile Include="utility\TimedCall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\DirectXCommon.h" />
@@ -145,6 +152,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="base\ViewProjection.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="base\WorldTransform.h" />
+    <ClInclude Include="Collision\Collider.h" />
+    <ClInclude Include="Collision\CollisionConfig.h" />
+    <ClInclude Include="Collision\CollisionManager.h" />
     <ClInclude Include="components\Audio.h" />
     <ClInclude Include="components\camera\Camera.h" />
     <ClInclude Include="components\camera\DebugCamera.h" />
@@ -152,6 +162,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="components\light\DirectionalLight.h" />
     <ClInclude Include="components\light\Light.h" />
     <ClInclude Include="Enemy\Enemy.h" />
+    <ClInclude Include="Enemy\EnemyBullet.h" />
     <ClInclude Include="Enemy\EnemyStateApproach.h" />
     <ClInclude Include="Enemy\EnemyStateLeave.h" />
     <ClInclude Include="Enemy\IEnemyState.h" />
@@ -159,6 +170,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="Manager\ImGuiManager.h" />
     <ClInclude Include="Manager\PipelineManager.h" />
     <ClInclude Include="Manager\TextureManager.h" />
+    <ClInclude Include="math\Lerp.h" />
     <ClInclude Include="math\Matrix3x3.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />
@@ -186,10 +198,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\IScene.h" />
     <ClInclude Include="scene\TitleScene.h" />
+    <ClInclude Include="skydome\Skydome.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TransformationMatrix.h" />
     <ClInclude Include="utility\ConvertString.h" />
     <ClInclude Include="utility\GlobalVariables.h" />
+    <ClInclude Include="utility\TimedCall.h" />
     <ClInclude Include="VertexData.h" />
   </ItemGroup>
   <ItemGroup>

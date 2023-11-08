@@ -1,8 +1,9 @@
 #include "Player.h"
+#include "../Collision/CollisionConfig.h"
 #include "../base/WorldTransform.h"
-#include <cassert>
 #include "../Manager/ImGuiManager.h"
 #include "../math/Matrix4x4.h"
+#include <cassert>
 
 Player::Player() {}
 Player::~Player() {
@@ -22,6 +23,11 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	// 引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
 	playerTexture_ = textureHandle;
+
+	// 衝突属性を設定
+	SetCollisionAttribute(kCollisionAttributePlayer);
+	// 衝突対象を自分の属性以外に設定
+	SetCollisionMask(~kCollisionAttributePlayer);
 
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
@@ -63,20 +69,11 @@ void Player::Attack() {
 // Updateの関数定義
 void Player::Update() {
 
-	// 死亡フラグの立った球を削除
-	bullets_.remove_if([](PlayerBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
 
 	// キャラクターの移動ベクトル
-	Vector3 move = {0, 0, 0};
+	Vector3 move = { 0, 0, 0 };
 
 	// キャラクターの移動の速さ
 	const float kCharacterSpeed = 0.2f;
@@ -86,29 +83,9 @@ void Player::Update() {
 	// 旋回処理
 	Rotate();
 
-	// スケーリング行列の生成
-	Matrix4x4 playerScale;
-	playerScale = MakeScaleMatrix(worldTransform_.scale_);
-
-	// Z,X,Y軸の回転行列の生成
-	Matrix4x4 zAxis;
-	Matrix4x4 xAxis;
-	Matrix4x4 yAxis;
-	xAxis = MakeRotateXMatrix(worldTransform_.rotation_.x);
-	yAxis = MakeRotateYMatrix(worldTransform_.rotation_.y);
-	zAxis = MakeRotateZMatrix(worldTransform_.rotation_.z);
-
-	// 回転行列の合成
-	Matrix4x4 playerRotate;
-	playerRotate = Multiply(zAxis, Multiply(xAxis, yAxis));
-
-	// 平行移動行列
-	Matrix4x4 playerTranslate;
-	playerTranslate = MakeTranslateMatrix(worldTransform_.translation_);
-
 	// アフィン変換行列をワールド行列に代入
 	worldTransform_.matWorld_ = MakeAffineMatrix(
-	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+		worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 #pragma endregion
 
@@ -119,18 +96,20 @@ void Player::Update() {
 	// 左右
 	if (input_->PressKey(DIK_LEFT)) {
 		move.x -= kCharacterSpeed;
-	} else if (input_->PressKey(DIK_RIGHT)) {
+	}
+	else if (input_->PressKey(DIK_RIGHT)) {
 		move.x += kCharacterSpeed;
 	}
 	// 上下
 	if (input_->PressKey(DIK_UP)) {
 		move.y += kCharacterSpeed;
-	} else if (input_->PressKey(DIK_DOWN)) {
+	}
+	else if (input_->PressKey(DIK_DOWN)) {
 		move.y -= kCharacterSpeed;
 	}
 
 	// 移動限界座標
-	const Vector2 kMoveLimit = {40 - 10, 30 - 15};
+	const Vector2 kMoveLimit = { 40 - 10, 30 - 15 };
 
 	// 範囲を超えない処理
 	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimit.x);
@@ -148,6 +127,15 @@ void Player::Update() {
 	// 弾の処理
 	Attack();
 
+	// 死亡フラグの立った球を削除
+	bullets_.remove_if([](PlayerBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+		});
+
 	// 弾の更新
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Update();
@@ -158,9 +146,7 @@ void Player::Update() {
 
 	// playerの座標表示
 	ImGui::Begin(" ");
-	ImGui::Text("KeysInfo   SPACE:bullet  A,D:Rotate  C:DebugCamera  ");
-	// float3スライダー
-	ImGui::SliderFloat3("Player", *inputFloat3, -30.0f, 30.0f);
+	ImGui::Text("KeysInfo   ArrowKeys:Move  SPACE:bullet  A,D:Rotate");
 	ImGui::End();
 }
 
@@ -172,4 +158,17 @@ void Player::Draw(ViewProjection& viewProjection) {
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Draw(viewProjection);
 	}
+}
+
+void Player::OnCollision() {}
+
+Vector3 Player::GetWorldPosition() {
+	// ワールド座標を入れる変数
+	Vector3 worldPos{};
+	// ワールド行列の平行移動成分を取得
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
 }

@@ -1,12 +1,13 @@
 #pragma once
-#include "../components/Input.h"
-#include "../base/Model.h"
-#include "../math/Vector4.h"
-#include "../base/WorldTransform.h"
 #include "PlayerBullet.h"
+#include "../components/Input.h"
+#include "../Collision/Collider.h"
+#include "../base/Model.h"
+#include "../base/WorldTransform.h"
+#include "../math/Vector4.h"
 #include <list>
 
-class Player {
+class Player : public Collider {
 public:
 	Player();
 
@@ -15,18 +16,10 @@ public:
 	/// </summary>
 	~Player();
 
-	// playerの回転
-	void Rotate();
-
 	/// <summary>
 	/// 初期化
 	/// <summary>
 	void Initialize(Model* model, uint32_t textureHandle);
-
-	/// <summary>
-	/// 攻撃
-	/// </summary>
-	void Attack();
 
 	/// <summary>
 	/// 更新
@@ -38,16 +31,30 @@ public:
 	/// <summary>
 	void Draw(ViewProjection& viewProjection);
 
+	///
+	/// User Method
+	/// 
+
+	// playerの回転
+	void Rotate();
+
+	/// <summary>
+	/// 攻撃
+	/// </summary>
+	void Attack();
+
+	// 衝突を検出したら呼び出されるコールバック関数
+	void OnCollision() override;
+
+	// ワールド行列の平行移動成分を取得
+	Vector3 GetWorldPosition() override;
+
+	// 弾リストを取得
+	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
+
 public:
 	// キーボード入力
 	Input* input_ = nullptr;
-
-	// ImGuiで値を入力する変数
-	float* inputFloat3[3] = {
-	    &worldTransform_.translation_.x, 
-		&worldTransform_.translation_.y,
-	    &worldTransform_.translation_.z
-	};
 
 	// ワールド変換データ
 	WorldTransform worldTransform_;

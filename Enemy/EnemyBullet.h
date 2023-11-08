@@ -1,13 +1,22 @@
 #pragma once
-#include "../base/Model.h"
-#include "../base/WorldTransform.h"
 #include "../Collision/Collider.h"
+#include "../base/Model.h"
+#include "../Player/Player.h"
+#include "../base/WorldTransform.h"
 
-/// <summary>
-/// 自キャラの弾
-/// </summary>
-class PlayerBullet : public Collider{
+class EnemyBullet : public Collider {
 public: // メンバ関数
+	// ワールド行列の平行移動成分を取得
+	Vector3 GetWorldPosition() override;
+
+	void SetPlayer(Player* player) { player_ = player; }
+
+public:
+	/// <summary>
+	/// 形状を設定
+	/// </summary>
+	void SettingScale();
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -15,10 +24,16 @@ public: // メンバ関数
 	/// <param name="pos">初期座標</param>
 	void Initialize(Model* model, const Vector3& pos, const Vector3& velocity);
 
+	// 衝突を検出したら呼び出されるコールバック関数
+	void OnCollision() override;
+
 	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update();
+
+	// 完了ならtrueを返す
+	bool isDead() const { return isDead_; }
 
 	/// <summary>
 	/// 描画
@@ -26,14 +41,7 @@ public: // メンバ関数
 	/// <param name="viewProjection">ビュープロジェクション</param>
 	void Draw(const ViewProjection& viewProjection);
 
-	// Getter
-	bool IsDead() const { return isDead_; }
-	// ワールド行列の平行移動成分を取得
-	Vector3 GetWorldPosition() override;
-	// 衝突を検出したら呼び出されるコールバック関数
-	void OnCollision() override;
-
-private: // メンバ変数
+public: // メンバ変数
 	// ワールド変換データ
 	WorldTransform worldTransform_;
 	// モデル
@@ -41,11 +49,14 @@ private: // メンバ変数
 	// テクスチャハンドル
 	uint32_t bulletTexture_ = 0u;
 
+	// プレイヤーの情報
+	Player* player_ = nullptr;
+
 	// 寿命<frm>
 	static const int32_t kLifeTime = 60 * 5;
 	// 死亡タイマー
 	int32_t deathTimer_ = kLifeTime;
-	// 死亡フラグ
+	// 弾の有無
 	bool isDead_ = false;
 
 	// 速度

@@ -21,9 +21,10 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::CreateModelFromObj("resources","block.obj");
 
+	modelSkydome_ = Model::CreateModelFromObj("resources/Skydome", "skydome.obj");
+
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-
 	viewProjection_.translation_ = { 0,0,-40 };
 
 	// 自キャラの生成
@@ -33,8 +34,17 @@ void GameScene::Initialize() {
 
 	// enemyの生成
 	enemy_ = new Enemy();
+	enemy_->SetPlayer(player_);
 	// enemyの初期化
 	enemy_->Initialize(model_, Vector3(0, 3, 30));
+
+	// 天球
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, { 0, 0, 0 });
+
+	// 衝突マネージャーの生成
+	collisionManager_ = new CollisionManager();
+	collisionManager_->Initialize(player_, enemy_);
 }
 
 void GameScene::Update() {
@@ -45,6 +55,12 @@ void GameScene::Update() {
 	if (enemy_) {
 		enemy_->Update();
 	}
+
+	// 天球
+	skydome_->Update();
+
+	// 衝突マネージャー(当たり判定)
+	collisionManager_->CheckAllCollisions();
 }
 
 void GameScene::Draw() {
@@ -53,6 +69,8 @@ void GameScene::Draw() {
 	if (enemy_) {
 		enemy_->Draw(viewProjection_);
 	}
+
+	skydome_->Draw(viewProjection_);
 }
 
 void GameScene::Finalize() {
@@ -62,6 +80,12 @@ void GameScene::Finalize() {
 	delete player_;
 	// enemyの解放
 	delete enemy_;
+	// 衝突マネージャーの解放
+	delete collisionManager_;
+	// 3Dモデル
+	delete modelSkydome_;
+	// 天球
+	delete skydome_;
 	// ビュー(カメラ)の解放
 	viewProjection_.constBuff_.ReleaseAndGetAddressOf();
 }
