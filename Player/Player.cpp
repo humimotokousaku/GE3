@@ -128,11 +128,11 @@ void Player::Draw(ViewProjection& viewProjection) {
 	// player
 	model_->Draw(worldTransform_, viewProjection, playerTexture_);
 	// 3Dレティクルを描画
-	model_->Draw(worldTransform3DReticle_, viewProjection, BULLET);
+	//model_->Draw(worldTransform3DReticle_, viewProjection, BULLET);
 }
 
 void Player::DrawUI() {
-	sprite2DReticle_->Draw(RETICLE);
+	sprite2DReticle_->Draw(MONSTERBALL);
 }
 
 // playerの回転

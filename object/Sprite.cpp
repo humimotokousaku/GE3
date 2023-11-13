@@ -32,16 +32,16 @@ void Sprite::Initialize() {
 	};
 
 	// 矩形のデータ
-	vertexData_[0].position = { 0.0f, 360.0f, 0.0f, 1.0f };// 左下
+	vertexData_[0].position = { 0.0f, 32.0f, 0.0f, 1.0f };// 左下
 	vertexData_[0].texcoord = { 0.0f,1.0f };
 	vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
 	vertexData_[1].position = { 0.0f, 0.0f, 0.0f, 1.0f };// 左上
 	vertexData_[1].texcoord = { 0.0f,0.0f };
 	vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
-	vertexData_[2].position = { 640.0f, 360.0f, 0.0f, 1.0f };// 右下
+	vertexData_[2].position = { 32.0f, 32.0f, 0.0f, 1.0f };// 右下
 	vertexData_[2].texcoord = { 1.0f,1.0f };
 	vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
-	vertexData_[3].position = { 640.0f, 0.0f, 0.0f, 1.0f };// 右上
+	vertexData_[3].position = { 32.0f, 0.0f, 0.0f, 1.0f };// 右上
 	vertexData_[3].texcoord = { 1.0f,0.0f };
 	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
 
@@ -62,6 +62,8 @@ void Sprite::Initialize() {
 
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
+
+	worldTransform_.translation_ = { 640,360,10 };
 }
 
 void Sprite::Draw(int textureNum) {
