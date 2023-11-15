@@ -12,6 +12,8 @@
 #include "../base/WorldTransform.h"
 #include "../base/Model.h"
 
+#include "../scene/GameScene.h"
+
 #include <cassert>
 #include <stdio.h>
 
@@ -60,7 +62,6 @@ void Enemy::Update() {
 
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
-
 }
 
 void Enemy::ChangeState(IEnemyState* pState) {
@@ -85,11 +86,11 @@ void Enemy::Fire() {
 
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
-	newBullet->Initialize(model_, GetWorldPosition(), velocity);
+	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 	newBullet->SetPlayer(player_);
 
 	// 弾を登録
-	bullets_.push_back(newBullet);
+	gameScene_->AddEnemyBullet(newBullet);
 }
 
 void Enemy::OnCollision() { isDead_ = true; }

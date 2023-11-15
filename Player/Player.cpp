@@ -31,8 +31,6 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 	// 衝突対象を自分の属性以外に設定
 	SetCollisionMask(~kCollisionAttributePlayer);
 
-
-
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
 	// 3Dレティクルのワールドトランスフォーム初期化

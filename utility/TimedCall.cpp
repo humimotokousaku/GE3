@@ -1,4 +1,4 @@
-﻿#include "TimedCall.h"
+#include "TimedCall.h"
 
 TimedCall::TimedCall(std::function<void()> f, uint32_t time) {
 	f_ = f;

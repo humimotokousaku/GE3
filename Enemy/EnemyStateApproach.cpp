@@ -36,15 +36,14 @@ void EnemyStateApproach::Update(Enemy* enemy) {
 			return true;
 		}
 		return false;
-		});
-
+	});
 	// 範囲forでリストの全要素について回す
 	for (TimedCall* timedCall : timedCalls_) {
 		timedCall->Update();
 	}
 
 	// 既定の位置に到達したら離脱
-	if (enemy->GetEnemyPos().z < -15.0f) {
+	if (enemy->GetEnemyPos().z < 60.0f) {
 		timedCalls_.clear();
 		enemy->ChangeState(new EnemyStateLeave());
 	}

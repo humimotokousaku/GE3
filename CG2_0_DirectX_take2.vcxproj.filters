@@ -240,14 +240,14 @@
     <ClCompile Include="math\Lerp.cpp">
       <Filter>ソース ファイル\math</Filter>
     </ClCompile>
-    <ClCompile Include="utility\TimedCall.cpp">
-      <Filter>ソース ファイル\utility</Filter>
-    </ClCompile>
     <ClCompile Include="skydome\Skydome.cpp">
       <Filter>ソース ファイル\skydome</Filter>
     </ClCompile>
     <ClCompile Include="RailCamera\RailCamera.cpp">
       <Filter>ソース ファイル\railCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\TimedCall.cpp">
+      <Filter>ソース ファイル\utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -422,14 +422,14 @@
     <ClInclude Include="math\Lerp.h">
       <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
-    <ClInclude Include="utility\TimedCall.h">
-      <Filter>ヘッダー ファイル\utility</Filter>
-    </ClInclude>
     <ClInclude Include="skydome\Skydome.h">
       <Filter>ヘッダー ファイル\skydome</Filter>
     </ClInclude>
     <ClInclude Include="RailCamera\RailCamera.h">
       <Filter>ヘッダー ファイル\railCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\TimedCall.h">
+      <Filter>ヘッダー ファイル\utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

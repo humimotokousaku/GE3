@@ -19,6 +19,8 @@
 #include "../skydome/Skydome.h"
 #include "../RailCamera/RailCamera.h"
 
+#include <list>
+
 class GameManager;
 /// <summary>
 /// ゲームシーン

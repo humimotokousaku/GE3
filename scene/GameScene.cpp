@@ -175,8 +175,9 @@ void GameScene::SpawnEnemy(Vector3 pos) {
 	// 自機の位置をもらう
 	enemy->SetPlayer(player_);
 	// 初期化
-	enemy->Initialize(model_, pos);
 	enemy->SetGameScene(this);
+	enemy->Initialize(model_, pos);
+
 	// リストに登録
 	enemy_.push_back(enemy);
 }

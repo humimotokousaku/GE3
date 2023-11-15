@@ -7,6 +7,7 @@
 #include "../utility/TimedCall.h"
 
 class Player;
+class GameScene;
 
 class Enemy : public Collider {
 public:
