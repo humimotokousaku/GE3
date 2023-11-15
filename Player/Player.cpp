@@ -22,8 +22,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 	// 引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
 	playerTexture_ = textureHandle;
-	// レティクル用のテクスチャ取得
-	uint32_t textureReticle = RETICLE;
+	// レティクル
 	sprite2DReticle_ = new Sprite();
 	sprite2DReticle_->Initialize();
 
@@ -110,7 +109,7 @@ void Player::Update(const ViewProjection& viewProjection) {
 	// ワールド→スクリーン座標変換
 	positionReticle = Transforms(positionReticle, matViewProjectionViewport);
 	// スプライトのレティクルに座標設定
-	sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
+	sprite2DReticle_->SetPosition(Vector2(positionReticle.x - 16, positionReticle.y - 16));
 
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
@@ -132,7 +131,7 @@ void Player::Draw(ViewProjection& viewProjection) {
 }
 
 void Player::DrawUI() {
-	sprite2DReticle_->Draw(MONSTERBALL);
+	sprite2DReticle_->Draw(RETICLE);
 }
 
 // playerの回転

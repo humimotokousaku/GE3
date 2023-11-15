@@ -61,27 +61,14 @@ void Sprite::Initialize() {
 	materialData_->uvTransform = MakeIdentity4x4();
 
 	worldTransform_.Initialize();
-	viewProjection_.Initialize();
+	worldTransform_.translation_ = { 640,360,0 };
 
-	worldTransform_.translation_ = { 640,360,10 };
+	viewProjection_.Initialize();
+	viewProjection_.constMap->view = MakeIdentity4x4();
+	viewProjection_.constMap->projection = MakeOrthographicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f);
 }
 
 void Sprite::Draw(int textureNum) {
-	//transform_.translate = pos;
-	//uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
-	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
-	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
-	//materialData_->uvTransform = uvTransformMatrix_;
-
-	//transformationMatrixData_->World = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	//viewMatrix_ = MakeIdentity4x4();
-	//projectionMatrix_ = MakeOrthographicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f);
-	// 	//worldViewProjectionMatrix_ = Multiply(transformationMatrixData_->World, Multiply(viewMatrix_, projectionMatrix_));
-	//transformationMatrixData_->WVP = worldViewProjectionMatrix_;
-	viewProjection_.matView = MakeIdentity4x4();
-	viewProjection_.matProjection = MakeOrthographicMatrix(0.0f, 0.0f, float(1280), float(720), 0.0f, 100.0f);
-
-	viewProjection_.UpdateMatrix();
 	worldTransform_.UpdateMatrix();
 
 	// コマンドを積む
