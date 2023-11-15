@@ -150,7 +150,7 @@ void Player::Draw(ViewProjection& viewProjection) {
 	// player
 	model_->Draw(worldTransform_, viewProjection, playerTexture_);
 	// 3Dレティクルを描画
-	//model_->Draw(worldTransform3DReticle_, viewProjection, BULLET);
+	model_->Draw(worldTransform3DReticle_, viewProjection, UVCHEKER);
 }
 
 void Player::DrawUI() {
