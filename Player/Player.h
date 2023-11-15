@@ -46,7 +46,12 @@ public:
 	/// <summary>
 	/// レティクルの配置
 	/// </summary>
-	void DeployReticle();
+	void Deploy3DReticle();
+
+	/// <summary>
+	/// 2Dレティクルの配置
+	/// </summary>
+	void Deploy2DReticle(const ViewProjection& viewProjection);
 
 	// playerの回転
 	void Rotate();
@@ -99,4 +104,7 @@ public:
 	GameScene* gameScene_;
 
 	bool isDead_ = true;
+
+	Matrix4x4 matViewport_;
+	Vector2 spritePosition_;
 };

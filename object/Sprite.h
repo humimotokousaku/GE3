@@ -42,6 +42,12 @@ public:
 		worldTransform_.translation_.x = position.x;
 		worldTransform_.translation_.y = position.y;
 	}
+
+	// Getter
+	Vector2 GetPosition() { 
+		return { worldTransform_.translation_.x ,worldTransform_.translation_.y };
+	}
+
 private:	
 	// Material
 	Material* materialData_;

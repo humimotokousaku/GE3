@@ -160,15 +160,15 @@ void GameManager::Finalize() {
 }
 
 void GameManager::ImGuiAdjustParameter() {
-	ImGui::Begin("CommonSettings");
-	if (ImGui::BeginTabBar("CommonTabBar"))
-	{
-		// ライトのImGui
-		if (ImGui::BeginTabItem("Half Lambert")) {
-			light_->ImGuiAdjustParameter();
-			ImGui::EndTabItem();
-		}
-		ImGui::EndTabBar();
-	}
-	ImGui::End();
+	//ImGui::Begin("CommonSettings");
+	//if (ImGui::BeginTabBar("CommonTabBar"))
+	//{
+	//	// ライトのImGui
+	//	if (ImGui::BeginTabItem("Half Lambert")) {
+	//		light_->ImGuiAdjustParameter();
+	//		ImGui::EndTabItem();
+	//	}
+	//	ImGui::EndTabBar();
+	//}
+	//ImGui::End();
 }
