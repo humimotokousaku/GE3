@@ -13,6 +13,13 @@ class Model
 public:
 	ModelData GetModelData() { return modelData_; }
 
+	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
+
+	void Initialize(const std::string& directoryPath, const std::string& filename);
+
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureNumber);
+
+private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes);
 
 	void CreateVertexResource();
@@ -21,13 +28,7 @@ public:
 
 	void CreateMaterialResource();
 
-	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
-
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
-
-	void Initialize(const std::string& directoryPath, const std::string& filename);
-
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureNumber);
 
 private:
 	// Material

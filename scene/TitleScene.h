@@ -6,6 +6,7 @@
 #include "../base/ViewProjection.h"
 #include "../base/Model.h"
 #include "../object/Cube.h"
+#include "../object/Sprite.h"
 
 class GameManager;
 
@@ -20,6 +21,7 @@ private:
 	const static int kMaxCube = 2;
 	Model* block_;
 	Model* axis_;
+	Sprite* sprite_;
 
 	int textureNum_;
 	Input* input_;

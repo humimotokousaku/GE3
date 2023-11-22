@@ -2,6 +2,65 @@
 #include "../Manager/ImGuiManager.h"
 #include <cassert>
 
+Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::string& filename)
+{
+	Model* model = new Model();
+	model->Initialize(directoryPath, filename);
+	return model;
+}
+
+void Model::Initialize(const std::string& directoryPath, const std::string& filename) {
+	// モデルの読み込み
+	modelData_ = LoadObjFile(directoryPath, filename);
+
+	CreateVertexResource();
+	CreateVertexBufferView();
+
+	CreateMaterialResource();
+	// 書き込むためのアドレスを取得
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
+
+	uvTransform_ = {
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f}
+	};
+
+	// Lightingするか
+	materialData_->enableLighting = true;
+
+	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
+
+	// uvTransform行列の初期化
+	materialData_->uvTransform = MakeIdentity4x4();
+}
+
+void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureNumber) {
+	//uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
+	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
+	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
+	//materialData_->uvTransform = uvTransformMatrix_;
+
+
+	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
+	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// コマンドを積む
+	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
+
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuff_->GetGPUVirtualAddress());
+
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
+	// DescriptorTableの設定
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[0]);
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, Light::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
+
+	// マテリアルCBufferの場所を設定
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+}
+
 Microsoft::WRL::ComPtr<ID3D12Resource> Model::CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes) {
 	HRESULT hr;
 	// 頂点リソース用のヒープの設定
@@ -48,13 +107,6 @@ void Model::CreateMaterialResource() {
 	materialData_ = nullptr;
 	// 書き込むためのアドレスを取得
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-}
-
-Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::string& filename)
-{
-	Model* model = new Model();
-	model->Initialize(directoryPath, filename);
-	return model;
 }
 
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
@@ -126,56 +178,4 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 		}
 	}
 	return modelData;
-}
-
-void Model::Initialize(const std::string& directoryPath, const std::string& filename) {
-	// モデルの読み込み
-	modelData_ = LoadObjFile(directoryPath, filename);
-
-	CreateVertexResource();
-	CreateVertexBufferView();
-
-	CreateMaterialResource();
-	// 書き込むためのアドレスを取得
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
-
-	uvTransform_ = {
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f}
-	};
-
-	// Lightingするか
-	materialData_->enableLighting = true;
-
-	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
-
-	// uvTransform行列の初期化
-	materialData_->uvTransform = MakeIdentity4x4();
-}
-
-void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureNumber) {
-	//uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
-	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
-	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
-	//materialData_->uvTransform = uvTransformMatrix_;
-
-
-	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
-	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	// コマンドを積む
-	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
-
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuff_->GetGPUVirtualAddress());
-
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
-	// DescriptorTableの設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[0]);
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, Light::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
-
-	// マテリアルCBufferの場所を設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
