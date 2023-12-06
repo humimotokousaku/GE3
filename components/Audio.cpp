@@ -1,5 +1,7 @@
 #include "Audio.h"
 #include <cassert>
+#include <mfapi.h>
+#include <mfidl.h>
 
 Audio* Audio::GetInstance() {
 	static Audio instance;
@@ -130,3 +132,22 @@ void Audio::SoundPlayLoopingWave(IXAudio2* xAudio2, const SoundData& soundData, 
 	// 再生開始
 	result = pSourceVoice->Start();
 }
+//
+//
+//HRESULT Audio::InitializeMediaFoundation() {
+//	return CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+//}
+//
+//void Audio::ShutdownMediaFoundation() {
+//	CoUninitialize();
+//}
+//
+//HRESULT LoadMP3File(const wchar_t* mp3FilePath, IMFSourceReader** sourceReader);
+//
+//HRESULT ConfigureAudioOutput(IMFSourceReader* sourceReader, const wchar_t* wavFilePath);
+//
+//HRESULT WriteWavHeader(const wchar_t* wavFilePath, WAVEFORMATEX* pWaveFormat);
+//
+//HRESULT DecodeAndWriteAudioData(IMFSourceReader* sourceReader, const wchar_t* wavFilePath);
+//
+//HRESULT UpdateWavFileSize(const wchar_t* wavFilePath);

@@ -7,7 +7,7 @@ void TitleScene::Initialize() {
 
 	viewProjection_.Initialize();
 
-	sprite_ = Sprite::Create(Vector2(36, 36));
+	sprite_ = Sprite::Create(Vector2(360, 360), MONSTERBALL);
 }
 
 void TitleScene::Update() {

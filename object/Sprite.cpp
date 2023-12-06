@@ -2,14 +2,14 @@
 #include "../Manager/ImGuiManager.h"
 #include <cassert>
 
-Sprite* Sprite::Create(Vector2 size)
+Sprite* Sprite::Create(Vector2 size, int textureNum)
 {
 	Sprite* sprite = new Sprite();
-	sprite->Initialize(size);
+	sprite->Initialize(size, textureNum);
 	return sprite;
 }
 
-void Sprite::Initialize(Vector2 size) {
+void Sprite::Initialize(Vector2 size, int textureNum) {
 	textureManager_->TextureManager::GetInstance();
 
 	/// メモリ確保
@@ -49,17 +49,9 @@ void Sprite::Initialize(Vector2 size) {
 	float bottom = (1.0f - anchorPoint_.y) * size_.y;
 	// 矩形のデータ
 	vertexData_[0].position = { left,bottom, 0.0f, 1.0f };// 左下
-	vertexData_[0].texcoord = { 0.0f,1.0f };
-	vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
 	vertexData_[1].position = { left,top, 0.0f, 1.0f };// 左上
-	vertexData_[1].texcoord = { 0.0f,0.0f };
-	vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
 	vertexData_[2].position = { right,bottom, 0.0f, 1.0f };// 右下
-	vertexData_[2].texcoord = { 1.0f,1.0f };
-	vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
 	vertexData_[3].position = { right,top, 0.0f, 1.0f };// 右上
-	vertexData_[3].texcoord = { 1.0f,0.0f };
-	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
 	// Index
 	indexData_[0] = 0;
 	indexData_[1] = 1;
@@ -67,6 +59,33 @@ void Sprite::Initialize(Vector2 size) {
 	indexData_[3] = 1;
 	indexData_[4] = 3;
 	indexData_[5] = 2;
+
+	//textureindex_
+
+	ID3D12Resource* textureBuffer = textureManager_->GetInstance()->GetTextureResource(UVCHEKER).Get();
+	assert(textureBuffer);
+
+	D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
+	textureSize_.x = static_cast<float>()
+	// 指定番号の画像が読み込み済みなら
+	if (textureBuffer) {
+		// テクスチャ情報取得
+		D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
+		// UVの頂点
+		float tex_left = textureLeftTop_.x / resDesc.Width;
+		float tex_right = (textureLeftTop_.x + textureSize_.x) / resDesc.Width;
+		float tex_top = textureLeftTop_.y / resDesc.Height;
+		float tex_bottom = (textureLeftTop_.y + textureSize_.y) / resDesc.Height;
+		// 頂点のUVに反映
+		vertexData_[0].texcoord = { tex_left, tex_bottom };
+		vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
+		vertexData_[1].texcoord = { tex_left, tex_top };
+		vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
+		vertexData_[2].texcoord = { tex_right, tex_bottom };
+		vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
+		vertexData_[3].texcoord = { tex_right, tex_top };
+		vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
+	}
 
 	// アンカーポイントのスクリーン座標
 	worldTransform_.Initialize();
@@ -78,7 +97,7 @@ void Sprite::Initialize(Vector2 size) {
 	viewProjection_.constMap->projection = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth_), float(WinApp::kClientHeight_), 0.0f, 100.0f);
 }
 
-void Sprite::Draw(Vector2 size, int textureNum) {
+void Sprite::Draw(int textureNum) {
 	//worldTransform_.translation_ = pos;
 	//uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
 	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
@@ -114,6 +133,10 @@ void Sprite::Draw(Vector2 size, int textureNum) {
 }
 
 void Sprite::Release() {
+
+}
+
+void Sprite::AdjustTextureSize() {
 
 }
 

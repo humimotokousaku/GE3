@@ -28,18 +28,18 @@ void GameManager::Initialize() {
 	input_ = Input::GetInstance();
 	input_->Initialize();
 
-	// Audioの初期化
-	audio_ = Audio::GetInstance();
+	//// Audioの初期化
+	//audio_ = Audio::GetInstance();
 
-	HRESULT result;
-	// Xaudio2エンジンのインスタンスを生成
-	result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
-	// マスターボイスを生成
-	result = xAudio2_->CreateMasteringVoice(&masterVoice_);
-	// 音声読み込み
-	soundData1_ = audio_->SoundLoadWave("resources/fanfare.wav");
-	// 音声再生
-	audio_->SoundPlayWave(xAudio2_.Get(), soundData1_);
+	//HRESULT result;
+	//// Xaudio2エンジンのインスタンスを生成
+	//result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	//// マスターボイスを生成
+	//result = xAudio2_->CreateMasteringVoice(&masterVoice_);
+	//// 音声読み込み
+	//soundData1_ = audio_->SoundLoadWave("resources/VSQSE_1014_singing_of_insect_11 (online-audio-converter.com).wav");
+	//// 音声再生
+	//audio_->SoundPlayWave(xAudio2_.Get(), soundData1_);
 
 	// Textureの初期化
 	textureManager_ = TextureManager::GetInstance();
@@ -104,6 +104,13 @@ void GameManager::Run() {
 			/// 更新処理
 			/// 
 			sceneArr_[sceneNum_]->Update();
+
+
+			// FPSカウンターの表示
+			ImGui::Begin("Control panel");
+			ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
+			ImGui::End();
+
 
 			// ImGuiのパラメータを入れている
 			ImGuiAdjustParameter();

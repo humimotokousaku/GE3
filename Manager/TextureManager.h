@@ -33,7 +33,7 @@ public:
 	D3D12_GPU_DESCRIPTOR_HANDLE* GetTextureSrvHandleGPU() { return textureSrvHandleGPU_; }
 
 	// textureResource
-	Microsoft::WRL::ComPtr<ID3D12Resource> GetTextureResource() { return textureResource_; }
+	Microsoft::WRL::ComPtr<ID3D12Resource> GetTextureResource(uint32_t index) { return textureResource_[index].Get(); }
 
 	// COMの初期化
 	void ComInit();

@@ -21,13 +21,13 @@ public:
 	/// インスタンスの生成
 	/// </summary>
 	/// <param name="size">画像の縦幅、横幅</param>
-	static Sprite* Create(Vector2 size);
+	static Sprite* Create(Vector2 size, int textureNum);
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="size">画像の縦幅、横幅</param>
-	void Initialize(Vector2 size);
+	void Initialize(Vector2 size,int textureNum);
 
 	//void update();
 
@@ -36,7 +36,7 @@ public:
 	/// </summary>
 	/// <param name="size">縦幅、横幅を入力</param>
 	/// <param name="textureNum">textureManagerで登録したenum型の番号を入れる</param>
-	void Draw(Vector2 size, int textureNum);
+	void Draw(int textureNum);
 
 	// 解放処理
 	void Release();
@@ -54,6 +54,8 @@ public:
 	Vector2 GetPos() { return { worldTransform_.translation_.x, worldTransform_.translation_.y }; }
 	// Spriteのアンカーポイント
 	Vector2 GetAnchorPoint() { return anchorPoint_; }
+	// 画像の切り出しサイズ
+	Vector2 GetTextureSize() { return textureSize_; }
 
 	/// Setter
 	// 縦幅、横幅
@@ -65,6 +67,14 @@ public:
 	}
 	// Spriteのアンカーポイント
 	void SetAnchorPoint(Vector2 anchorPoint) { anchorPoint_ = anchorPoint; }
+	// 画像の切り出しサイズ
+	void SetTextureSize(Vector2 textureSize) { textureSize_ = textureSize; }
+
+	// 画像の切りだしサイズのリセット
+	void ResetTextureSize() { textureSize_ = { 512.0f,512.0f }; }
+
+	// テクスチャのサイズをスプライトに合わせる
+	void AdjustTextureSize();
 
 private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes);
@@ -102,7 +112,14 @@ private:
 	// 画像の中心点
 	Vector2 anchorPoint_ = { 0.5f,0.5f };
 
-	// 画像の縦幅、横幅
+	// スプライトの縦幅、横幅
 	Vector2 size_;
+
+	// 画像の左上の座標
+	Vector2 textureLeftTop_ = { 0.0f,0.0f };
+	// テクスチャの切り出しサイズ
+	Vector2 textureSize_ = { 512.0f,512.0f };
+
+	uint32_t textureindex_;
 };
 
