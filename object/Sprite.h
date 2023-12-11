@@ -21,13 +21,13 @@ public:
 	/// インスタンスの生成
 	/// </summary>
 	/// <param name="size">画像の縦幅、横幅</param>
-	static Sprite* Create(Vector2 size, int textureNum);
+	static Sprite* Create(int textureIndex);
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="size">画像の縦幅、横幅</param>
-	void Initialize(Vector2 size,int textureNum);
+	void Initialize(int textureIndex);
 
 	//void update();
 
@@ -36,7 +36,7 @@ public:
 	/// </summary>
 	/// <param name="size">縦幅、横幅を入力</param>
 	/// <param name="textureNum">textureManagerで登録したenum型の番号を入れる</param>
-	void Draw(int textureNum);
+	void Draw();
 
 	// 解放処理
 	void Release();
@@ -118,8 +118,8 @@ private:
 	// 画像の左上の座標
 	Vector2 textureLeftTop_ = { 0.0f,0.0f };
 	// テクスチャの切り出しサイズ
-	Vector2 textureSize_ = { 512.0f,512.0f };
+	Vector2 textureSize_;
 
-	uint32_t textureindex_;
+	uint32_t textureIndex_;
 };
 

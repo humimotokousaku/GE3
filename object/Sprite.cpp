@@ -2,14 +2,14 @@
 #include "../Manager/ImGuiManager.h"
 #include <cassert>
 
-Sprite* Sprite::Create(Vector2 size, int textureNum)
+Sprite* Sprite::Create(int textureIndex)
 {
 	Sprite* sprite = new Sprite();
-	sprite->Initialize(size, textureNum);
+	sprite->Initialize(textureIndex);
 	return sprite;
 }
 
-void Sprite::Initialize(Vector2 size, int textureNum) {
+void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 	textureManager_->TextureManager::GetInstance();
 
 	/// メモリ確保
@@ -40,8 +40,12 @@ void Sprite::Initialize(Vector2 size, int textureNum) {
 	};
 
 	/// 頂点座標の設定
-	// 画像のサイズ
-	size_ = size;
+	if (textureIndex != UINT32_MAX) {
+		textureIndex_ = textureIndex;
+		AdjustTextureSize();
+		size_ = textureSize_;
+	}
+
 	// アンカーポイントから見た頂点座標
 	float left = (0.0f - anchorPoint_.x) * size_.x;
 	float right = (1.0f - anchorPoint_.x) * size_.x;
@@ -60,16 +64,11 @@ void Sprite::Initialize(Vector2 size, int textureNum) {
 	indexData_[4] = 3;
 	indexData_[5] = 2;
 
-	//textureindex_
+	ID3D12Resource* textureBuffer = textureManager_->GetInstance()->GetTextureResource(textureIndex_).Get();
 
-	ID3D12Resource* textureBuffer = textureManager_->GetInstance()->GetTextureResource(UVCHEKER).Get();
-	assert(textureBuffer);
-
-	D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
-	textureSize_.x = static_cast<float>()
 	// 指定番号の画像が読み込み済みなら
 	if (textureBuffer) {
-		// テクスチャ情報取得
+		//// テクスチャ情報取得
 		D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
 		// UVの頂点
 		float tex_left = textureLeftTop_.x / resDesc.Width;
@@ -97,13 +96,7 @@ void Sprite::Initialize(Vector2 size, int textureNum) {
 	viewProjection_.constMap->projection = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth_), float(WinApp::kClientHeight_), 0.0f, 100.0f);
 }
 
-void Sprite::Draw(int textureNum) {
-	//worldTransform_.translation_ = pos;
-	//uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
-	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
-	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
-	//materialData_->uvTransform = uvTransformMatrix_;
-
+void Sprite::Draw() {
 	// ワールド座標の更新
 	worldTransform_.UpdateMatrix();
 	/// コマンドを積む
@@ -124,7 +117,7 @@ void Sprite::Draw(int textureNum) {
 
 	/// DescriptorTableの設定
 	// texture
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[textureNum]);
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[textureIndex_]);
 	// ライティング
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, Light::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 
@@ -137,7 +130,12 @@ void Sprite::Release() {
 }
 
 void Sprite::AdjustTextureSize() {
+	ID3D12Resource* textureBuffer = textureManager_->GetInstance()->GetTextureResource(textureIndex_).Get();
+	assert(textureBuffer);
 
+	D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
+	textureSize_.x = static_cast<float>(resDesc.Width);
+	textureSize_.y = static_cast<float>(resDesc.Height);
 }
 
 void Sprite::ImGuiAdjustParameter() {
