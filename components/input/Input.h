@@ -4,7 +4,7 @@
 #include <dinput.h>
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
-#include "../base/WinApp.h"
+#include "../../base/WinApp.h"
 #include <array>
 #include <windows.h>
 #include <Xinput.h>

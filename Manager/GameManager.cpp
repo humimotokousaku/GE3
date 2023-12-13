@@ -43,7 +43,7 @@ void GameManager::Initialize() {
 
 	// Textureの初期化
 	textureManager_ = TextureManager::GetInstance();
-	textureManager_->TextureManager::GetInstance()->Initialize();
+	textureManager_->Initialize();
 
 	// エンジンの初期化
 	myEngine_ = new MyEngine();

@@ -20,8 +20,8 @@
 #include "../components/light/Light.h"
 #include "../components/camera/Camera.h"
 #include "../components/camera/DebugCamera.h"
-#include "../components/Input.h"
-#include "../components/Audio.h"
+#include "../components/input/Input.h"
+#include "../components/audio/Audio.h"
 
 #pragma endregion
 

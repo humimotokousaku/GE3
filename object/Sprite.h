@@ -1,13 +1,10 @@
 #pragma once
-#include "../math/Matrix4x4.h"
-#include "../VertexData.h"
-#include "../Transform.h"
-#include "../TransformationMatrix.h"
 #include "../base/DirectXCommon.h"
 #include "../base/WinApp.h"
-#include "../base/ViewProjection.h"
-#include "../base/WorldTransform.h"
-#include "../Material.h"
+#include "../components/WorldTransform.h"
+#include "../components/camera/ViewProjection.h"
+#include "../components/model/ModelStructs.h"
+#include "../math/Matrix4x4.h"
 #include <d3d12.h>
 #include <wrl.h>
 

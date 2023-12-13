@@ -1,20 +1,14 @@
 #pragma once
 #include "../externals/DirectXTex/d3dx12.h"
 #include "../externals/DirectXTex/DirectXTex.h"
-#include <string>
-
-#include "../math/Matrix4x4.h"
-#include "../VertexData.h"
-#include "../Transform.h"
-#include <d3d12.h>
-#include "../Material.h"
-#include "../TransformationMatrix.h"
+#include "../base/DirectXCommon.h"
+#include "../components/model/ModelStructs.h"
 #include "../components/light/DirectionalLight.h"
 #include "../components/light/Light.h"
-#include "../ModelData.h"
-#include "../base/MaterialData.h"
+#include "../math/Matrix4x4.h"
+#include <string>
+#include <d3d12.h>
 #include <wrl.h>
-#include "../base/DirectXCommon.h"
 
 enum TextureName {
 	UVCHEKER,

@@ -1,4 +1,4 @@
-#include "MaterialData.h"
+#include "ModelStructs.h"
 #include <cassert>
 
 MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {

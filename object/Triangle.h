@@ -1,23 +1,9 @@
 #pragma once
-#include <string>
-#include <d3d12.h>
-#include <dxgi1_6.h>
-#include <dxgidebug.h>
-#pragma comment(lib,"d3d12.lib")
-#pragma comment(lib,"dxgi.lib")
-#include <dxgidebug.h>
-#pragma comment(lib, "dxguid.lib")
-#include <dxcapi.h>
-#pragma comment(lib, "dxcompiler.lib")
-
 #include "../base/DirectXCommon.h"
+#include "../components/camera/Camera.h"
+#include "../components/model/ModelStructs.h"
 #include "../math/Vector4.h"
 #include "../math/Matrix4x4.h"
-#include "../Transform.h"
-#include "../VertexData.h"
-#include "../components/camera/Camera.h"
-#include "../Material.h"
-#include "../TransformationMatrix.h"
 #include <wrl.h>
 
 // 三角形の頂点

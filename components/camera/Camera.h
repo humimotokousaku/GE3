@@ -1,8 +1,7 @@
 #pragma once
 #include "../../math/Vector3.h"
 #include "../../math/Matrix4x4.h"
-#include "../../Transform.h"
-#include "../../base/ViewProjection.h"
+#include "../../components/model/ModelStructs.h"
 
 class Camera
 {
@@ -21,7 +20,7 @@ public:
 	void DrawDebugParameter();
 
 private:
-	ViewProjection viewProjection_;
+	//ViewProjection viewProjection_;
 	Matrix4x4 worldMatrix_;
 	Matrix4x4 cameraMatrix_;
 	Transform worldTransform_;

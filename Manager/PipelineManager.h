@@ -8,6 +8,17 @@
 #include "../object/Sprite.h"
 #include "../object/Sphere.h"
 
+#include <string>
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#include <dxgidebug.h>
+#pragma comment(lib,"d3d12.lib")
+#pragma comment(lib,"dxgi.lib")
+#include <dxgidebug.h>
+#pragma comment(lib, "dxguid.lib")
+#include <dxcapi.h>
+#pragma comment(lib, "dxcompiler.lib")
+
 class MyEngine {
 public:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDsvDescriptorHeap() { return dsvDescriptorHeap_.Get(); }

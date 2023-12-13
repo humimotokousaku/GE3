@@ -1,5 +1,5 @@
 #include "Model.h"
-#include "../Manager/ImGuiManager.h"
+#include "../../Manager/ImGuiManager.h"
 #include <cassert>
 
 Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::string& filename)

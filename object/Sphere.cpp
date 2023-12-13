@@ -175,11 +175,6 @@ void Sphere::Draw(const WorldTransform& worldTransform, const ViewProjection& vi
 	uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
 	materialData_->uvTransform = uvTransformMatrix_;
 
-	// カメラ
-	//transformationMatrixData_->World = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	//transformationMatrixData_->WVP = Multiply(transformationMatrixData_->World, *Camera::GetInstance()->GetTransformationMatrixData());
-	//transformationMatrixData_->World = MakeIdentity4x4();
-
 	// コマンドを積む
 	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
 

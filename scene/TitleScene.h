@@ -1,12 +1,12 @@
 #pragma once
 #include "IScene.h"
-#include "../components/Input.h"
-#include "../object/Sphere.h"
-#include "../base/WorldTransform.h"
-#include "../base/ViewProjection.h"
-#include "../base/Model.h"
+#include "../components/WorldTransform.h"
+#include "../components/camera/ViewProjection.h"
+#include "../components/input/Input.h"
+#include "../components/model/Model.h"
 #include "../object/Cube.h"
 #include "../object/Sprite.h"
+#include "../object/Sphere.h"
 
 class GameManager;
 

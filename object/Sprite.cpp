@@ -10,7 +10,7 @@ Sprite* Sprite::Create(int textureIndex)
 }
 
 void Sprite::Initialize(int textureIndex = UINT32_MAX) {
-	textureManager_->TextureManager::GetInstance();
+	textureManager_ = TextureManager::GetInstance();
 
 	/// メモリ確保
 	// 頂点データ
@@ -64,7 +64,7 @@ void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 	indexData_[4] = 3;
 	indexData_[5] = 2;
 
-	ID3D12Resource* textureBuffer = textureManager_->GetInstance()->GetTextureResource(textureIndex_).Get();
+	ID3D12Resource* textureBuffer = textureManager_->GetTextureResource(textureIndex_).Get();
 
 	// 指定番号の画像が読み込み済みなら
 	if (textureBuffer) {
@@ -130,7 +130,7 @@ void Sprite::Release() {
 }
 
 void Sprite::AdjustTextureSize() {
-	ID3D12Resource* textureBuffer = textureManager_->GetInstance()->GetTextureResource(textureIndex_).Get();
+	Microsoft::WRL::ComPtr<ID3D12Resource> textureBuffer = textureManager_->GetTextureResource(textureIndex_).Get();
 	assert(textureBuffer);
 
 	D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();

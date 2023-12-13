@@ -1,5 +1,5 @@
 #include "DebugCamera.h"
-#include "../../components/Input.h"
+#include "../../components/input/Input.h"
 #include "../../Manager/ImGuiManager.h"
 
 DebugCamera* DebugCamera::GetInstance() {

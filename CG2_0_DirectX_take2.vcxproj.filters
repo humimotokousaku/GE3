@@ -70,6 +70,24 @@
     <Filter Include="ヘッダー ファイル\components\camera">
       <UniqueIdentifier>{64cb0be1-4cde-45a1-94d0-fbe462d1991a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\components\audio">
+      <UniqueIdentifier>{e7df8b91-dfdd-403d-bbb8-c43f61a5f195}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\components\input">
+      <UniqueIdentifier>{79e871ca-d7da-4b5c-8667-08b9335e21e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\components\model">
+      <UniqueIdentifier>{3b959b16-c9a3-4a42-afe1-aaa355897a01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\components\audio">
+      <UniqueIdentifier>{b1efdcaa-db4b-4750-9d69-93ae3fe53c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\components\input">
+      <UniqueIdentifier>{575f07d7-23a3-44d0-95b9-8bf6066d4a27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\components\model">
+      <UniqueIdentifier>{0728c072-1fb4-491b-8f0d-9a554e9da6df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -138,12 +156,6 @@
     <ClCompile Include="Manager\PipelineManager.cpp">
       <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="components\Audio.cpp">
-      <Filter>ソース ファイル\components</Filter>
-    </ClCompile>
-    <ClCompile Include="components\Input.cpp">
-      <Filter>ソース ファイル\components</Filter>
-    </ClCompile>
     <ClCompile Include="utility\GlobalVariables.cpp">
       <Filter>ソース ファイル\utility</Filter>
     </ClCompile>
@@ -162,26 +174,32 @@
     <ClCompile Include="scene\GameOver.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="base\WorldTransform.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\ViewProjection.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
     <ClCompile Include="object\Cube.cpp">
       <Filter>ソース ファイル\object</Filter>
     </ClCompile>
-    <ClCompile Include="base\MaterialData.cpp">
-      <Filter>ソース ファイル\base</Filter>
+    <ClCompile Include="components\audio\Audio.cpp">
+      <Filter>ソース ファイル\components\audio</Filter>
     </ClCompile>
-    <ClCompile Include="base\Model.cpp">
-      <Filter>ソース ファイル\base</Filter>
+    <ClCompile Include="components\input\Input.cpp">
+      <Filter>ソース ファイル\components\input</Filter>
+    </ClCompile>
+    <ClCompile Include="components\WorldTransform.cpp">
+      <Filter>ソース ファイル\components</Filter>
+    </ClCompile>
+    <ClCompile Include="components\model\Model.cpp">
+      <Filter>ソース ファイル\components\model</Filter>
+    </ClCompile>
+    <ClCompile Include="components\camera\ViewProjection.cpp">
+      <Filter>ソース ファイル\components\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="components\model\ModelStructs.cpp">
+      <Filter>ソース ファイル\components\model</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Vector3.cpp">
+      <Filter>ソース ファイル\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Transform.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="externals\ImGui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -205,21 +223,6 @@
     </ClInclude>
     <ClInclude Include="externals\ImGui\imstb_truetype.h">
       <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformationMatrix.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="base\WinApp.h">
       <Filter>ヘッダー ファイル\base</Filter>
@@ -275,12 +278,6 @@
     <ClInclude Include="Manager\PipelineManager.h">
       <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="components\Audio.h">
-      <Filter>ヘッダー ファイル\components</Filter>
-    </ClInclude>
-    <ClInclude Include="components\Input.h">
-      <Filter>ヘッダー ファイル\components</Filter>
-    </ClInclude>
     <ClInclude Include="utility\GlobalVariables.h">
       <Filter>ヘッダー ファイル\utility</Filter>
     </ClInclude>
@@ -302,31 +299,35 @@
     <ClInclude Include="scene\GameOver.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="base\ViewProjection.h">
-      <Filter>ヘッダー ファイル\base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\WorldTransform.h">
-      <Filter>ヘッダー ファイル\base</Filter>
-    </ClInclude>
     <ClInclude Include="object\Cube.h">
       <Filter>ヘッダー ファイル\object</Filter>
     </ClInclude>
-    <ClInclude Include="base\MaterialData.h">
-      <Filter>ヘッダー ファイル\base</Filter>
+    <ClInclude Include="components\input\Input.h">
+      <Filter>ヘッダー ファイル\components\input</Filter>
     </ClInclude>
-    <ClInclude Include="base\Model.h">
-      <Filter>ヘッダー ファイル\base</Filter>
+    <ClInclude Include="components\audio\Audio.h">
+      <Filter>ヘッダー ファイル\components\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="components\WorldTransform.h">
+      <Filter>ヘッダー ファイル\components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\model\Model.h">
+      <Filter>ヘッダー ファイル\components\model</Filter>
+    </ClInclude>
+    <ClInclude Include="components\model\ModelStructs.h">
+      <Filter>ヘッダー ファイル\components\model</Filter>
+    </ClInclude>
+    <ClInclude Include="components\camera\ViewProjection.h">
+      <Filter>ヘッダー ファイル\components\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="math\MathStructs.h">
+      <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\ImGui\LICENSE.txt">
       <Filter>imgui</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="CG2_0_DirectX_take2.rc">
-      <Filter>リソース ファイル</Filter>
-    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\sharder\Object3d.hlsli">

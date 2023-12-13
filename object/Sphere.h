@@ -1,15 +1,11 @@
 #pragma once
-#include "../math/Matrix4x4.h"
-#include "../VertexData.h"
-#include "../Transform.h"
-#include "../TransformationMatrix.h"
-#include "../Material.h"
-#include <d3d12.h>
-#include "../Manager/TextureManager.h"
 #include "../base/DirectXCommon.h"
-#include "../components/camera/Camera.h"
-#include "../base/WorldTransform.h"
-#include "../base/ViewProjection.h"
+#include "../components/WorldTransform.h"
+#include "../components/camera/ViewProjection.h"
+#include "../components/model/ModelStructs.h"
+#include "../Manager/TextureManager.h"
+#include "../math/Matrix4x4.h"
+#include <d3d12.h>
 
 class Sphere
 {

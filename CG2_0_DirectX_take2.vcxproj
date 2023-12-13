@@ -97,16 +97,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="base\DirectXCommon.cpp" />
-    <ClCompile Include="base\MaterialData.cpp" />
-    <ClCompile Include="base\Model.cpp" />
-    <ClCompile Include="base\ViewProjection.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
-    <ClCompile Include="base\WorldTransform.cpp" />
-    <ClCompile Include="components\Audio.cpp" />
+    <ClCompile Include="components\audio\Audio.cpp" />
     <ClCompile Include="components\camera\Camera.cpp" />
     <ClCompile Include="components\camera\DebugCamera.cpp" />
-    <ClCompile Include="components\Input.cpp" />
+    <ClCompile Include="components\camera\ViewProjection.cpp" />
+    <ClCompile Include="components\input\Input.cpp" />
     <ClCompile Include="components\light\Light.cpp" />
+    <ClCompile Include="components\model\Model.cpp" />
+    <ClCompile Include="components\model\ModelStructs.cpp" />
+    <ClCompile Include="components\WorldTransform.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\ImGuiManager.cpp" />
     <ClCompile Include="Manager\PipelineManager.cpp" />
@@ -119,6 +119,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="externals\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="externals\ImGui\imgui_tables.cpp" />
     <ClCompile Include="externals\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="math\Vector3.cpp" />
     <ClCompile Include="object\Cube.cpp" />
     <ClCompile Include="object\Sphere.cpp" />
     <ClCompile Include="object\Sprite.cpp" />
@@ -134,21 +135,22 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\DirectXCommon.h" />
-    <ClInclude Include="base\MaterialData.h" />
-    <ClInclude Include="base\Model.h" />
-    <ClInclude Include="base\ViewProjection.h" />
     <ClInclude Include="base\WinApp.h" />
-    <ClInclude Include="base\WorldTransform.h" />
-    <ClInclude Include="components\Audio.h" />
+    <ClInclude Include="components\audio\Audio.h" />
     <ClInclude Include="components\camera\Camera.h" />
     <ClInclude Include="components\camera\DebugCamera.h" />
-    <ClInclude Include="components\Input.h" />
+    <ClInclude Include="components\camera\ViewProjection.h" />
+    <ClInclude Include="components\input\Input.h" />
     <ClInclude Include="components\light\DirectionalLight.h" />
     <ClInclude Include="components\light\Light.h" />
+    <ClInclude Include="components\model\Model.h" />
+    <ClInclude Include="components\model\ModelStructs.h" />
+    <ClInclude Include="components\WorldTransform.h" />
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\ImGuiManager.h" />
     <ClInclude Include="Manager\PipelineManager.h" />
     <ClInclude Include="Manager\TextureManager.h" />
+    <ClInclude Include="math\MathStructs.h" />
     <ClInclude Include="math\Matrix3x3.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />
@@ -162,23 +164,17 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="externals\ImGui\imstb_rectpack.h" />
     <ClInclude Include="externals\ImGui\imstb_textedit.h" />
     <ClInclude Include="externals\ImGui\imstb_truetype.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="ModelData.h" />
     <ClInclude Include="object\Cube.h" />
     <ClInclude Include="object\Sphere.h" />
     <ClInclude Include="object\Sprite.h" />
     <ClInclude Include="object\Triangle.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="scene\GameClear.h" />
     <ClInclude Include="scene\GameOver.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\IScene.h" />
     <ClInclude Include="scene\TitleScene.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="TransformationMatrix.h" />
     <ClInclude Include="utility\ConvertString.h" />
     <ClInclude Include="utility\GlobalVariables.h" />
-    <ClInclude Include="VertexData.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\ImGui\LICENSE.txt" />
@@ -187,9 +183,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="CG2_0_DirectX_take2.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\sharder\Object3d.hlsli">

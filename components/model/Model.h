@@ -1,11 +1,8 @@
 #pragma once
-#include "../math/Matrix4x4.h"
-#include "../VertexData.h"
-#include "../Transform.h"
-#include "WorldTransform.h"
-#include "ViewProjection.h"
-#include "../Material.h"
-#include "MaterialData.h"
+#include "../../math/Matrix4x4.h"
+#include "ModelStructs.h"
+#include "../WorldTransform.h"
+#include "../camera/ViewProjection.h"
 #include <d3d12.h>
 
 class Model
