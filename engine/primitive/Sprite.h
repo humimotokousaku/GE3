@@ -3,6 +3,7 @@
 #include "MathStructs.h"
 #include "ModelStructs.h"
 #include "TextureManager.h"
+#include "PipelineManager.h"
 #include "ViewProjection.h"
 #include "WinApp.h"
 #include "WorldTransform.h"
@@ -12,7 +13,7 @@
 class Sprite
 {
 public:
-	Sprite() = default;
+	Sprite(int textureIndex);
 	~Sprite() = default;
 
 	/// <summary>
@@ -74,7 +75,7 @@ public:
 	// テクスチャのサイズをスプライトに合わせる
 	void AdjustTextureSize();
 
-private:
+protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes);
 
 	void CreateVertexResource();
@@ -87,8 +88,13 @@ private:
 
 	void CreateMaterialResource();
 
-private:
+protected:
 	TextureManager* textureManager_;
+	PipelineManager* psoManager_;
+
+	// カメラ
+	Microsoft::WRL::ComPtr<ID3D12Resource> cameraPosResource_;
+	Vector3 cameraPosData_;
 
 	// Material
 	Material* materialData_;

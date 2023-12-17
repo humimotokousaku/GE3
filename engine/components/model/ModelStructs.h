@@ -7,8 +7,8 @@
 #include <stdint.h>
 
 struct TransformationMatrix {
-	Matrix4x4 WVP;
-	Matrix4x4 World;
+	Matrix4x4 matWorld;
+	Matrix4x4 WorldInverseTrasnpose;
 };
 struct Transform {
 	Vector3 scale;
@@ -27,6 +27,7 @@ struct Material {
 	int32_t enableLighting;
 	float padding[3];
 	Matrix4x4 uvTransform;
+	float shininess;
 };
 struct MaterialData {
 	std::string textureFilePath;

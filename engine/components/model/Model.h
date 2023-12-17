@@ -14,7 +14,10 @@ public:
 
 	void Initialize(const std::string& directoryPath, const std::string& filename);
 
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureNumber);
+	void Draw(const ViewProjection& viewProjection, uint32_t textureNum);
+
+	// Setter
+	void SetIsLighting(bool isActive) { materialData_->enableLighting = isActive; }
 
 private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes);
@@ -27,6 +30,9 @@ private:
 
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 
+public:
+	// ワールド座標
+	WorldTransform worldTransform;
 private:
 	// Material
 	Material* materialData_;
@@ -39,5 +45,9 @@ private:
 	VertexData* vertexData_;
 
 	ModelData modelData_;
+
+	// カメラ
+	Microsoft::WRL::ComPtr<ID3D12Resource> cameraPosResource_;
+	Vector3 cameraPosData_;
 };
 

@@ -3,6 +3,8 @@
 #include "Input.h"
 #include "Model.h"
 #include "Sprite.h"
+#include "Particles.h"
+#include "PostEffect.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
@@ -16,10 +18,12 @@ public:
 	void Draw() override;
 	void Finalize()override;
 private:
+	PostEffect* postEffect_;
 	const static int kMaxCube = 2;
-	Model* block_;
+	Model* plane_;
 	Model* axis_;
 	Sprite* sprite_;
+	Particles* particles_;
 
 	int textureNum_;
 	Input* input_;

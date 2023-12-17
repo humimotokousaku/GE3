@@ -37,21 +37,27 @@ void GameManager::Initialize() {
 	//// マスターボイスを生成
 	//result = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	//// 音声読み込み
-	//soundData1_ = audio_->SoundLoadWave("resources/VSQSE_1014_singing_of_insect_11 (online-audio-converter.com).wav");
+	//soundData1_ = audio_->SoundLoadWave("resources/fanfare.wav");
 	//// 音声再生
 	//audio_->SoundPlayWave(xAudio2_.Get(), soundData1_);
 
 	// Textureの初期化
 	textureManager_ = TextureManager::GetInstance();
-	textureManager_->Initialize();
+	textureManager_->TextureManager::GetInstance()->Initialize();
 
 	// エンジンの初期化
-	myEngine_ = new MyEngine();
-	myEngine_->Initialize();
+	pipelineManager_ = PipelineManager::GetInstance();
+	pipelineManager_->Initialize();
 
 	// ライトの設定
 	light_ = Light::GetInstance();
 	light_->Initialize(DirectXCommon::GetInstance()->GetDevice());
+	// 点光源
+	pointLight_ = PointLight::GetInstance();
+	pointLight_->Initialize();
+	// スポットライト
+	spotLight_ = SpotLight::GetInstance();
+	spotLight_->Initialize();
 
 	// デバッグカメラの初期化
 	debugCamera_ = DebugCamera::GetInstance();
@@ -105,15 +111,13 @@ void GameManager::Run() {
 			/// 
 			sceneArr_[sceneNum_]->Update();
 
+			// ImGuiのパラメータを入れている
+			ImGuiAdjustParameter();
 
 			// FPSカウンターの表示
 			ImGui::Begin("Control panel");
 			ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
 			ImGui::End();
-
-
-			// ImGuiのパラメータを入れている
-			ImGuiAdjustParameter();
 
 			///
 			/// 描画処理
@@ -130,7 +134,7 @@ void GameManager::Run() {
 
 void GameManager::BeginFrame() {
 	input_->Update();
-	myEngine_->BeginFrame();
+	pipelineManager_->BeginFrame();
 	// デバッグカメラ
 	debugCamera_->Update();
 	// カメラの設定
@@ -146,17 +150,18 @@ void GameManager::EndFrame() {
 	// ImGui
 	imGuiManager_->PostDraw();
 
-	myEngine_->EndFrame();
+	pipelineManager_->EndFrame();
 }
+
 void GameManager::Finalize() {
 	sceneArr_[sceneNum_]->Finalize();
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 2; i++) {
 		delete sceneArr_[i];
 	}
 	// ImGui
 	imGuiManager_->Release();
 	delete imGuiManager_;
-	delete myEngine_;
+	//delete pipelineManager_;
 	textureManager_->Release();
 	directXCommon_->Release();
 	CloseWindow(winApp_->GetHwnd());
@@ -171,8 +176,19 @@ void GameManager::ImGuiAdjustParameter() {
 	if (ImGui::BeginTabBar("CommonTabBar"))
 	{
 		// ライトのImGui
-		if (ImGui::BeginTabItem("Half Lambert")) {
+		// 平行光源
+		if (ImGui::BeginTabItem("Directional Light")) {
 			light_->ImGuiAdjustParameter();
+			ImGui::EndTabItem();
+		}
+		// 点光源
+		if (ImGui::BeginTabItem("Point Light")) {
+			pointLight_->ImGuiAdjustParameter();
+			ImGui::EndTabItem();
+		}
+		// スポットライト
+		if (ImGui::BeginTabItem("Spot Light")) {
+			spotLight_->ImGuiAdjustParameter();
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();

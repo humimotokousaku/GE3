@@ -3,11 +3,11 @@
 #pragma region include
  
 // Scene
-#include "../scene/IScene.h"
-#include "../scene/TitleScene.h"
-#include "../scene/GameScene.h"
-#include "../scene/GameClear.h"
-#include "../scene/GameOver.h"
+#include "IScene.h"
+#include "TitleScene.h"
+#include "GameScene.h"
+#include "GameClear.h"
+#include "GameOver.h"
 
 // Manager
 #include "PipelineManager.h"
@@ -18,6 +18,8 @@
 
 // components
 #include "Light.h"
+#include "PointLight.h"
+#include "SpotLight.h"
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "Input.h"
@@ -65,12 +67,15 @@ private:
 	// base
 	WinApp* winApp_;
 	DirectXCommon* directXCommon_;
-	MyEngine* myEngine_;
+	PipelineManager* pipelineManager_;
 
 	// components
 	Camera* camera_;
 	DebugCamera* debugCamera_;
 	Light* light_;
+	PointLight* pointLight_;
+	SpotLight* spotLight_;
+
 	TextureManager* textureManager_;
 	ImGuiManager* imGuiManager_;
 	Input* input_;

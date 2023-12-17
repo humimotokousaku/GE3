@@ -1,16 +1,23 @@
 #include "Sprite.h"
 #include "ImGuiManager.h"
+#include "PointLight.h"
+#include "SpotLight.h"
 #include <cassert>
+
+Sprite::Sprite(int textureIndex) {
+	Initialize(textureIndex);
+}
 
 Sprite* Sprite::Create(int textureIndex)
 {
-	Sprite* sprite = new Sprite();
-	sprite->Initialize(textureIndex);
+	Sprite* sprite = new Sprite(textureIndex);
+
 	return sprite;
 }
 
 void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 	textureManager_ = TextureManager::GetInstance();
+	psoManager_ = PipelineManager::GetInstance();
 
 	/// メモリ確保
 	// 頂点データ
@@ -21,6 +28,12 @@ void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 	CreateIndexBufferView();
 	// material
 	CreateMaterialResource();
+	
+	// 1つ分のサイズを用意する
+	cameraPosResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Vector3)).Get();
+	// 書き込むためのアドレスを取得
+	cameraPosResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraPosData_));
+	
 	// 書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
@@ -88,18 +101,23 @@ void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 
 	// アンカーポイントのスクリーン座標
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 1,1,1 };
+	worldTransform_.translation_ = { 640,360,1 };
 
 	// カメラ
 	viewProjection_.Initialize();
 	viewProjection_.constMap->view = MakeIdentity4x4();
 	viewProjection_.constMap->projection = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth_), float(WinApp::kClientHeight_), 0.0f, 100.0f);
+	cameraPosData_ = viewProjection_.translation_;
 }
 
 void Sprite::Draw() {
 	// ワールド座標の更新
 	worldTransform_.UpdateMatrix();
 	/// コマンドを積む
+	// RootSignatureを設定。PSOに設定しているけど別途設定が必要
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(psoManager_->GetRootSignature()[1].Get());
+	DirectXCommon::GetInstance()->GetCommandList()->SetPipelineState(psoManager_->GetGraphicsPipelineState()[1].Get()); // PSOを設定
+
 
 	// 形状を設定
 	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -108,18 +126,23 @@ void Sprite::Draw() {
 	DirectXCommon::GetInstance()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 
 	/// CBVの設定
-	// material
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
+
 	// worldTransform
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform_.constBuff_->GetGPUVirtualAddress());
 	// viewProjection
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection_.constBuff_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraPosResource_.Get()->GetGPUVirtualAddress());
 
 	/// DescriptorTableの設定
 	// texture
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[textureIndex_]);
+	// material
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
 	// ライティング
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, Light::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, PointLight::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(7, SpotLight::GetInstance()->GetSpotLightResource()->GetGPUVirtualAddress());
+
 
 	// 描画(DrawCall/ドローコール)。6頂点で1つのインスタンス
 	DirectXCommon::GetInstance()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);

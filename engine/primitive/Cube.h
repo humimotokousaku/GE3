@@ -56,8 +56,8 @@ public:
 	VertexData* vertexData_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 	Material* materialData_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
-	TransformationMatrix* wvpData_;
+	//Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
+	//TransformationMatrix* wvpData_;
 	Transform transform_;
 	Transform uvTransform_;
 	Matrix4x4 uvTransformMatrix_;

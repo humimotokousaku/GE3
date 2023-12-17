@@ -88,6 +88,18 @@
     <Filter Include="ヘッダー ファイル\components\model">
       <UniqueIdentifier>{0728c072-1fb4-491b-8f0d-9a554e9da6df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\postProcess">
+      <UniqueIdentifier>{1dca0b38-3c89-4973-941d-c3f0f02f8d10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\postProcess">
+      <UniqueIdentifier>{45a7bbca-dd61-44ad-973b-3d3d44954e2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\particle">
+      <UniqueIdentifier>{afd965d3-9dc1-43b6-9398-143311b29b9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\particle">
+      <UniqueIdentifier>{6c359c64-4a3a-4d51-9e67-5cc3be658f20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -197,6 +209,18 @@
     </ClCompile>
     <ClCompile Include="engine\math\Vector3.cpp">
       <Filter>ソース ファイル\math</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\postProcess\PostEffect.cpp">
+      <Filter>ソース ファイル\postProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\particle\Particles.cpp">
+      <Filter>ソース ファイル\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\components\light\PointLight.cpp">
+      <Filter>ソース ファイル\components\light</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\components\light\SpotLight.cpp">
+      <Filter>ソース ファイル\components\light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -323,6 +347,18 @@
     <ClInclude Include="engine\math\MathStructs.h">
       <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
+    <ClInclude Include="engine\postProcess\PostEffect.h">
+      <Filter>ヘッダー ファイル\postProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\particle\Particles.h">
+      <Filter>ヘッダー ファイル\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\components\light\SpotLight.h">
+      <Filter>ヘッダー ファイル\components\light</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\components\light\PointLight.h">
+      <Filter>ヘッダー ファイル\components\light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\ImGui\LICENSE.txt">
@@ -333,12 +369,21 @@
     <None Include="engine\resources\sharder\Object3d.hlsli">
       <Filter>リソース ファイル</Filter>
     </None>
+    <None Include="engine\resources\sharder\Particle.hlsli">
+      <Filter>リソース ファイル</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="engine\resources\sharder\Object3d.PS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="engine\resources\sharder\Object3d.VS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="engine\resources\sharder\Particle.VS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="engine\resources\sharder\Particle.PS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>
