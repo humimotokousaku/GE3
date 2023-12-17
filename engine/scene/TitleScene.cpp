@@ -26,12 +26,12 @@ void TitleScene::Update() {
 
 	//sprite_->ImGuiAdjustParameter();
 
-	ImGui::Begin("block");
+	ImGui::Begin("plane");
 	ImGui::DragFloat3("translation", &plane_->worldTransform.translation_.x, 0.1f, -100, 100);
 	ImGui::End();
 
 	ImGui::Begin("axis");
-	ImGui::DragFloat3("axis.translation", &axis_->worldTransform.translation_.x, 0.1f, -100, 100);
+	ImGui::DragFloat3("translation", &axis_->worldTransform.translation_.x, 0.1f, -100, 100);
 	ImGui::End();
 }
 
