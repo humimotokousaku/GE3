@@ -1,14 +1,14 @@
-#include "Light.h"
+#include "DirectionalLight.h"
 #include "ImGuiManager.h"
 #include <cassert>
 
-Light* Light::GetInstance() {
-	static Light instance;
+DirectionalLight* DirectionalLight::GetInstance() {
+	static DirectionalLight instance;
 
 	return &instance;
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> Light::CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes) {
+Microsoft::WRL::ComPtr<ID3D12Resource> DirectionalLight::CreateBufferResource(size_t sizeInBytes) {
 	HRESULT hr;
 	// 頂点リソース用のヒープの設定
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
@@ -28,36 +28,36 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Light::CreateBufferResource(const Microso
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
 	// 実際に頂点リソースを作る
-	hr = device.Get()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
+	hr = DirectXCommon::GetInstance()->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
 	assert(SUCCEEDED(hr));
 
 	return vertexResource;
 }
 
-void Light::CreateDirectionalResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device) {
-	directionalLightResource_ = CreateBufferResource(device.Get(), sizeof(DirectionalLight)).Get();
+void DirectionalLight::CreateDirectionalResource() {
+	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLightGPU)).Get();
 	// マテリアルにデータを書き込む
 	directionalLightData_ = nullptr;
 	// 書き込むためのアドレスを取得
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 }
 
-Light::~Light() {
+DirectionalLight::~DirectionalLight() {
 
 }
 
-void Light::Initialize(const Microsoft::WRL::ComPtr<ID3D12Device>& device) {
-	CreateDirectionalResource(device.Get());
+void DirectionalLight::Initialize() {
+	CreateDirectionalResource();
 
-	// Lightingのデフォ値
+	// DirectionalLightingのデフォ値
 	directionalLightData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	directionalLightData_->direction = { 0.0f, -1.0f, 0.0f };
 	directionalLightData_->intensity = 1.0f;
 }
 
-void Light::ImGuiAdjustParameter() {
-	ImGui::SliderFloat3("Lighting.direction", &directionalLightData_->direction.x, -1, 1);
-	ImGui::ColorEdit3("Lighting.color", &directionalLightData_->color.x);
-	ImGui::SliderFloat("Lighting.intensity", &directionalLightData_->intensity, 0, 1);
+void DirectionalLight::ImGuiAdjustParameter() {
+	ImGui::SliderFloat3("DirectionalLighting.direction", &directionalLightData_->direction.x, -1, 1);
+	ImGui::ColorEdit3("DirectionalLighting.color", &directionalLightData_->color.x);
+	ImGui::SliderFloat("DirectionalLighting.intensity", &directionalLightData_->intensity, 0, 1);
 }

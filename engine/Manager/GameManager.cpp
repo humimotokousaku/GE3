@@ -11,10 +11,12 @@ GameManager::GameManager() {
 }
 
 void GameManager::Initialize() {
-
+	// タイトル名を入力
 	const char kWindowTitle[] = "CG2_CLASS";
 	// タイトルバーの変換
 	auto&& titleString = ConvertString(kWindowTitle);
+
+	/// エンジン機能の生成
 
 	// windowの初期化
 	winApp_ = WinApp::GetInstance();
@@ -24,9 +26,36 @@ void GameManager::Initialize() {
 	directXCommon_ = DirectXCommon::GetInstance();
 	directXCommon_->DirectXCommon::GetInstance()->Initialize(winApp_->GetHwnd());
 
+	// Textureの初期化
+	textureManager_ = TextureManager::GetInstance();
+	textureManager_->TextureManager::GetInstance()->Initialize();
+
+	// エンジンの初期化
+	pipelineManager_ = PipelineManager::GetInstance();
+	pipelineManager_->Initialize();
+
+	// ImGuiの初期化
+	imGuiManager_ = new ImGuiManager();
+	imGuiManager_->Initialize(winApp_->GetHwnd());
+	
+	// ブローバル変数の読み込み
+	//GlobalVariables::GetInstance()->LoadFiles();
+
+	/// Components
+
 	// 入力(キーボードとゲームパッド)
 	input_ = Input::GetInstance();
 	input_->Initialize();
+
+	// ライトの設定
+	directionalLight_ = DirectionalLight::GetInstance();
+	directionalLight_->Initialize();
+	// 点光源
+	pointLight_ = PointLight::GetInstance();
+	pointLight_->Initialize();
+	// スポットライト
+	spotLight_ = SpotLight::GetInstance();
+	spotLight_->Initialize();
 
 	//// Audioの初期化
 	//audio_ = Audio::GetInstance();
@@ -40,39 +69,6 @@ void GameManager::Initialize() {
 	//soundData1_ = audio_->SoundLoadWave("resources/fanfare.wav");
 	//// 音声再生
 	//audio_->SoundPlayWave(xAudio2_.Get(), soundData1_);
-
-	// Textureの初期化
-	textureManager_ = TextureManager::GetInstance();
-	textureManager_->TextureManager::GetInstance()->Initialize();
-
-	// エンジンの初期化
-	pipelineManager_ = PipelineManager::GetInstance();
-	pipelineManager_->Initialize();
-
-	// ライトの設定
-	light_ = Light::GetInstance();
-	light_->Initialize(DirectXCommon::GetInstance()->GetDevice());
-	// 点光源
-	pointLight_ = PointLight::GetInstance();
-	pointLight_->Initialize();
-	// スポットライト
-	spotLight_ = SpotLight::GetInstance();
-	spotLight_->Initialize();
-
-	// デバッグカメラの初期化
-	debugCamera_ = DebugCamera::GetInstance();
-	debugCamera_->initialize();
-
-	// カメラの初期化
-	camera_ = Camera::GetInstance();
-	camera_->Initialize();
-
-	// ImGuiの初期化
-	imGuiManager_ = new ImGuiManager();
-	imGuiManager_->Initialize(winApp_->GetHwnd());
-
-	// ブローバル変数の読み込み
-	//GlobalVariables::GetInstance()->LoadFiles();
 
 	//初期シーンの設定
 	sceneNum_ = TITLE_SCENE;
@@ -133,13 +129,12 @@ void GameManager::Run() {
 }
 
 void GameManager::BeginFrame() {
+	// キーの状態を取得
 	input_->Update();
-	pipelineManager_->BeginFrame();
-	// デバッグカメラ
-	debugCamera_->Update();
-	// カメラの設定
-	camera_->SettingCamera();
-
+	// DirectXCommon
+	directXCommon_->PreDraw();
+	// PSO
+	pipelineManager_->PreDraw();
 	// ImGui
 	imGuiManager_->PreDraw();
 	// グローバル変数の更新
@@ -149,8 +144,10 @@ void GameManager::BeginFrame() {
 void GameManager::EndFrame() {
 	// ImGui
 	imGuiManager_->PostDraw();
-
-	pipelineManager_->EndFrame();
+	// DirectXCommon
+	directXCommon_->PostDraw();
+	// PSO
+	pipelineManager_->PostDraw();
 }
 
 void GameManager::Finalize() {
@@ -159,11 +156,9 @@ void GameManager::Finalize() {
 		delete sceneArr_[i];
 	}
 	// ImGui
-	imGuiManager_->Release();
-	delete imGuiManager_;
-	//delete pipelineManager_;
-	textureManager_->Release();
-	directXCommon_->Release();
+	imGuiManager_->Finalize();
+	textureManager_->Finalize();
+	directXCommon_->Finalize();
 	CloseWindow(winApp_->GetHwnd());
 	xAudio2_.Reset();
 	audio_->SoundUnload(&soundData1_);
@@ -178,7 +173,7 @@ void GameManager::ImGuiAdjustParameter() {
 		// ライトのImGui
 		// 平行光源
 		if (ImGui::BeginTabItem("Directional Light")) {
-			light_->ImGuiAdjustParameter();
+			directionalLight_->ImGuiAdjustParameter();
 			ImGui::EndTabItem();
 		}
 		// 点光源

@@ -26,7 +26,7 @@ void ImGuiManager::PostDraw() {
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), DirectXCommon::GetInstance()->GetCommandList().Get());
 }
 
-void ImGuiManager::Release() {
+void ImGuiManager::Finalize() {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext(); // ImGuiのコンテキストを破棄

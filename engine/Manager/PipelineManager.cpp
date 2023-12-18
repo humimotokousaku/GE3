@@ -9,6 +9,25 @@ PipelineManager* PipelineManager::GetInstance() {
 	return &instance;
 }
 
+void PipelineManager::Initialize() {
+
+	// DXCの初期化
+	DXCInitialize();
+	// PSOを生成
+	PSO();
+	// ビューポートの生成
+	CreateViewport();
+	// シザー矩形の生成
+	CreateScissor();
+}
+
+void PipelineManager::PreDraw() {
+	DirectXCommon::GetInstance()->GetCommandList()->RSSetViewports(1, &viewport_); // Viewportを設定
+	DirectXCommon::GetInstance()->GetCommandList()->RSSetScissorRects(1, &scissorRect_); // Scirssorを設定
+}
+
+void PipelineManager::PostDraw() {}
+
 void PipelineManager::DXCInitialize() {
 	HRESULT hr;
 	// dxCompilerの初期化
@@ -116,21 +135,6 @@ void PipelineManager::CreateDescriptorRange() {
 	descriptorRangeForInstancing_[0].NumDescriptors = 1;
 	descriptorRangeForInstancing_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	descriptorRangeForInstancing_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-}
-
-void PipelineManager::CraeteDescriptorTable() {
-	//// PS
-	//for (int i = 0; i < kMaxPSO - 1; i++) {
-	//	rootParameters_[i][2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//	rootParameters_[i][2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//	rootParameters_[i][2].DescriptorTable.pDescriptorRanges = descriptorRange_[i];
-	//	rootParameters_[i][2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_[i]);
-	//}
-	//// particle用
-	//rootParameters_[6][2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//rootParameters_[6][2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//rootParameters_[6][2].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing_;
-	//rootParameters_[6][2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing_);
 }
 
 void PipelineManager::SettingSampler() {
@@ -372,6 +376,9 @@ void PipelineManager::CreatePSO() {
 			vertexShaderBlob_->GetBufferSize() }; // vertexShader
 			graphicsPipelineStateDescs_[i].PS = { pixelShaderBlob_->GetBufferPointer(),
 			pixelShaderBlob_->GetBufferSize() }; // pixelShader
+			// DepthStencilの設定
+			graphicsPipelineStateDescs_[i].DepthStencilState = DirectXCommon::GetInstance()->GetDepthStencilDesc();
+			graphicsPipelineStateDescs_[i].DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		}
 		// particleの時
 		else if (i == 6) {
@@ -379,11 +386,17 @@ void PipelineManager::CreatePSO() {
 			particleVertexShaderBlob_->GetBufferSize() }; // vertexShader
 			graphicsPipelineStateDescs_[i].PS = { particlePixelShaderBlob_->GetBufferPointer(),
 			particlePixelShaderBlob_->GetBufferSize() }; // pixelShader
+			// DepthStencilの設定
+			D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+			// Depthの機能を有効化する
+			depthStencilDesc.DepthEnable = true;
+			// 書き込みをします
+			depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+			// 比較関数はLessEqual。つまり、近ければ描画される
+			depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+			graphicsPipelineStateDescs_[i].DepthStencilState = depthStencilDesc;
+			graphicsPipelineStateDescs_[i].DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		}
-
-		// DepthStencilの設定
-		graphicsPipelineStateDescs_[i].DepthStencilState = GetDepthStencilDesc();
-		graphicsPipelineStateDescs_[i].DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 		graphicsPipelineStateDescs_[i].BlendState = blendDesc_[i]; // blendState
 		graphicsPipelineStateDescs_[i].RasterizerState = rasterizerDesc_[i]; // rasterizerState
@@ -419,10 +432,6 @@ void PipelineManager::PSO() {
 
 	PixelSharder();
 
-	CreateDepthStencilView();
-
-	SettingDepthStencilState();
-
 	CreatePSO();
 }
 
@@ -442,100 +451,4 @@ void PipelineManager::CreateScissor() {
 	scissorRect_.right = WinApp::kClientWidth_;
 	scissorRect_.top = 0;
 	scissorRect_.bottom = WinApp::kClientHeight_;
-}
-
-void PipelineManager::Initialize() {
-
-	// DXCの初期化
-	DXCInitialize();
-	// PSOを生成
-	PSO();
-	// ビューポートの生成
-	CreateViewport();
-	// シザー矩形の生成
-	CreateScissor();
-}
-
-void PipelineManager::BeginFrame() {
-	DirectXCommon::GetInstance()->PreDraw(GetDsvDescriptorHeap().Get());
-
-	DirectXCommon::GetInstance()->GetCommandList()->RSSetViewports(1, &viewport_); // Viewportを設定
-	DirectXCommon::GetInstance()->GetCommandList()->RSSetScissorRects(1, &scissorRect_); // Scirssorを設定
-}
-
-void PipelineManager::EndFrame() {
-	// DirectX
-	DirectXCommon::GetInstance()->PostDraw();
-}
-
-Microsoft::WRL::ComPtr<ID3D12Resource> PipelineManager::CreateDepthStencilTextureResource(int32_t width, int32_t height) {
-	// 生成するResourceの設定
-	D3D12_RESOURCE_DESC resourceDesc{};
-	resourceDesc.Width = width;									  // Textureの幅
-	resourceDesc.Height = height;								  // Textureの高さ
-	resourceDesc.MipLevels = 1;									  // mipmapの数
-	resourceDesc.DepthOrArraySize = 1;							  // 奥行き or 配列Textureの配列数
-	resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;		  // DepthStencilとして利用可能なフォーマット
-	resourceDesc.SampleDesc.Count = 1;							  // サンプリングカウント。1固定
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;  // 2次元
-	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL; // DepthStencilとして使う通知
-
-	// 利用するHeapの設定
-	D3D12_HEAP_PROPERTIES heapProperties{};
-	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT; // VRAM上に作る
-
-	// 深度値のクリア設定
-	D3D12_CLEAR_VALUE depthClearValue{};
-	depthClearValue.DepthStencil.Depth = 1.0f; // 1.0f(最大値)でクリア
-	depthClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // フォーマット。Resourceと合わせる
-
-	// Resourceの生成
-	Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
-	HRESULT hr = DirectXCommon::GetInstance()->GetDevice()->CreateCommittedResource(
-		&heapProperties,				  // Heapの設定
-		D3D12_HEAP_FLAG_NONE,			  // Heapの特殊な設定。特になし
-		&resourceDesc,					  // Resourceの設定
-		D3D12_RESOURCE_STATE_DEPTH_WRITE, // 深度値を書き込む状態にしておく
-		&depthClearValue,				  // Clear最適値
-		IID_PPV_ARGS(resource.GetAddressOf())			  // 作成するResourceポインタへのポインタ
-	);
-
-	assert(SUCCEEDED(hr));
-
-	return resource;
-}
-
-Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> PipelineManager::CreateDsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible) {
-	HRESULT hr;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap;
-	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
-	rtvDescriptorHeapDesc.Type = heapType; // レンダーターゲットビュー用
-	rtvDescriptorHeapDesc.NumDescriptors = numDescriptors; // ダブルバッファ用に2つ。多くても別に構わない
-	rtvDescriptorHeapDesc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	hr = DirectXCommon::GetInstance()->GetDevice()->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
-	// DiscriptorHeapが作れなかったので起動できない
-	assert(SUCCEEDED(hr));
-
-	return descriptorHeap;
-}
-
-void PipelineManager::CreateDepthStencilView() {
-	depthStencilResource_ = CreateDepthStencilTextureResource(WinApp::kClientWidth_, WinApp::kClientHeight_).Get();
-
-	dsvDescriptorHeap_ = CreateDsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false).Get();
-	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-
-	const uint32_t descriptorSizeDSV = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-	DirectXCommon::GetInstance()->GetDevice()->CreateDepthStencilView(depthStencilResource_.Get(), &dsvDesc, TextureManager::GetInstance()->GetCPUDescriptorHandle(dsvDescriptorHeap_.Get(), descriptorSizeDSV, 0));
-}
-
-void PipelineManager::SettingDepthStencilState() {
-	// Depthの機能を有効化する
-	depthStencilDesc_.DepthEnable = true;
-	// 書き込みをします
-	depthStencilDesc_.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	// 比較関数はLessEqual。つまり、近ければ描画される
-	depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }

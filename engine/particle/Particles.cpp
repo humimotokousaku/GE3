@@ -1,13 +1,14 @@
 #include "Particles.h"
 #include "ImGuiManager.h"
 #include "GlobalVariables.h"
+#include "DirectionalLight.h"
 #include <cassert>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <numbers>
 #include <vector>
 
-void Particles::Initialize(bool isRandomColor = false, bool isRandomLifeTime = false) {
+void Particles::Initialize(bool isRandomColor, bool isRandomLifeTime, Model* model) {
 	// 頂点の座標
 	modelData_.vertices.push_back({ .position = {-1.0f,1.0f,0.0f,1.0f}, .texcoord = {0.0f,0.0f},.normal = {0.0f,0.0f,1.0f} }); // 左上
 	modelData_.vertices.push_back({ .position = {1.0f,1.0f,0.0f,1.0f}, .texcoord = {1.0f,0.0f},.normal = {0.0f,0.0f,1.0f} }); // 右上
@@ -63,8 +64,8 @@ void Particles::Initialize(bool isRandomColor = false, bool isRandomLifeTime = f
 	materialData_->uvTransform = MakeIdentity4x4();
 
 	// エミッターの設定
-	emitter_.count = 10;
-	emitter_.frequency = 1;
+	emitter_.count = uint32_t(model->GetModelData().vertices.size());
+	emitter_.frequency = 10;
 	emitter_.frequencyTime = 1.0f;
 
 	// フィールド(疑似風を作成)
@@ -72,6 +73,9 @@ void Particles::Initialize(bool isRandomColor = false, bool isRandomLifeTime = f
 	accField_.area.min = { -10,-10,-10 };
 	accField_.area.max = { 10,10,10 };
 	accField_.isActive = true;
+
+	particles_.splice(particles_.end(), ShapePlacement(model, emitter_));
+	//particles_ = ShapePlacement(model, emitter_);
 }
 
 void Particles::Update() {
@@ -85,17 +89,17 @@ void Particles::Update() {
 
 		if (numInstance < kNumMaxInstance) {
 			// fieldの範囲内のparticleには加速度を適用
-			if (accField_.isActive) {
+		/*	if (accField_.isActive) {
 				if (IsCollision(accField_.area, (*particleIterator).transform.translate)) {
 					(*particleIterator).vel = Add((*particleIterator).vel, Multiply(kDeltaTime, accField_.acc));
 				}
-			}
+			}*/
 			// 移動処理
-			//(*particleIterator).transform.translate = Add((*particleIterator).transform.translate, Multiply(kDeltaTime, (*particleIterator).vel));
+			(*particleIterator).transform.translate = Add((*particleIterator).transform.translate, Multiply(kDeltaTime, (*particleIterator).vel));
 
 			// 指定した時間に透明になる
-			float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
-			(*particleIterator).color.w = alpha;
+			//float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
+			//(*particleIterator).color.w = alpha;
 			instancingData_[numInstance].color = (*particleIterator).color;
 			++numInstance;
 		}
@@ -104,12 +108,12 @@ void Particles::Update() {
 	}
 
 	//emitter_.frequencyTime += kDeltaTime;
-	if (emitter_.frequency <= emitter_.frequencyTime) {
-		std::random_device seedGenerator;
-		std::mt19937 randomEngine(seedGenerator());
-		particles_.splice(particles_.end(), Emission(emitter_, randomEngine));
-		emitter_.frequencyTime -= emitter_.frequency;
-	}
+	//if (emitter_.frequency <= emitter_.frequencyTime) {
+	//	//std::random_device seedGenerator;
+	//	//std::mt19937 randomEngine(seedGenerator());
+	//	//particles_.splice(particles_.end(), Emission(emitter_, randomEngine));
+	//	//emitter_.frequencyTime -= emitter_.frequency;
+	//}
 }
 
 void Particles::Draw(const ViewProjection& viewProjection, int textureNum) {
@@ -134,13 +138,13 @@ void Particles::Draw(const ViewProjection& viewProjection, int textureNum) {
 		if (numInstance < kNumMaxInstance) {
 
 			// WVPとworldMatrixの計算
-			Matrix4x4 worldMatrix = AffineMatrix((*particleIterator).transform.scale, billboardMatrix, (*particleIterator).transform.translate);//MakeAffineMatrix(particles_[index].transform.scale, Vector3{ 1,1,1 }/*particles_[index].transform.rotate*/, particles_[index].transform.translate);
+			Matrix4x4 worldMatrix = AffineMatrix((*particleIterator).transform.scale, billboardMatrix, (*particleIterator).transform.translate);
 			instancingData_[numInstance].World = Multiply(worldMatrix, Multiply(viewProjection.matView, viewProjection.matProjection));
 			instancingData_[numInstance].WVP = instancingData_[numInstance].World;
 			++numInstance;
 
 			// 時間を進める
-			//(*particleIterator).currentTime += kDeltaTime;
+			(*particleIterator).currentTime += kDeltaTime;
 		}
 
 		++particleIterator;
@@ -159,7 +163,7 @@ void Particles::Draw(const ViewProjection& viewProjection, int textureNum) {
 	// DescriptorTableの設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[textureNum]);
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, Light::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, DirectionalLight::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, PointLight::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
 
 	// マテリアルCBufferの場所を設定
@@ -189,16 +193,29 @@ Particle Particles::MakeNewParticle(std::mt19937& randomEngine, const Vector3& t
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
 
 	Particle particle;
-	particle.transform.scale = { 1.0f,1.0f,1.0f };
+	particle.transform.scale = { 0.5f,0.5f,0.5f };
 	particle.transform.rotate = { 0,0,0 };
-	Vector3 randomTranslate;
 
+	Vector3 randomTranslate;
 	randomTranslate = { distribution(randomEngine),distribution(randomEngine) ,distribution(randomEngine) };
 	particle.transform.translate = Add(translate, randomTranslate);
 	//if()
 	particle.vel = { distribution(randomEngine) ,distribution(randomEngine) ,distribution(randomEngine) };
 	particle.color = { distColor(randomEngine),distColor(randomEngine) ,distColor(randomEngine),1.0f };
 	particle.lifeTime = distTime(randomEngine);
+	particle.currentTime = 0;
+	return particle;
+}
+
+Particle Particles::MakeNewParticle(const Vector3& translate) {
+	Particle particle;
+	particle.transform.scale = { 0.1f,0.1f,0.1f };
+	particle.transform.rotate = { 0,0,0 };
+
+	particle.transform.translate = translate;
+	particle.vel = { 2,0,0 };
+	particle.color = { 1.0f,1.0f,1.0f,1.0f };
+	particle.lifeTime = 120;
 	particle.currentTime = 0;
 	return particle;
 }
@@ -226,15 +243,20 @@ void Particles::ImGuiAdjustParameter()
 	ImGui::End();
 }
 
-void Particles::ShapePlacement(Model* model) {
-	for (std::vector<VertexData>::iterator it = model->GetModelData().vertices.begin(); it != model->GetModelData().vertices.end();) {
-		for (std::list<Particle>::iterator particleIterator = particles_.begin(); particleIterator != particles_.end();) {
-			(*particleIterator).transform.translate = Vector3{ (*it).position.x,(*it).position.y,(*it).position.z };
-			++particleIterator;
-			break;
-		}
-		++it;
+std::list<Particle> Particles::ShapePlacement(Model* model, const Emitter& emitter) {
+	std::list<Particle> particles;
+	for (uint32_t count = 0; count < emitter.count; ++count) {
+			particles.push_back(MakeNewParticle(Vector3{ model->GetModelData().vertices[count].position.x,model->GetModelData().vertices[count].position.y,model->GetModelData().vertices[count].position.z }));
 	}
+	return particles;
+	//for (const auto& m : model->GetModelData().vertices) {
+	//	for (std::list<Particle>::iterator particleIterator = particles_.begin(); particleIterator != particles_.end();) {
+	//		(*particleIterator).transform.translate = Vector3{ m.position.x,m.position.y,m.position.z };
+	//		++particleIterator;
+	//		break;
+	//	}
+	//	//++it;
+	//}
 }
 
 Vector3 Particles::KelvinToRGB(int kelvin) {

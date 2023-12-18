@@ -8,21 +8,20 @@ void TitleScene::Initialize() {
 	viewProjection_.Initialize();
 
 	plane_ = Model::CreateModelFromObj("engine/resources", "plane.obj");
-	axis_ = Model::CreateModelFromObj("engine/resources", "axis.obj");
+	axis_ = Model::CreateModelFromObj("engine/resources", "teapot.obj");
 	//sprite_ = Sprite::Create(MONSTERBALL);
-	//postEffect_ = new PostEffect();
-	//postEffect_->Initialize();
+	postEffect_ = new PostEffect();
+	postEffect_->Initialize();
 
-	//particles_ = new Particles();
-	//particles_->Initialize(true,true);
-	//particles_->ShapePlacement(block_);
+	particles_ = new Particles();
+	particles_->Initialize(true,true,axis_);
 }
 
 void TitleScene::Update() {
 	viewProjection_.UpdateViewMatrix();
 	viewProjection_.TransferMatrix();
 
-	//particles_->Update();
+	particles_->Update();
 
 	//sprite_->ImGuiAdjustParameter();
 
@@ -33,12 +32,18 @@ void TitleScene::Update() {
 	ImGui::Begin("axis");
 	ImGui::DragFloat3("translation", &axis_->worldTransform.translation_.x, 0.1f, -100, 100);
 	ImGui::End();
+
+	ImGui::Begin("Camera");
+	ImGui::DragFloat3("translation", &viewProjection_.translation_.x, 0.1f, -100, 100);
+	ImGui::DragFloat3("rotation", &viewProjection_.rotation_.x, 0.01f, -6.28f, 6.28f);
+	ImGui::End();
 }
 
 void TitleScene::Draw() {
-	//particles_->Draw(viewProjection_, UVCHEKER);
+	//particles_->Draw(viewProjection_, PARTICLE);
 	axis_->Draw(viewProjection_, UVCHEKER);
 	plane_->Draw(viewProjection_, UVCHEKER);
+	particles_->Draw(viewProjection_, PARTICLE);
 	//sprite_->Draw();
 	//postEffect_->Draw();
 }

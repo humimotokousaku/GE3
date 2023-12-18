@@ -1,6 +1,6 @@
 #include "Cube.h"
 #include "ImGuiManager.h"
-#include "Light.h"
+#include "DirectionalLight.h"
 #include "TextureManager.h"
 #include <cassert>
 
@@ -204,7 +204,7 @@ void Cube::Draw(const WorldTransform& worldTransform, const ViewProjection& view
 	// DescriptorTableの設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[MONSTERBALL]);
 
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, Light::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, DirectionalLight::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 
 	// 描画(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 	DirectXCommon::GetInstance()->GetCommandList()->DrawInstanced(36, 1, 0, 0);

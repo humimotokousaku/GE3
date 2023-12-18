@@ -17,7 +17,7 @@
 #include "DirectXCommon.h"
 
 // components
-#include "Light.h"
+#include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Camera.h"
@@ -72,7 +72,7 @@ private:
 	// components
 	Camera* camera_;
 	DebugCamera* debugCamera_;
-	Light* light_;
+	DirectionalLight* directionalLight_;
 	PointLight* pointLight_;
 	SpotLight* spotLight_;
 

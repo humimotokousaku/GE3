@@ -1,70 +1,12 @@
 #include "Sphere.h"
-#include "../Manager/ImGuiManager.h"
-#include "../Manager/PipelineManager.h"
+#include "ImGuiManager.h"
+#include "PipelineManager.h"
+#include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 #include <cassert>
 #define _USE_MATH_DEFINES
 #include <math.h>
-
-Microsoft::WRL::ComPtr<ID3D12Resource> Sphere::CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes) {
-	HRESULT hr;
-	// 頂点リソース用のヒープの設定
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD; // UploadHeapを使う
-	// 頂点リソースの設定
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	// バッファソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeInBytes; // リソースのサイズ。今回はVector4を3頂点分
-	// バッファの場合はこれからは1にする決まり
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	// バッファの場合はこれにする決まり
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
-	// 実際に頂点リソースを作る
-	hr = device.Get()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
-	assert(SUCCEEDED(hr));
-
-	return vertexResource;
-}
-
-void Sphere::CreateVertexResource() {
-	vertexResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(VertexData) * vertexIndex).Get();
-}
-
-void Sphere::CreateVertexBufferView() {
-	// リソースの先頭のアドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_.Get()->GetGPUVirtualAddress();
-	// 使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * vertexIndex;
-	// 1頂点当たりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(VertexData);
-}
-
-void Sphere::CreateMaterialResource() {
-	materialResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Material)).Get();
-	// マテリアルにデータを書き込む
-	materialData_ = nullptr;
-	// 書き込むためのアドレスを取得
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-}
-
-void Sphere::CreateWvpResource() {
-	// 1つ分のサイズを用意する
-	cameraPosResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Vector3)).Get();
-	// 書き込むためのアドレスを取得
-	cameraPosResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraPosData_));
-}
-
-Sphere::~Sphere() {
-
-}
 
 void Sphere::Initialize() {
 	CreateVertexResource();
@@ -177,7 +119,7 @@ void Sphere::Draw(const WorldTransform& worldTransform, const ViewProjection& vi
 	uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
 	materialData_->uvTransform = uvTransformMatrix_;
 
-	cameraPosData_ = viewProjection.translation_;//viewProjection.constMap->cameraPos;
+	cameraPosData_ = viewProjection.translation_;
 
 	// RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetRootSignature()[1].Get());
@@ -197,16 +139,16 @@ void Sphere::Draw(const WorldTransform& worldTransform, const ViewProjection& vi
 
 	// マテリアルCBufferの場所を設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, Light::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, DirectionalLight::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, PointLight::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(7, SpotLight::GetInstance()->GetSpotLightResource()->GetGPUVirtualAddress());
 
 	DirectXCommon::GetInstance()->GetCommandList()->DrawInstanced(vertexIndex, 1, 0, 0);
 }
 
-void Sphere::Release() {
-
-}
+//void Sphere::Release() {
+//
+//}
 
 void Sphere::ImGuiAdjustParameter() {
 	ImGui::CheckboxFlags("isLighting", &materialData_->enableLighting, 1);
@@ -216,4 +158,59 @@ void Sphere::ImGuiAdjustParameter() {
 	ImGui::SliderFloat2("UvScale", &uvTransform_.scale.x, -5, 5);
 	ImGui::SliderAngle("UvRotate.z", &uvTransform_.rotate.z);
 	ImGui::DragFloat("shininess", &materialData_->shininess, 0.01f, 0, 50);
+}
+
+Microsoft::WRL::ComPtr<ID3D12Resource> Sphere::CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes) {
+	HRESULT hr;
+	// 頂点リソース用のヒープの設定
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD; // UploadHeapを使う
+	// 頂点リソースの設定
+	D3D12_RESOURCE_DESC vertexResourceDesc{};
+	// バッファソース。テクスチャの場合はまた別の設定をする
+	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc.Width = sizeInBytes; // リソースのサイズ。今回はVector4を3頂点分
+	// バッファの場合はこれからは1にする決まり
+	vertexResourceDesc.Height = 1;
+	vertexResourceDesc.DepthOrArraySize = 1;
+	vertexResourceDesc.MipLevels = 1;
+	vertexResourceDesc.SampleDesc.Count = 1;
+	// バッファの場合はこれにする決まり
+	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
+	// 実際に頂点リソースを作る
+	hr = device.Get()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
+		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
+	assert(SUCCEEDED(hr));
+
+	return vertexResource;
+}
+
+void Sphere::CreateVertexResource() {
+	vertexResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(VertexData) * vertexIndex).Get();
+}
+
+void Sphere::CreateVertexBufferView() {
+	// リソースの先頭のアドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_.Get()->GetGPUVirtualAddress();
+	// 使用するリソースのサイズは頂点3つ分のサイズ
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * vertexIndex;
+	// 1頂点当たりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+}
+
+void Sphere::CreateMaterialResource() {
+	materialResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Material)).Get();
+	// マテリアルにデータを書き込む
+	materialData_ = nullptr;
+	// 書き込むためのアドレスを取得
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+}
+
+void Sphere::CreateWvpResource() {
+	// 1つ分のサイズを用意する
+	cameraPosResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Vector3)).Get();
+	// 書き込むためのアドレスを取得
+	cameraPosResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraPosData_));
 }

@@ -20,6 +20,6 @@ public:
 	void Initialize(HWND hwnd);
 	void PreDraw();
 	void PostDraw();
-	void Release();
+	void Finalize();
 };
 

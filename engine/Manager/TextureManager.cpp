@@ -13,15 +13,13 @@ TextureManager* TextureManager::GetInstance() {
 
 	return &instance;
 }
-TextureManager::~TextureManager() {
-
-}
 
 void TextureManager::TransferTexture() {
 	// 画像の読み込み
 	mipImages_[UVCHEKER] = LoadTexture("engine/resources/uvChecker.png");
 	mipImages_[MONSTERBALL] = LoadTexture("engine/resources/monsterBall.png");
 	mipImages_[TESTBLOCK] = LoadTexture("engine/resources/block.png");
+	mipImages_[PARTICLE] = LoadTexture("engine/resources/circle.png");
 
 	DirectX::TexMetadata metadata[kMaxImages]{};
 	for (uint32_t i = 0; i < kMaxImages; i++) {
@@ -54,7 +52,7 @@ void TextureManager::Initialize() {
 	TransferTexture();
 }
 
-void TextureManager::Release() {
+void TextureManager::Finalize() {
 	for (uint32_t i = 0; i < kMaxImages; i++) {
 		textureResource_[i].Reset();
 		intermediateResource_[i].Reset();

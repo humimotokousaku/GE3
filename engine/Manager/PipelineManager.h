@@ -3,9 +3,7 @@
 #include "WinApp.h"
 #include "ImGuiManager.h"
 #include "TextureManager.h"
-#include "Light.h"
-//
-//#include <string>
+
 #include <dxcapi.h>
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dxcompiler.lib")
@@ -29,14 +27,32 @@ enum BlendMode {
 
 class PipelineManager {
 public:
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDsvDescriptorHeap() { return dsvDescriptorHeap_.Get(); }
-	Microsoft::WRL::ComPtr<ID3D12Resource> GetDepthStencilResource() { return depthStencilResource_.Get(); }
-	D3D12_DEPTH_STENCIL_DESC GetDepthStencilDesc() { return depthStencilDesc_; }
+	///
+	/// Default Method
+	///
+	
+	static PipelineManager* GetInstance();
+
+	~PipelineManager() = default;
+
+	// エンジンの初期化
+	void Initialize();
+
+	// 描画前の処理
+	void PreDraw();
+
+	// 描画後の処理
+	void PostDraw();
+
+	///
+	/// User Method
+	/// 
+
+	// Getter
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>* GetGraphicsPipelineState() { return graphicsPipelineState_; }
 	Microsoft::WRL::ComPtr<ID3D12RootSignature>* GetRootSignature() { return rootSignature_; }
 
-	static PipelineManager* GetInstance();
-
+private:// プライベートな関数
 	// DXCの初期化
 	void DXCInitialize();
 
@@ -51,23 +67,8 @@ public:
 		IDxcCompiler3* dxcCompiler,
 		IDxcIncludeHandler* includeHandler);
 
-	// DepthStenciltextureの生成
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(int32_t width, int32_t height);
-
-	// dsvDescriptorHeapの生成
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
-
-	// CPUで書き込む用のTextureResourceを作りコマンドを積む
-	void CreateDepthStencilView();
-
-	// DepthStencilStateの設定
-	void SettingDepthStencilState();
-
 	// DescriptorRangeの生成
 	void CreateDescriptorRange();
-
-	// DescriptorTableの生成
-	void CraeteDescriptorTable();
 
 	// Samplerの設定
 	void SettingSampler();
@@ -105,17 +106,6 @@ public:
 	// シザー矩形
 	void CreateScissor();
 
-	~PipelineManager() = default;
-
-	// エンジンの初期化
-	void Initialize();
-
-	// 描画前の処理
-	void BeginFrame();
-
-	// 描画後の処理
-	void EndFrame();
-
 private:
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
@@ -149,9 +139,4 @@ private:
 
 	D3D12_VIEWPORT viewport_;
 	D3D12_RECT scissorRect_;
-
-	// Depth
-	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource_;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_;
 };

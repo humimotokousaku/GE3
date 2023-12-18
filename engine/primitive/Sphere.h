@@ -10,6 +10,26 @@
 class Sphere
 {
 public:
+	/// 
+	/// Default Method
+	/// 
+
+	// デストラクタ
+	~Sphere() = default;
+
+	// 初期化
+	void Initialize();
+
+	// 描画処理
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+
+	// 解放処理
+	//void Release();
+
+	// ImGuiをまとめた関数
+	void ImGuiAdjustParameter();
+
+private:// プライベートなメンバ関数
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes);
 
 	void CreateVertexResource();
@@ -20,21 +40,11 @@ public:
 
 	void CreateWvpResource();
 
-	~Sphere();
-
-	void Initialize();
-
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
-
-	void Release();
-
-
-	void ImGuiAdjustParameter();
-
-public:
+private:
 	// Material
 	Material* materialData_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
+	// UV座標
 	Transform uvTransform_;
 	Matrix4x4 uvTransformMatrix_;
 	// Vertex

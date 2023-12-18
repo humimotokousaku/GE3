@@ -98,6 +98,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\components\light\DirectionalLight.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\WinApp.cpp" />
     <ClCompile Include="engine\components\audio\Audio.cpp" />
@@ -105,7 +106,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="engine\components\camera\DebugCamera.cpp" />
     <ClCompile Include="engine\components\camera\ViewProjection.cpp" />
     <ClCompile Include="engine\components\input\Input.cpp" />
-    <ClCompile Include="engine\components\light\Light.cpp" />
     <ClCompile Include="engine\components\light\PointLight.cpp" />
     <ClCompile Include="engine\components\light\SpotLight.cpp" />
     <ClCompile Include="engine\components\model\Model.cpp" />
@@ -148,7 +148,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="engine\components\camera\ViewProjection.h" />
     <ClInclude Include="engine\components\input\Input.h" />
     <ClInclude Include="engine\components\light\DirectionalLight.h" />
-    <ClInclude Include="engine\components\light\Light.h" />
     <ClInclude Include="engine\components\light\PointLight.h" />
     <ClInclude Include="engine\components\light\SpotLight.h" />
     <ClInclude Include="engine\components\model\Model.h" />

@@ -50,7 +50,7 @@ public:
 	///
 
 	// 初期化
-	void Initialize(bool isRandomColor, bool isRandomLifeTime);
+	void Initialize(bool isRandomColor, bool isRandomLifeTime, Model* model);
 
 	// 更新処理
 	void Update();
@@ -78,7 +78,7 @@ public:
 	/// <param name="frequency">秒</param>
 	void SetEmitterFrequency(float frequency) { emitter_.frequencyTime = frequency; }
 
-	void ShapePlacement(Model* model);
+	std::list<Particle> ShapePlacement(Model* model, const Emitter& emitter);
 
 	// ImGuiでパラメータをまとめたもの
 	void ImGuiAdjustParameter();
@@ -86,6 +86,7 @@ public:
 private:
 	// particleの座標と速度のランダム生成
 	Particle MakeNewParticle(std::mt19937& randomEngine, const Vector3& translate);
+	Particle MakeNewParticle(const Vector3& translate);
 
 	std::list<Particle> Emission(const Emitter& emitter, std::mt19937& randomEngine);
 
@@ -110,7 +111,7 @@ private:// 定数
 	// 1フレームで進む時間
 	const float kDeltaTime = 1.0f / 60.0f;
 	// パーティクルの最大数
-	const static uint32_t kNumMaxInstance = 300;
+	const static uint32_t kNumMaxInstance = 6000;
 
 private:
 	// パーティクル
