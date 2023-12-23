@@ -177,12 +177,6 @@
     <ClCompile Include="engine\utility\GlobalVariables.cpp">
       <Filter>ソース ファイル\Engine\utility</Filter>
     </ClCompile>
-    <ClCompile Include="engine\components\camera\Camera.cpp">
-      <Filter>ソース ファイル\Engine\components\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\components\camera\DebugCamera.cpp">
-      <Filter>ソース ファイル\Engine\components\camera</Filter>
-    </ClCompile>
     <ClCompile Include="engine\scene\GameClear.cpp">
       <Filter>ソース ファイル\Engine\scene</Filter>
     </ClCompile>
@@ -314,12 +308,6 @@
     <ClInclude Include="engine\components\light\DirectionalLight.h">
       <Filter>ヘッダー ファイル\Engine\components\light</Filter>
     </ClInclude>
-    <ClInclude Include="engine\components\camera\Camera.h">
-      <Filter>ヘッダー ファイル\Engine\components\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\components\camera\DebugCamera.h">
-      <Filter>ヘッダー ファイル\Engine\components\camera</Filter>
-    </ClInclude>
     <ClInclude Include="engine\scene\GameClear.h">
       <Filter>ヘッダー ファイル\Engine\scene</Filter>
     </ClInclude>
@@ -360,7 +348,7 @@
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\postProcess\PostEffect.h">
-      <Filter>ヘッダー ファイル\Engine</Filter>
+      <Filter>ヘッダー ファイル\Engine\postProcess</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

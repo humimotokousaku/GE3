@@ -17,36 +17,31 @@ void GameManager::Initialize() {
 	auto&& titleString = ConvertString(kWindowTitle);
 
 	/// エンジン機能の生成
-
 	// windowの初期化
 	winApp_ = WinApp::GetInstance();
 	winApp_->Initialize(titleString.c_str(), 1280, 720);
-
 	// DirectXの初期化
 	directXCommon_ = DirectXCommon::GetInstance();
 	directXCommon_->DirectXCommon::GetInstance()->Initialize(winApp_->GetHwnd());
-
 	// Textureの初期化
 	textureManager_ = TextureManager::GetInstance();
 	textureManager_->TextureManager::GetInstance()->Initialize();
-
-	// エンジンの初期化
+	// PSOの初期化
 	pipelineManager_ = PipelineManager::GetInstance();
 	pipelineManager_->Initialize();
-
 	// ImGuiの初期化
 	imGuiManager_ = new ImGuiManager();
 	imGuiManager_->Initialize(winApp_->GetHwnd());
-	
 	// ブローバル変数の読み込み
 	//GlobalVariables::GetInstance()->LoadFiles();
+	// ポストエフェクト
+	//postEffect_ = new PostEffect();
+	//postEffect_->Initialize();
 
 	/// Components
-
 	// 入力(キーボードとゲームパッド)
 	input_ = Input::GetInstance();
 	input_->Initialize();
-
 	// ライトの設定
 	directionalLight_ = DirectionalLight::GetInstance();
 	directionalLight_->Initialize();
@@ -56,10 +51,8 @@ void GameManager::Initialize() {
 	// スポットライト
 	spotLight_ = SpotLight::GetInstance();
 	spotLight_->Initialize();
-
 	//// Audioの初期化
 	//audio_ = Audio::GetInstance();
-
 	//HRESULT result;
 	//// Xaudio2エンジンのインスタンスを生成
 	//result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
@@ -118,8 +111,11 @@ void GameManager::Run() {
 			///
 			/// 描画処理
 			/// 
+			//postEffect_->PreDrawScene();		
 			sceneArr_[sceneNum_]->Draw();
-
+			//postEffect_->Draw();
+			//postEffect_->PostDrawScene();
+			
 			// 描画後の処理
 			EndFrame();
 		}

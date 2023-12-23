@@ -41,8 +41,8 @@ void TextureManager::TransferTexture() {
 		srvDesc[i].ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 		srvDesc[i].Texture2D.MipLevels = UINT(metadata[i].mipLevels);
 		// SRVを作成するDescriptorHeapの場所を決める
-		textureSrvHandleCPU_[i] = GetCPUDescriptorHandle(DirectXCommon::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV[i], i + 1);
-		textureSrvHandleGPU_[i] = GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV[i], i + 1);
+		textureSrvHandleCPU_[i] = GetCPUDescriptorHandle(DirectXCommon::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV[i], i + 2);
+		textureSrvHandleGPU_[i] = GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV[i], i + 2);
 		// SRVの生成
 		DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(textureResource_[i].Get(), &srvDesc[i], textureSrvHandleCPU_[i]);
 	}

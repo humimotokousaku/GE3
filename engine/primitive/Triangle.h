@@ -1,6 +1,5 @@
 #pragma once
 #include "DirectXCommon.h"
-#include "Camera.h"
 #include "MathStructs.h"
 #include "ModelStructs.h"
 #include "TextureManager.h"

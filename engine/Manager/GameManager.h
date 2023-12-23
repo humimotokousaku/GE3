@@ -20,10 +20,10 @@
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
-#include "Camera.h"
-#include "DebugCamera.h"
 #include "Input.h"
 #include "Audio.h"
+
+#include "PostEffect.h"
 
 #pragma endregion
 
@@ -68,10 +68,9 @@ private:
 	WinApp* winApp_;
 	DirectXCommon* directXCommon_;
 	PipelineManager* pipelineManager_;
+	PostEffect* postEffect_;
 
 	// components
-	Camera* camera_;
-	DebugCamera* debugCamera_;
 	DirectionalLight* directionalLight_;
 	PointLight* pointLight_;
 	SpotLight* spotLight_;

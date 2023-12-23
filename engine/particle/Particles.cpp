@@ -8,7 +8,7 @@
 #include <numbers>
 #include <vector>
 
-void Particles::Initialize(bool isRandomColor, bool isRandomLifeTime, Model* model) {
+void Particles::Initialize() {
 	// 頂点の座標
 	modelData_.vertices.push_back({ .position = {-1.0f,1.0f,0.0f,1.0f}, .texcoord = {0.0f,0.0f},.normal = {0.0f,0.0f,1.0f} }); // 左上
 	modelData_.vertices.push_back({ .position = {1.0f,1.0f,0.0f,1.0f}, .texcoord = {1.0f,0.0f},.normal = {0.0f,0.0f,1.0f} }); // 右上
@@ -64,18 +64,15 @@ void Particles::Initialize(bool isRandomColor, bool isRandomLifeTime, Model* mod
 	materialData_->uvTransform = MakeIdentity4x4();
 
 	// エミッターの設定
-	emitter_.count = uint32_t(model->GetModelData().vertices.size());
-	emitter_.frequency = 10;
-	emitter_.frequencyTime = 1.0f;
+	emitter_.count = 10;
+	emitter_.frequency = 1;
+	emitter_.frequencyTime = 0.0f;
 
 	// フィールド(疑似風を作成)
 	accField_.acc = { 15,0,0 };
 	accField_.area.min = { -10,-10,-10 };
 	accField_.area.max = { 10,10,10 };
 	accField_.isActive = true;
-
-	particles_.splice(particles_.end(), ShapePlacement(model, emitter_));
-	//particles_ = ShapePlacement(model, emitter_);
 }
 
 void Particles::Update() {
@@ -89,17 +86,17 @@ void Particles::Update() {
 
 		if (numInstance < kNumMaxInstance) {
 			// fieldの範囲内のparticleには加速度を適用
-		/*	if (accField_.isActive) {
+			if (accField_.isActive) {
 				if (IsCollision(accField_.area, (*particleIterator).transform.translate)) {
 					(*particleIterator).vel = Add((*particleIterator).vel, Multiply(kDeltaTime, accField_.acc));
 				}
-			}*/
+			}
 			// 移動処理
 			(*particleIterator).transform.translate = Add((*particleIterator).transform.translate, Multiply(kDeltaTime, (*particleIterator).vel));
 
 			// 指定した時間に透明になる
-			//float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
-			//(*particleIterator).color.w = alpha;
+			float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
+			(*particleIterator).color.w = alpha;
 			instancingData_[numInstance].color = (*particleIterator).color;
 			++numInstance;
 		}
@@ -107,13 +104,13 @@ void Particles::Update() {
 		++particleIterator;
 	}
 
-	//emitter_.frequencyTime += kDeltaTime;
-	//if (emitter_.frequency <= emitter_.frequencyTime) {
-	//	//std::random_device seedGenerator;
-	//	//std::mt19937 randomEngine(seedGenerator());
-	//	//particles_.splice(particles_.end(), Emission(emitter_, randomEngine));
-	//	//emitter_.frequencyTime -= emitter_.frequency;
-	//}
+	emitter_.frequencyTime += kDeltaTime;
+	if (emitter_.frequency <= emitter_.frequencyTime) {
+		std::random_device seedGenerator;
+		std::mt19937 randomEngine(seedGenerator());
+		particles_.splice(particles_.end(), Emission(emitter_, randomEngine));
+		emitter_.frequencyTime -= emitter_.frequency;
+	}
 }
 
 void Particles::Draw(const ViewProjection& viewProjection, int textureNum) {
@@ -199,7 +196,6 @@ Particle Particles::MakeNewParticle(std::mt19937& randomEngine, const Vector3& t
 	Vector3 randomTranslate;
 	randomTranslate = { distribution(randomEngine),distribution(randomEngine) ,distribution(randomEngine) };
 	particle.transform.translate = Add(translate, randomTranslate);
-	//if()
 	particle.vel = { distribution(randomEngine) ,distribution(randomEngine) ,distribution(randomEngine) };
 	particle.color = { distColor(randomEngine),distColor(randomEngine) ,distColor(randomEngine),1.0f };
 	particle.lifeTime = distTime(randomEngine);
@@ -213,7 +209,7 @@ Particle Particles::MakeNewParticle(const Vector3& translate) {
 	particle.transform.rotate = { 0,0,0 };
 
 	particle.transform.translate = translate;
-	particle.vel = { 2,0,0 };
+	particle.vel = { 0,0,0 };
 	particle.color = { 1.0f,1.0f,1.0f,1.0f };
 	particle.lifeTime = 120;
 	particle.currentTime = 0;
@@ -243,20 +239,12 @@ void Particles::ImGuiAdjustParameter()
 	ImGui::End();
 }
 
-std::list<Particle> Particles::ShapePlacement(Model* model, const Emitter& emitter) {
+std::list<Particle> Particles::ShapePlacement(const Emitter& emitter) {
 	std::list<Particle> particles;
 	for (uint32_t count = 0; count < emitter.count; ++count) {
-			particles.push_back(MakeNewParticle(Vector3{ model->GetModelData().vertices[count].position.x,model->GetModelData().vertices[count].position.y,model->GetModelData().vertices[count].position.z }));
+		particles.push_back(MakeNewParticle(Vector3{ placementModel_->GetModelData().vertices[count].position.x,placementModel_->GetModelData().vertices[count].position.y,placementModel_->GetModelData().vertices[count].position.z }));
 	}
 	return particles;
-	//for (const auto& m : model->GetModelData().vertices) {
-	//	for (std::list<Particle>::iterator particleIterator = particles_.begin(); particleIterator != particles_.end();) {
-	//		(*particleIterator).transform.translate = Vector3{ m.position.x,m.position.y,m.position.z };
-	//		++particleIterator;
-	//		break;
-	//	}
-	//	//++it;
-	//}
 }
 
 Vector3 Particles::KelvinToRGB(int kelvin) {

@@ -56,7 +56,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)engine\scene;$(ProjectDir)engine\primitive;$(ProjectDir)engine\utility;$(ProjectDir)engine\math;$(ProjectDir)engine\Manager;$(ProjectDir)engine\components;$(ProjectDir)engine\base;$(ProjectDir)engine\components\model;$(ProjectDir)engine\components\input;$(ProjectDir)engine\components\audio;$(ProjectDir)engine\components\camera;$(ProjectDir)engine\components\light;$(ProjectDir)engine\postProcess;$(ProjectDir)engine\particle;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -80,7 +80,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)engine\scene;$(ProjectDir)engine\primitive;$(ProjectDir)engine\utility;$(ProjectDir)engine\math;$(ProjectDir)engine\Manager;$(ProjectDir)engine\components;$(ProjectDir)engine\base;$(ProjectDir)engine\components\model;$(ProjectDir)engine\components\input;$(ProjectDir)engine\components\audio;$(ProjectDir)engine\components\camera;$(ProjectDir)engine\components\light;$(ProjectDir)engine\postProcess;$(ProjectDir)engine\particle;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -102,8 +102,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\WinApp.cpp" />
     <ClCompile Include="engine\components\audio\Audio.cpp" />
-    <ClCompile Include="engine\components\camera\Camera.cpp" />
-    <ClCompile Include="engine\components\camera\DebugCamera.cpp" />
     <ClCompile Include="engine\components\camera\ViewProjection.cpp" />
     <ClCompile Include="engine\components\input\Input.cpp" />
     <ClCompile Include="engine\components\light\PointLight.cpp" />
@@ -143,8 +141,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\WinApp.h" />
     <ClInclude Include="engine\components\audio\Audio.h" />
-    <ClInclude Include="engine\components\camera\Camera.h" />
-    <ClInclude Include="engine\components\camera\DebugCamera.h" />
     <ClInclude Include="engine\components\camera\ViewProjection.h" />
     <ClInclude Include="engine\components\input\Input.h" />
     <ClInclude Include="engine\components\light\DirectionalLight.h" />
