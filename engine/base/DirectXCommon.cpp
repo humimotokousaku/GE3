@@ -51,7 +51,6 @@ void DirectXCommon::Initialize(HWND hwnd) {
 	SettingDepthStencilState();
 	// RTV
 	rtvDescriptorHeap_ = CreateDescriptorHeap(device_.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false).Get();
-
 	CreateRTV();
 
 #pragma region FenceとEventを生成する

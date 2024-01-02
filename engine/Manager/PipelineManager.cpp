@@ -397,6 +397,16 @@ void PipelineManager::CreatePSO() {
 			graphicsPipelineStateDescs_[i].DepthStencilState = depthStencilDesc;
 			graphicsPipelineStateDescs_[i].DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		}
+		// ポストエフェクト
+		else if (i == 7) {
+			graphicsPipelineStateDescs_[i].VS = { vertexShaderBlob_->GetBufferPointer(),
+			vertexShaderBlob_->GetBufferSize() }; // vertexShader
+			graphicsPipelineStateDescs_[i].PS = { pixelShaderBlob_->GetBufferPointer(),
+			pixelShaderBlob_->GetBufferSize() }; // pixelShader
+			// DepthStencilの設定
+			graphicsPipelineStateDescs_[i].DepthStencilState = DirectXCommon::GetInstance()->GetDepthStencilDesc();
+			graphicsPipelineStateDescs_[i].DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		}
 
 		graphicsPipelineStateDescs_[i].BlendState = blendDesc_[i]; // blendState
 		graphicsPipelineStateDescs_[i].RasterizerState = rasterizerDesc_[i]; // rasterizerState
