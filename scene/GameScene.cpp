@@ -20,9 +20,9 @@ void GameScene::Initialize() {
 	// ファイル名を指定してテクスチャを読み込む
 	playerTexture_ = PLAYER;
 	// 3Dモデルの生成
-	model_ = Model::CreateModelFromObj("resources","block.obj");
+	model_ = Model::CreateModelFromObj("engine/resources","block.obj");
 
-	modelSkydome_ = Model::CreateModelFromObj("resources/Skydome", "skydome.obj");
+	modelSkydome_ = Model::CreateModelFromObj("engine/resources/Skydome", "skydome.obj");
 
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
