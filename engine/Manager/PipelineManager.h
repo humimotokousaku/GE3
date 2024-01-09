@@ -113,7 +113,7 @@ private:
 
 	ID3DBlob* errorBlob_;
 
-	static const int kMaxPSO = 8;
+	static const int kMaxPSO = 7;
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_[kMaxPSO];
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[kMaxPSO][3];
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc_[kMaxPSO];
