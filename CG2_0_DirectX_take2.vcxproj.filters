@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="imgui">
-      <UniqueIdentifier>{a3dee17f-dd6e-43a8-ad94-de15e89a0747}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Engine">
       <UniqueIdentifier>{631a231a-e916-48a4-a7f0-fcea517f4f0d}</UniqueIdentifier>
     </Filter>
@@ -106,31 +103,37 @@
     <Filter Include="ヘッダー ファイル\Engine\primitive">
       <UniqueIdentifier>{0f96bbf9-79cb-4d38-af95-694987399c02}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{e26bac3c-5d37-4a2c-919a-79066a62e4a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\imgui">
+      <UniqueIdentifier>{a3dee17f-dd6e-43a8-ad94-de15e89a0747}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="externals\ImGui\imgui.cpp">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\ImGui\imgui_demo.cpp">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\ImGui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\ImGui\imgui_impl_dx12.cpp">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\ImGui\imgui_impl_win32.cpp">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\ImGui\imgui_tables.cpp">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\ImGui\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\DirectXCommon.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
@@ -225,28 +228,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\ImGui\imconfig.h">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\ImGui\imgui.h">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\ImGui\imgui_impl_dx12.h">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\ImGui\imgui_impl_win32.h">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\ImGui\imgui_internal.h">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\ImGui\imstb_rectpack.h">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\ImGui\imstb_textedit.h">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\ImGui\imstb_truetype.h">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </ClInclude>
     <ClInclude Include="engine\base\WinApp.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
@@ -353,7 +356,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\ImGui\LICENSE.txt">
-      <Filter>imgui</Filter>
+      <Filter>External\imgui</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

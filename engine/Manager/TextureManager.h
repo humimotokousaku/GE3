@@ -1,6 +1,6 @@
 #pragma once
-#include "../../externals/DirectXTex/d3dx12.h"
-#include "../../externals/DirectXTex/DirectXTex.h"
+#include "d3dx12.h"
+#include "DirectXTex.h"
 #include "DirectXCommon.h"
 #include "MathStructs.h"
 #include "ModelStructs.h"
