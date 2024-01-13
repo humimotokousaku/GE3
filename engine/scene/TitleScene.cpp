@@ -9,6 +9,9 @@ void TitleScene::Initialize() {
 	plane_ = Model::CreateModelFromObj("engine/resources", "plane.obj");
 	axis_ = Model::CreateModelFromObj("engine/resources", "teapot.obj");
 
+	// Sprite
+	sprite_ = Sprite::Create(UVCHEKER);
+
 	// particle
 	particles_ = new Particles();
 	particles_->Initialize();
@@ -23,16 +26,20 @@ void TitleScene::Update() {
 	// パーティクルの更新処理
 	particles_->Update();
 
+#ifdef _DEBUG
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("translation", &viewProjection_.translation_.x, 0.1f, -100, 100);
 	ImGui::DragFloat3("rotation", &viewProjection_.rotation_.x, 0.01f, -6.28f, 6.28f);
 	ImGui::End();
+#endif
+	sprite_->ImGuiAdjustParameter();
 }
 
 void TitleScene::Draw() {
 	axis_->Draw(viewProjection_, UVCHEKER);
 	plane_->Draw(viewProjection_, UVCHEKER);
 	particles_->Draw(viewProjection_, PARTICLE);
+	sprite_->Draw();
 }
 
 void TitleScene::Finalize() {

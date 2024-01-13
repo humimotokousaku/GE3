@@ -27,7 +27,6 @@ private:
 
 	int textureNum_;
 	Input* input_;
-	Vector3 pos_;
 	WorldTransform cubeWorldTransform_[kMaxCube];
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;

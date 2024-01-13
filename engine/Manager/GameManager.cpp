@@ -100,22 +100,20 @@ void GameManager::Run() {
 			/// 
 			sceneArr_[sceneNum_]->Update();
 
+#ifdef _DEBUG
 			// ImGuiのパラメータを入れている
-			ImGuiAdjustParameter();
-
+			//ImGuiAdjustParameter();
 			// FPSカウンターの表示
 			ImGui::Begin("Control panel");
 			ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
 			ImGui::End();
+#endif // _DEBUG
 
 			///
 			/// 描画処理
-			/// 
-			//postEffect_->PreDrawScene();		
+			/// 	
 			sceneArr_[sceneNum_]->Draw();
-			//postEffect_->Draw();
-			//postEffect_->PostDrawScene();
-			
+
 			// 描画後の処理
 			EndFrame();
 		}
@@ -148,7 +146,7 @@ void GameManager::EndFrame() {
 
 void GameManager::Finalize() {
 	sceneArr_[sceneNum_]->Finalize();
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 4; i++) {
 		delete sceneArr_[i];
 	}
 	// ImGui

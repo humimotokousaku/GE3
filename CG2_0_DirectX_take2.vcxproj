@@ -87,6 +87,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
       <TreatWarningAsError>false</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)engine\scene;$(ProjectDir)engine\primitive;$(ProjectDir)engine\utility;$(ProjectDir)engine\math;$(ProjectDir)engine\Manager;$(ProjectDir)engine\components;$(ProjectDir)engine\base;$(ProjectDir)engine\components\model;$(ProjectDir)engine\components\input;$(ProjectDir)engine\components\audio;$(ProjectDir)engine\components\camera;$(ProjectDir)engine\components\light;$(ProjectDir)engine\postProcess;$(ProjectDir)engine\particle;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

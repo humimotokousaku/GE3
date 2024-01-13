@@ -29,12 +29,12 @@ void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 	CreateIndexBufferView();
 	// material
 	CreateMaterialResource();
-	
+
 	// 1つ分のサイズを用意する
 	cameraPosResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Vector3)).Get();
 	// 書き込むためのアドレスを取得
 	cameraPosResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraPosData_));
-	
+
 	// 書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
@@ -102,7 +102,7 @@ void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 
 	// アンカーポイントのスクリーン座標
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 640,360,1 };
+	worldTransform_.translation_ = { 0,0,1 };
 
 	// カメラ
 	viewProjection_.Initialize();
@@ -112,6 +112,19 @@ void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 }
 
 void Sprite::Draw() {
+#pragma region スプライトの大きさを決める 
+	// アンカーポイントから見た頂点座標
+	float left = (0.0f - anchorPoint_.x) * size_.x;
+	float right = (1.0f - anchorPoint_.x) * size_.x;
+	float top = (0.0f - anchorPoint_.y) * size_.y;
+	float bottom = (1.0f - anchorPoint_.y) * size_.y;
+	// 矩形のデータ
+	vertexData_[0].position = { left,bottom, 0.0f, 1.0f };// 左下
+	vertexData_[1].position = { left,top, 0.0f, 1.0f };// 左上
+	vertexData_[2].position = { right,bottom, 0.0f, 1.0f };// 右下
+	vertexData_[3].position = { right,top, 0.0f, 1.0f };// 右上
+#pragma endregion
+
 	// ワールド座標の更新
 	worldTransform_.UpdateMatrix();
 	/// コマンドを積む
@@ -119,19 +132,17 @@ void Sprite::Draw() {
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(psoManager_->GetRootSignature()[1].Get());
 	DirectXCommon::GetInstance()->GetCommandList()->SetPipelineState(psoManager_->GetGraphicsPipelineState()[1].Get()); // PSOを設定
 
-
 	// 形状を設定
 	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
 	DirectXCommon::GetInstance()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 
 	/// CBVの設定
-
 	// worldTransform
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform_.constBuff_->GetGPUVirtualAddress());
 	// viewProjection
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection_.constBuff_->GetGPUVirtualAddress());
+	// カメラ位置
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraPosResource_.Get()->GetGPUVirtualAddress());
 
 	/// DescriptorTableの設定
@@ -143,7 +154,6 @@ void Sprite::Draw() {
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, DirectionalLight::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, PointLight::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(7, SpotLight::GetInstance()->GetSpotLightResource()->GetGPUVirtualAddress());
-
 
 	// 描画(DrawCall/ドローコール)。6頂点で1つのインスタンス
 	DirectXCommon::GetInstance()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
@@ -163,13 +173,17 @@ void Sprite::AdjustTextureSize() {
 }
 
 void Sprite::ImGuiAdjustParameter() {
-	ImGui::Text("Sprite");
-	ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.1f, 0, 720);
-	ImGui::DragFloat3("Scale", &worldTransform_.scale_.x, 0.1f, -5, 5);
-	ImGui::DragFloat3("Rotate.z", &worldTransform_.rotation_.x, 0.1f, -6.28f, 6.28f);
-	ImGui::DragFloat2("AnchorPoint", &anchorPoint_.x, 0.01f, -1.0f, 1.0f);
-	ImGui::DragFloat2("Size", &size_.x, 0.1f);
+#ifdef _DEBUG
+	// ウィンドウの初期サイズを指定
+	ImGui::Begin("Sprite");
+	ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.5f, 0, 1280, "%.1f");
+	ImGui::DragFloat3("Scale", &worldTransform_.scale_.x, 0.1f, -5, 5, "%.1f");
+	ImGui::DragFloat3("Rotate.z", &worldTransform_.rotation_.x, 0.1f, -6.28f, 6.28f, "%.1f");
+	ImGui::DragFloat2("AnchorPoint", &anchorPoint_.x, 0.01f, -1.0f, 1.0f, "%.2f");
+	ImGui::DragFloat2("Size", &size_.x, 0.1f, 0,1280,"%.1f");
 	ImGui::CheckboxFlags("isLighting", &materialData_->enableLighting, 1);
+	ImGui::End();
+#endif
 }
 
 Microsoft::WRL::ComPtr<ID3D12Resource> Sprite::CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes) {
