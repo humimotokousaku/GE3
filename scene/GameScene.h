@@ -29,6 +29,10 @@ class GameManager;
 class GameScene : public IScene
 {
 public: // メンバ関数
+	///
+	/// Default Method
+	/// 
+
 	/// <summary>
 	/// コンストクラタ
 	/// </summary>
@@ -55,6 +59,14 @@ public: // メンバ関数
 	void Draw()override;
 
 	void Finalize()override;
+
+	///
+	/// User Method
+	/// 
+
+	void UpdatePlayerPosition(float t);
+
+	Vector3 CatmullRomSpline(const std::vector<Vector3>& controlPoints, float t);
 
 	// 弾リストを取得
 	const std::list<PlayerBullet*>& GetPlayerBullets() const { return playerBullets_; }
@@ -135,5 +147,17 @@ private: // メンバ変数
 	bool isWait_ = false;
 	// 敵が発生するまでの時間
 	int32_t waitTime_ = 0;
+
+	// スプライン曲線制御点（通過点）
+	std::vector<Vector3> controlPoints_;
+	// 線分で描画する用の頂点リスト
+	std::vector<Vector3> pointsDrawing_;
+	// 線分の数
+	const size_t segmentCount = 100;
+
+	Vector3 target_;
+
+	float t_;
+	float targetT_;
 };
 

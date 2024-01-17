@@ -20,7 +20,7 @@ void GameScene::Initialize() {
 	// ファイル名を指定してテクスチャを読み込む
 	playerTexture_ = PLAYER;
 	// 3Dモデルの生成
-	model_ = Model::CreateModelFromObj("resources","block.obj");
+	model_ = Model::CreateModelFromObj("resources", "block.obj");
 
 	modelSkydome_ = Model::CreateModelFromObj("resources/Skydome", "skydome.obj");
 
@@ -55,17 +55,23 @@ void GameScene::Initialize() {
 	line_ = new Line();
 	line_->Initialize();
 
+	// スプライン曲線制御点（通過点）の初期化
+	controlPoints_ = {
+		{0,  0,  0},
+		{10, 10, 10},
+		{10, 15, 0},
+		{20, 15, 20},
+		{20, 0,  0},
+		{30, 0,  -10}
+	};
+	targetT_ = 1.0f / segmentCount;
+
 	// 衝突マネージャーの生成
 	collisionManager_ = new CollisionManager();
 }
 
 void GameScene::Update() {
 	viewProjection_.UpdateMatrix();
-
-	// デバッグカメラの更新
-	railCamera_->Update();
-	viewProjection_.matView = railCamera_->GetViewProjection().matView;
-	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
 
 	// 敵の出現するタイミングと座標
 	UpdateEnemyPopCommands();
@@ -112,6 +118,36 @@ void GameScene::Update() {
 	// 天球
 	skydome_->Update();
 
+	// 線分の数+1個分の頂点座標の計算
+	for (size_t i = 0; i < segmentCount + 1; i++) {
+		float t = 1.0f / segmentCount * i;
+
+		Vector3 pos = CatmullRomSpline(controlPoints_, t);
+		// 描画用頂点リストに追加
+		pointsDrawing_.push_back(pos);
+	}
+
+	// カメラの移動
+	if (t_ < 0.99f) {
+		t_ += 1.0f / segmentCount / 10;
+	}
+	else {
+		t_ = 0.99f;
+	}
+	if (targetT_ < 0.99f) {
+		targetT_ += 1.0f / segmentCount / 10;
+	}
+	else {
+		targetT_ = 1.0f;
+	}
+	target_ = CatmullRomSpline(controlPoints_, targetT_);
+	UpdatePlayerPosition(t_);
+
+	// デバッグカメラの更新
+	railCamera_->Update(target_);
+	viewProjection_.matView = railCamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+
 	// 当たり判定を必要とするObjectをまとめてセットする
 	collisionManager_->SetGameObject(player_, enemy_, enemyBullets_, playerBullets_);
 	// 衝突マネージャー(当たり判定)
@@ -145,7 +181,9 @@ void GameScene::Draw() {
 	player_->DrawUI();
 
 	// 線
-	line_->Draw(viewProjection_);
+	for (int i = 0; i < segmentCount - 1; i++) {
+		line_->Draw(pointsDrawing_[i], pointsDrawing_[i + 1], viewProjection_);
+	}
 }
 
 void GameScene::Finalize() {
@@ -176,6 +214,41 @@ void GameScene::Finalize() {
 	viewProjection_.constBuff_.ReleaseAndGetAddressOf();
 
 	worldTransform_.constBuff_.ReleaseAndGetAddressOf();
+}
+
+
+Vector3 GameScene::CatmullRomSpline(const std::vector<Vector3>& controlPoints, float t) {
+	int n = (int)controlPoints.size();
+	int segment = static_cast<int>(t * (n - 1));
+	float tSegment = t * (n - 1) - segment;
+
+	Vector3 p0 = controlPoints[segment > 0 ? segment - 1 : 0];
+	Vector3 p1 = controlPoints[segment];
+	Vector3 p2 = controlPoints[segment < n - 1 ? segment + 1 : n - 1];
+	Vector3 p3 = controlPoints[segment < n - 2 ? segment + 2 : n - 1];
+
+	Vector3 interpolatedPoint;
+	interpolatedPoint.x =
+		0.5f * ((2.0f * p1.x) + (-p0.x + p2.x) * tSegment +
+			(2.0f * p0.x - 5.0f * p1.x + 4.0f * p2.x - p3.x) * (tSegment * tSegment) +
+			(-p0.x + 3.0f * p1.x - 3.0f * p2.x + p3.x) * (tSegment * tSegment * tSegment));
+	interpolatedPoint.y =
+		0.5f * ((2.0f * p1.y) + (-p0.y + p2.y) * tSegment +
+			(2.0f * p0.y - 5.0f * p1.y + 4.0f * p2.y - p3.y) * (tSegment * tSegment) +
+			(-p0.y + 3.0f * p1.y - 3.0f * p2.y + p3.y) * (tSegment * tSegment * tSegment));
+	interpolatedPoint.z =
+		0.5f * ((2.0f * p1.z) + (-p0.z + p2.z) * tSegment +
+			(2.0f * p0.z - 5.0f * p1.z + 4.0f * p2.z - p3.z) * (tSegment * tSegment) +
+			(-p0.z + 3.0f * p1.z - 3.0f * p2.z + p3.z) * (tSegment * tSegment * tSegment));
+
+	return interpolatedPoint;
+}
+
+void GameScene::UpdatePlayerPosition(float t) {
+	Vector3 cameraPosition{};
+	// Catmull-Romスプライン関数で補間された位置を取得
+	cameraPosition = CatmullRomSpline(controlPoints_, t);
+	railCamera_->SetTranslation(cameraPosition);
 }
 
 void GameScene::SpawnEnemy(Vector3 pos) {

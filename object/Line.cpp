@@ -14,12 +14,16 @@ void Line::Initialize() {
 	vertexData_[0].position = { 0,0,0,1 };
 	vertexData_[1].position = { 10,0,0,1 };
 
-	*materialData_ = Vector4(1.0f,1.0f,1.0f,1.0f);
+	*materialData_ = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
 
 	worldTransform.Initialize();
 }
 
-void Line::Draw(const ViewProjection& viewProjection) {
+void Line::Draw(Vector3 start, Vector3 end, const ViewProjection& viewProjection) {
+	// 頂点座標を設定
+	vertexData_[0].position = { start.x,start.y,start.z,1 };
+	vertexData_[1].position = { end.x,end.y,end.z,1 };
+
 	worldTransform.UpdateMatrix();
 	// RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(LinePSO::GetInstance()->GetRootSignature().Get());
@@ -36,7 +40,7 @@ void Line::Draw(const ViewProjection& viewProjection) {
 
 	// マテリアルCBufferの場所を設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
-	
+
 	DirectXCommon::GetInstance()->GetCommandList()->DrawInstanced(2, 1, 0, 0);
 }
 
