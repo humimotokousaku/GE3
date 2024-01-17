@@ -52,8 +52,10 @@ void GameScene::Initialize() {
 	skydome_->Initialize(modelSkydome_, { 0, 0, 0 });
 
 	// 線
-	line_ = new Line();
-	line_->Initialize();
+	for (int i = 0; i < segmentCount; i++) {
+		line_[i] = new Line();
+		line_[i]->Initialize();
+	}
 
 	// スプライン曲線制御点（通過点）の初期化
 	controlPoints_ = {
@@ -121,7 +123,6 @@ void GameScene::Update() {
 	// 線分の数+1個分の頂点座標の計算
 	for (size_t i = 0; i < segmentCount + 1; i++) {
 		float t = 1.0f / segmentCount * i;
-
 		Vector3 pos = CatmullRomSpline(controlPoints_, t);
 		// 描画用頂点リストに追加
 		pointsDrawing_.push_back(pos);
@@ -182,12 +183,14 @@ void GameScene::Draw() {
 
 	// 線
 	for (int i = 0; i < segmentCount - 1; i++) {
-		line_->Draw(pointsDrawing_[i], pointsDrawing_[i + 1], viewProjection_);
+		line_[i]->Draw(pointsDrawing_[i], pointsDrawing_[i + 1], viewProjection_);
 	}
 }
 
 void GameScene::Finalize() {
-	delete line_;
+	for (int i = 0; i < segmentCount; i++) {
+		delete line_[i];
+	}
 	// 3Dモデル
 	delete model_;
 	// 自キャラの解放
@@ -215,7 +218,6 @@ void GameScene::Finalize() {
 
 	worldTransform_.constBuff_.ReleaseAndGetAddressOf();
 }
-
 
 Vector3 GameScene::CatmullRomSpline(const std::vector<Vector3>& controlPoints, float t) {
 	int n = (int)controlPoints.size();

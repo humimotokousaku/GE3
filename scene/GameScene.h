@@ -140,8 +140,6 @@ private: // メンバ変数
 	Skydome* skydome_ = nullptr;
 	// カメラレール
 	RailCamera* railCamera_ = nullptr;
-	// 線
-	Line* line_;
 
 	// 敵が発生待機中か
 	bool isWait_ = false;
@@ -153,7 +151,9 @@ private: // メンバ変数
 	// 線分で描画する用の頂点リスト
 	std::vector<Vector3> pointsDrawing_;
 	// 線分の数
-	const size_t segmentCount = 100;
+	static const size_t segmentCount = 100;
+	// 線
+	Line* line_[segmentCount];
 
 	Vector3 target_;
 
