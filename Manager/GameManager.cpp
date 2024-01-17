@@ -46,8 +46,12 @@ void GameManager::Initialize() {
 	textureManager_->TextureManager::GetInstance()->Initialize();
 
 	// エンジンの初期化
-	myEngine_ = new MyEngine();
+	myEngine_ = MyEngine::GetInstance();
 	myEngine_->Initialize();
+
+	// PSOの初期化
+	linePSO_ = LinePSO::GetInstance();
+	linePSO_->Initialize();
 
 	// ライトの設定
 	light_ = Light::GetInstance();
@@ -149,7 +153,6 @@ void GameManager::Finalize() {
 	// ImGui
 	imGuiManager_->Release();
 	delete imGuiManager_;
-	delete myEngine_;
 	textureManager_->Release();
 	directXCommon_->Release();
 	CloseWindow(winApp_->GetHwnd());

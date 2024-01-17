@@ -51,6 +51,10 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, { 0, 0, 0 });
 
+	// 線
+	line_ = new Line();
+	line_->Initialize();
+
 	// 衝突マネージャーの生成
 	collisionManager_ = new CollisionManager();
 }
@@ -139,9 +143,13 @@ void GameScene::Draw() {
 
 	// 2Dレティクル
 	player_->DrawUI();
+
+	// 線
+	line_->Draw(viewProjection_);
 }
 
 void GameScene::Finalize() {
+	delete line_;
 	// 3Dモデル
 	delete model_;
 	// 自キャラの解放

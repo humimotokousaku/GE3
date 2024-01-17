@@ -100,6 +100,12 @@
     <Filter Include="ソース ファイル\railCamera">
       <UniqueIdentifier>{a1b7855a-a5ae-48b6-8340-0d2aa380e2ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\pso">
+      <UniqueIdentifier>{2c3dc6c9-c6c2-451a-a29b-9ba8e26e0290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\pso">
+      <UniqueIdentifier>{1d73cb95-0a0b-4acb-a97e-32bcb2dfa602}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -248,6 +254,12 @@
     </ClCompile>
     <ClCompile Include="utility\TimedCall.cpp">
       <Filter>ソース ファイル\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="pso\LinePSO.cpp">
+      <Filter>ソース ファイル\pso</Filter>
+    </ClCompile>
+    <ClCompile Include="object\Line.cpp">
+      <Filter>ソース ファイル\object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -430,6 +442,12 @@
     </ClInclude>
     <ClInclude Include="utility\TimedCall.h">
       <Filter>ヘッダー ファイル\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="pso\LinePSO.h">
+      <Filter>ヘッダー ファイル\pso</Filter>
+    </ClInclude>
+    <ClInclude Include="object\Line.h">
+      <Filter>ヘッダー ファイル\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

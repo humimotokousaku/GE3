@@ -11,6 +11,8 @@
 
 // Manager
 #include "../Manager/PipelineManager.h"
+// PSO
+#include "../pso/LinePSO.h"
 
 // Base
 #include "../base/WinApp.h"
@@ -66,6 +68,7 @@ private:
 	WinApp* winApp_;
 	DirectXCommon* directXCommon_;
 	MyEngine* myEngine_;
+	LinePSO* linePSO_;
 
 	// components
 	Camera* camera_;

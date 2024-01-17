@@ -12,6 +12,7 @@
 #include "../Collision/CollisionManager.h"
 
 #include "../object/Sprite.h"
+#include "../object/Line.h"
 
 #include "../Enemy/Enemy.h"
 #include "../Player/Player.h"
@@ -127,6 +128,8 @@ private: // メンバ変数
 	Skydome* skydome_ = nullptr;
 	// カメラレール
 	RailCamera* railCamera_ = nullptr;
+	// 線
+	Line* line_;
 
 	// 敵が発生待機中か
 	bool isWait_ = false;
