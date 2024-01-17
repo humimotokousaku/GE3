@@ -20,7 +20,7 @@ public:
 	// 初期化
 	void Initialize();
 	// 描画処理
-	void Draw(const ViewProjection& viewProjection);
+	void Draw(Vector3 start, Vector3 end, const ViewProjection& viewProjection);
 	// 解放処理
 	//void Release();
 
