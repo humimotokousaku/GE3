@@ -10,6 +10,8 @@ public:
 	/// </summary>
 	PostEffect();
 	
+	static PostEffect* GetInstance();
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -38,6 +40,8 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index);
+
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetSrvDescriptorHeap() { return descHeapSRV_.Get(); }
 private:
 	DirectXCommon* directXCommon_;
 

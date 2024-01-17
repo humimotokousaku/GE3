@@ -109,6 +109,12 @@
     <Filter Include="External\imgui">
       <UniqueIdentifier>{a3dee17f-dd6e-43a8-ad94-de15e89a0747}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\pso">
+      <UniqueIdentifier>{4e160585-d5d9-4253-a7c3-6b03eaef2f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\pso">
+      <UniqueIdentifier>{35534473-80f0-4829-ba0c-eff2a95082e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -224,6 +230,15 @@
     </ClCompile>
     <ClCompile Include="engine\components\light\DirectionalLight.cpp">
       <Filter>ソース ファイル\Engine\components\light</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\math\Lerp.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\pso\LinePSO.cpp">
+      <Filter>ソース ファイル\pso</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\primitive\Line.cpp">
+      <Filter>ソース ファイル\Engine\primitive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +368,15 @@
     <ClInclude Include="engine\postProcess\PostEffect.h">
       <Filter>ヘッダー ファイル\Engine\postProcess</Filter>
     </ClInclude>
+    <ClInclude Include="engine\math\Lerp.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\primitive\Line.h">
+      <Filter>ヘッダー ファイル\Engine\primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\pso\LinePSO.h">
+      <Filter>ヘッダー ファイル\pso</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\ImGui\LICENSE.txt">
@@ -364,6 +388,9 @@
       <Filter>リソース ファイル</Filter>
     </None>
     <None Include="engine\resources\sharder\Particle.hlsli">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="engine\resources\sharder\Line.hlsli">
       <Filter>リソース ファイル</Filter>
     </None>
   </ItemGroup>
@@ -378,6 +405,12 @@
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="engine\resources\sharder\Particle.PS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="engine\resources\sharder\LineVS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="engine\resources\sharder\LinePS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>

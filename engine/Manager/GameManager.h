@@ -9,8 +9,9 @@
 #include "GameClear.h"
 #include "GameOver.h"
 
-// Manager
+// PSO
 #include "PipelineManager.h"
+#include "LinePSO.h"
 
 // Base
 #include "WinApp.h"
@@ -22,7 +23,6 @@
 #include "SpotLight.h"
 #include "Input.h"
 #include "Audio.h"
-
 #include "PostEffect.h"
 
 #pragma endregion
@@ -67,7 +67,10 @@ private:
 	// base
 	WinApp* winApp_;
 	DirectXCommon* directXCommon_;
+	// PSO
 	PipelineManager* pipelineManager_;
+	LinePSO* linePSO_;
+
 	PostEffect* postEffect_;
 
 	// components

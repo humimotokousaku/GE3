@@ -1,6 +1,7 @@
 #include "ConvertString.h"
 #include "ImGuiManager.h"
 #include "TextureManager.h"
+#include "PostEffect.h"
 #include <vector>
 #include <cassert>
 #define _USE_MATH_DEFINES

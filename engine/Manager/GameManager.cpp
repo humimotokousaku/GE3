@@ -29,14 +29,17 @@ void GameManager::Initialize() {
 	// PSOの初期化
 	pipelineManager_ = PipelineManager::GetInstance();
 	pipelineManager_->Initialize();
+	// 線のPSO
+	linePSO_ = LinePSO::GetInstance();
+	linePSO_->Initialize();
 	// ImGuiの初期化
 	imGuiManager_ = new ImGuiManager();
 	imGuiManager_->Initialize(winApp_->GetHwnd());
 	// ブローバル変数の読み込み
 	//GlobalVariables::GetInstance()->LoadFiles();
 	// ポストエフェクト
-	//postEffect_ = new PostEffect();
-	//postEffect_->Initialize();
+	postEffect_ = new PostEffect();
+	postEffect_->Initialize();
 
 	/// Components
 	// 入力(キーボードとゲームパッド)
@@ -91,8 +94,8 @@ void GameManager::Run() {
 
 			//シーン変更チェック
 			if (sceneNum_ != preSceneNum_) {
-				sceneArr_[sceneNum_]->Initialize();
 				sceneArr_[preSceneNum_]->Finalize();
+				sceneArr_[sceneNum_]->Initialize();				
 			}
 
 			///
@@ -102,7 +105,7 @@ void GameManager::Run() {
 
 #ifdef _DEBUG
 			// ImGuiのパラメータを入れている
-			//ImGuiAdjustParameter();
+			ImGuiAdjustParameter();
 			// FPSカウンターの表示
 			ImGui::Begin("Control panel");
 			ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
@@ -112,8 +115,12 @@ void GameManager::Run() {
 			///
 			/// 描画処理
 			/// 	
+			//postEffect_->PreDrawScene();
 			sceneArr_[sceneNum_]->Draw();
+			//postEffect_->PostDrawScene();
 
+
+			//postEffect_->Draw();		
 			// 描画後の処理
 			EndFrame();
 		}

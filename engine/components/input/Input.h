@@ -28,10 +28,8 @@ public:
 	/// 
 	// キーを押した瞬間
 	bool TriggerKey(BYTE keyNumber) const;
-
 	// キーを押している間
 	bool PressKey(BYTE keyNumber)const;
-
 	// キーを離した瞬間
 	bool ReleaseKey(BYTE keyNumber)const;
 
@@ -46,6 +44,10 @@ public:
 
 	// トリガー処理
 	bool GamePadTrigger(int GAMEPAD_NUM);
+	// リリース処理
+	bool GamePadRelease(int GAMEPAD_NUM);
+	// 押してるときの処理
+	bool GamePadPress(int GAMEPAD_NUM);
 
 private:
 	/// 

@@ -37,6 +37,9 @@ void Input::Update() {
 
 	// 全キーの入力状態を取得
 	keyboard_->GetDeviceState(sizeof(key_), &key_);
+
+	preJoyState_ = joyState_;
+	GetJoystickState(0, joyState_);
 }
 
 bool Input::TriggerKey(BYTE keyNumber) const {
@@ -82,7 +85,28 @@ SHORT Input::ApplyDeadzone(SHORT inputValue) {
 }
 
 bool Input::GamePadTrigger(int GAMEPAD_NUM) {
-	XINPUT_STATE controllerState;
-	XInputGetState(0, &controllerState);
-	return (controllerState.Gamepad.wButtons & GAMEPAD_NUM) == 0;
+	if ((joyState_.Gamepad.wButtons & GAMEPAD_NUM) && !(preJoyState_.Gamepad.wButtons & GAMEPAD_NUM)) {
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+bool Input::GamePadRelease(int GAMEPAD_NUM) {
+	if (!(joyState_.Gamepad.wButtons & GAMEPAD_NUM) && (preJoyState_.Gamepad.wButtons & GAMEPAD_NUM)) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool Input::GamePadPress(int GAMEPAD_NUM) {
+	if ((joyState_.Gamepad.wButtons & GAMEPAD_NUM)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }

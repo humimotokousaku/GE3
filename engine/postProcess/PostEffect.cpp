@@ -9,6 +9,12 @@ PostEffect::PostEffect() : Sprite(UVCHEKER)
 
 }
 
+PostEffect* PostEffect::GetInstance() {
+	static PostEffect instance;
+
+	return &instance;
+}
+
 void PostEffect::Initialize() {
 	directXCommon_ = DirectXCommon::GetInstance();
 	HRESULT result;
@@ -75,8 +81,8 @@ void PostEffect::Initialize() {
 	uint32_t descriptorSizeSRV{};
 	descriptorSizeSRV = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	//D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU{};
-	srvHandleCPU_ = GetCPUDescriptorHandle(directXCommon_->GetSrvDescriptorHeap(), descriptorSizeSRV, 1);
-	srvHandleGPU_ = GetGPUDescriptorHandle(directXCommon_->GetSrvDescriptorHeap(), descriptorSizeSRV, 1);
+	srvHandleCPU_ = GetCPUDescriptorHandle(descHeapSRV_, descriptorSizeSRV, 0);
+	srvHandleGPU_ = GetGPUDescriptorHandle(descHeapSRV_, descriptorSizeSRV, 0);
 
 	directXCommon_->GetDevice()->CreateShaderResourceView(texBuff_.Get(),
 		&srvDesc,
@@ -139,6 +145,9 @@ void PostEffect::Initialize() {
 		&dsvDesc,
 		descHeapDSV_->GetCPUDescriptorHandleForHeapStart()
 	);
+	// 描画用のDescriptorHeapの設定
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> ppHeaps[] = { descHeapSRV_.Get() };
+	directXCommon_->GetCommandList()->SetDescriptorHeaps(1, ppHeaps->GetAddressOf());
 }
 
 void PostEffect::Draw() {
@@ -147,13 +156,9 @@ void PostEffect::Draw() {
 
 	/// コマンドを積む
 	// RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(psoManager_->GetRootSignature()[0].Get());
-	DirectXCommon::GetInstance()->GetCommandList()->SetPipelineState(psoManager_->GetGraphicsPipelineState()[0].Get()); // PSOを設定
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(psoManager_->GetRootSignature()[1].Get());
+	DirectXCommon::GetInstance()->GetCommandList()->SetPipelineState(psoManager_->GetGraphicsPipelineState()[1].Get()); // PSOを設定
 	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	// 描画用のDescriptorHeapの設定
-	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> ppHeaps[] = { descHeapSRV_.Get() };
-	//directXCommon_->GetCommandList()->SetDescriptorHeaps(1, ppHeaps->GetAddressOf());
 
 	// VBVを設定
 	directXCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
