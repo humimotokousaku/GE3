@@ -148,9 +148,9 @@ void LinePSO::CreateRootParameter() {
 	rootParameters_[0].Descriptor.ShaderRegister = 0;
 
 	// worldTransform
-	rootParameters_[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameters_[1].Descriptor.ShaderRegister = 0;
+	//rootParameters_[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//rootParameters_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	//rootParameters_[1].Descriptor.ShaderRegister = 0;
 
 	//// texture
 	//rootParameters_[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -159,9 +159,9 @@ void LinePSO::CreateRootParameter() {
 	//rootParameters_[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_);
 
 	// viewProjection
-	rootParameters_[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters_[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameters_[2].Descriptor.ShaderRegister = 1;
+	rootParameters_[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameters_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	rootParameters_[1].Descriptor.ShaderRegister = 0;
 
 	//// 平行光源
 	//rootParameters_[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;

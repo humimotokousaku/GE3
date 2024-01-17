@@ -12,14 +12,14 @@ void Line::Initialize() {
 
 	*materialData_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	worldTransform.Initialize();
+	//worldTransform.Initialize();
 }
 
 void Line::Draw(Vector3 start, Vector3 end, const ViewProjection& viewProjection) {
-	vertexData_[0].position = { start.x,start.y ,start.z ,1 };
-	vertexData_[1].position = { end.x,end.y ,end.z ,1 };
+	vertexData_[0] = { start.x,start.y ,start.z ,1 };
+	vertexData_[1] = { end.x,end.y ,end.z ,1 };
 
-	worldTransform.UpdateMatrix();
+	//worldTransform.UpdateMatrix();
 	// RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(LinePSO::GetInstance()->GetRootSignature().Get());
 	DirectXCommon::GetInstance()->GetCommandList()->SetPipelineState(LinePSO::GetInstance()->GetGraphicsPipelineState().Get()); // PSOを設定
@@ -27,8 +27,8 @@ void Line::Draw(Vector3 start, Vector3 end, const ViewProjection& viewProjection
 	// コマンドを積む
 	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
 
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuff_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(2, viewProjection.constBuff_->GetGPUVirtualAddress());
+	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuff_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, viewProjection.constBuff_->GetGPUVirtualAddress());
 
 	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
 	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
@@ -41,12 +41,12 @@ void Line::Draw(Vector3 start, Vector3 end, const ViewProjection& viewProjection
 
 void Line::ImGuiAdjustParameter() {
 	ImGui::Begin("Line");
-	if (ImGui::TreeNode("worldTransform")) {
+	/*if (ImGui::TreeNode("worldTransform")) {
 		ImGui::DragFloat3("translation", &worldTransform.translation_.x, 0.01f, -50, 50);
 		ImGui::DragFloat3("rotate", &worldTransform.rotation_.x, 0.001f, 0, 6.28f);
 		ImGui::DragFloat3("scale", &worldTransform.scale_.x, 0.001f, 0, 10);
 		ImGui::TreePop();
-	}
+	}*/
 
 	ImGui::End();
 }
@@ -79,16 +79,16 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Line::CreateBufferResource(const Microsof
 }
 
 void Line::CreateVertexResource() {
-	vertexResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(VertexData) * 2).Get();
+	vertexResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Vector4) * 2).Get();
 }
 
 void Line::CreateVertexBufferView() {
 	// リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_.Get()->GetGPUVirtualAddress();
 	// 使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 2;
+	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 2;
 	// 1頂点当たりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+	vertexBufferView_.StrideInBytes = sizeof(Vector4);
 }
 
 void Line::CreateMaterialResource() {

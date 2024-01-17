@@ -107,7 +107,7 @@ private:
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDescs_;
 	D3D12_BLEND_DESC blendDesc_;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_;
-	D3D12_ROOT_PARAMETER rootParameters_[3];
+	D3D12_ROOT_PARAMETER rootParameters_[2];
 	D3D12_DESCRIPTOR_RANGE descriptorRange_[1];
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];

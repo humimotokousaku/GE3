@@ -53,9 +53,6 @@ private:
 	// 頂点情報
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
-	VertexData* vertexData_;
-public:
-	// ワールド座標
-	WorldTransform worldTransform;
+	Vector4* vertexData_;
 };
 
