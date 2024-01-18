@@ -250,6 +250,8 @@ void GameScene::UpdatePlayerPosition(float t) {
 	Vector3 cameraPosition{};
 	// Catmull-Romスプライン関数で補間された位置を取得
 	cameraPosition = CatmullRomSpline(controlPoints_, t);
+	cameraPosition.y += 0.01f;
+	cameraPosition.z += 0.01f;
 	railCamera_->SetTranslation(cameraPosition);
 }
 
