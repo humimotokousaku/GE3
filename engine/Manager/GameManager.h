@@ -82,10 +82,8 @@ private:
 	ImGuiManager* imGuiManager_;
 	Input* input_;
 	Audio* audio_;
-	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;
-	IXAudio2MasteringVoice* masterVoice_;
-	SoundData soundData1_;
 
+	SoundData soundData1_;
 	// scene
 	IScene* sceneArr_[4];
 	int sceneNum_;
