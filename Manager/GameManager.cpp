@@ -4,10 +4,10 @@
 
 GameManager::GameManager() {
 	// 各シーンの配列
-	sceneArr_[TITLE_SCENE] = new TitleScene();
-	sceneArr_[GAME_SCENE] = new GameScene();
-	sceneArr_[GAMECLEAR_SCENE] = new GameClear();
-	sceneArr_[GAMEOVER_SCENE] = new GameOver();
+	sceneArr_[TITLE_SCENE] = std::make_unique<TitleScene>();
+	sceneArr_[GAME_SCENE] = std::make_unique<GameScene>();
+	sceneArr_[GAMECLEAR_SCENE] = std::make_unique<GameClear>();
+	sceneArr_[GAMEOVER_SCENE] = std::make_unique<GameOver>();
 }
 
 void GameManager::Initialize() {
@@ -72,8 +72,12 @@ void GameManager::Initialize() {
 	// ブローバル変数の読み込み
 	//GlobalVariables::GetInstance()->LoadFiles();
 
+	// シーン遷移
+	sceneTransition_ = SceneTransition::GetInstance();
+	sceneTransition_->Initialize(false);
+
 	//初期シーンの設定
-	sceneNum_ = GAME_SCENE;
+	sceneNum_ = TITLE_SCENE;
 	// シーンごとの初期化
 	sceneArr_[sceneNum_]->Initialize();
 }
@@ -100,14 +104,15 @@ void GameManager::Run() {
 
 			//シーン変更チェック
 			if (sceneNum_ != preSceneNum_) {
-				sceneArr_[sceneNum_]->Initialize();
 				sceneArr_[preSceneNum_]->Finalize();
+				sceneArr_[sceneNum_]->Initialize();
 			}
 
 			///
 			/// 更新処理
-			/// 
+			/// 	
 			sceneArr_[sceneNum_]->Update();
+			sceneTransition_->Update();
 
 			// ImGuiのパラメータを入れている
 			ImGuiAdjustParameter();
@@ -116,6 +121,8 @@ void GameManager::Run() {
 			/// 描画処理
 			/// 
 			sceneArr_[sceneNum_]->Draw();
+			// フェードインとフェードアウト
+			sceneTransition_->Draw(UVCHEKER);
 
 			// 描画後の処理
 			EndFrame();
@@ -147,8 +154,8 @@ void GameManager::EndFrame() {
 }
 void GameManager::Finalize() {
 	sceneArr_[sceneNum_]->Finalize();
-	for (int i = 0; i < 4; i++) {
-		delete sceneArr_[i];
+	for (auto& scene : sceneArr_) {
+		scene.reset();
 	}
 	// ImGui
 	imGuiManager_->Release();

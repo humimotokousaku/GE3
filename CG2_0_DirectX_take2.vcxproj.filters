@@ -88,9 +88,6 @@
     <Filter Include="ヘッダー ファイル\collision">
       <UniqueIdentifier>{6dcaa99e-5d1f-4ea5-806b-4d4e06a4bfad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\skydome">
-      <UniqueIdentifier>{5211df89-70e2-46ee-a265-d5ec148c782a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\skydome">
       <UniqueIdentifier>{12a0fa93-f6a9-48a4-8ee9-b4c89074279b}</UniqueIdentifier>
     </Filter>
@@ -105,6 +102,12 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\pso">
       <UniqueIdentifier>{1d73cb95-0a0b-4acb-a97e-32bcb2dfa602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene\sceneTransition">
+      <UniqueIdentifier>{bbfa6d8a-78db-4d49-b0bf-d78e2a132407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\skydome">
+      <UniqueIdentifier>{5211df89-70e2-46ee-a265-d5ec148c782a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -260,6 +263,9 @@
     </ClCompile>
     <ClCompile Include="object\Line.cpp">
       <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\SceneTransition\SceneTransition.cpp">
+      <Filter>ソース ファイル\scene\sceneTransition</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -448,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="object\Line.h">
       <Filter>ヘッダー ファイル\object</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneTransition\SceneTransition.h">
+      <Filter>ソース ファイル\scene\sceneTransition</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

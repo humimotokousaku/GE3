@@ -142,6 +142,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="scene\GameOver.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="scene\IScene.cpp" />
+    <ClCompile Include="scene\SceneTransition\SceneTransition.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
     <ClCompile Include="skydome\Skydome.cpp" />
     <ClCompile Include="utility\ConvertString.cpp" />
@@ -203,6 +204,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="scene\GameOver.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\IScene.h" />
+    <ClInclude Include="scene\SceneTransition\SceneTransition.h" />
     <ClInclude Include="scene\TitleScene.h" />
     <ClInclude Include="skydome\Skydome.h" />
     <ClInclude Include="Transform.h" />

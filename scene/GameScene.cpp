@@ -2,6 +2,7 @@
 #include "../Manager/GameManager.h"
 #include "../Manager/ImGuiManager.h"
 #include "../Manager/TextureManager.h"
+#include "SceneTransition/SceneTransition.h"
 #include <cassert>
 
 GameScene::GameScene() {}
@@ -38,7 +39,6 @@ void GameScene::Initialize() {
 
 	// 自キャラの生成
 	player_ = new Player();
-
 	// 初期位置
 	Vector3 playerPosition(0, -2, 10);
 	// 自キャラの初期化
@@ -66,6 +66,7 @@ void GameScene::Initialize() {
 		{20, 0,  0},
 		{30, 0,  -10}
 	};
+	t_ = 0;
 	targetT_ = 1.0f / segmentCount;
 
 	// 衝突マネージャーの生成
@@ -73,7 +74,20 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	// シーンチェンジ
+	if (input_->TriggerKey(DIK_SPACE)) {
+		SceneTransition::sceneChangeType_ = FADE_IN;
+	}
+	if (SceneTransition::GetInstance()->GetSceneChangeSignal()) {
+		sceneNum = GAMECLEAR_SCENE;
+	}
+
 	viewProjection_.UpdateMatrix();
+
+	// デバッグカメラの更新
+	railCamera_->Update(target_);
+	viewProjection_.matView = railCamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
 
 	// 敵の出現するタイミングと座標
 	UpdateEnemyPopCommands();
@@ -144,11 +158,6 @@ void GameScene::Update() {
 	target_ = CatmullRomSpline(controlPoints_, targetT_);
 	UpdatePlayerPosition(t_);
 
-	// デバッグカメラの更新
-	railCamera_->Update(target_);
-	viewProjection_.matView = railCamera_->GetViewProjection().matView;
-	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
-
 	// 当たり判定を必要とするObjectをまとめてセットする
 	collisionManager_->SetGameObject(player_, enemy_, enemyBullets_, playerBullets_);
 	// 衝突マネージャー(当たり判定)
@@ -188,6 +197,9 @@ void GameScene::Draw() {
 }
 
 void GameScene::Finalize() {
+	controlPoints_.clear();
+	pointsDrawing_.clear();
+	enemyPopCommands_.clear();
 	for (int i = 0; i < segmentCount; i++) {
 		delete line_[i];
 	}
@@ -195,13 +207,16 @@ void GameScene::Finalize() {
 	delete model_;
 	// 自キャラの解放
 	delete player_;
+	playerBullets_.clear();
 	for (PlayerBullet* bullet : playerBullets_) {
 		delete bullet;
 	}
 	// enemyの解放
+	enemy_.clear();
 	for (Enemy* enemy : enemy_) {
 		delete enemy;
 	}
+	enemyBullets_.clear();
 	for (EnemyBullet* bullet : enemyBullets_) {
 		delete bullet;
 	}

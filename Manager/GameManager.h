@@ -1,7 +1,7 @@
 #pragma once
 
 #pragma region include
- 
+
 // Scene
 #include "../scene/IScene.h"
 #include "../scene/TitleScene.h"
@@ -11,6 +11,7 @@
 
 // Manager
 #include "../Manager/PipelineManager.h"
+#include "../scene/SceneTransition/SceneTransition.h"
 // PSO
 #include "../pso/LinePSO.h"
 
@@ -28,7 +29,7 @@
 #pragma endregion
 
 class GameManager
-{	
+{
 public:
 	///
 	/// Default Method
@@ -83,8 +84,9 @@ private:
 	SoundData soundData1_;
 
 	// scene
-	IScene* sceneArr_[4];
+	std::array<std::unique_ptr<IScene>, 4u> sceneArr_;
 	int sceneNum_;
 	int preSceneNum_;
+	SceneTransition* sceneTransition_;
 };
 

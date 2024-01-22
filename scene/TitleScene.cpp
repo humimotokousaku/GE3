@@ -1,7 +1,9 @@
 #include "TitleScene.h"
 #include "../Manager/ImGuiManager.h"
+#include "SceneTransition/SceneTransition.h"
 
 void TitleScene::Initialize() {
+	sceneNum = TITLE_SCENE;
 	textureNum_ = UVCHEKER;
 	input_ = Input::GetInstance();
 
@@ -9,16 +11,15 @@ void TitleScene::Initialize() {
 }
 
 void TitleScene::Update() {
-	//// 追従対象からカメラまでのオフセット
-	//Vector3 offset = { 0.0f, 4.0f, -10.0f };
-	//// カメラの角度から回転行列を計算
-	//Matrix4x4 rotateMatrix = MakeRotateMatrix(viewProjection_.viewProjection_.rotation);
+	if (input_->TriggerKey(DIK_SPACE)) {
+		SceneTransition::sceneChangeType_ = FADE_IN;
+	}
+	if (SceneTransition::GetInstance()->GetSceneChangeSignal()) {
+		sceneNum = GAME_SCENE;
+	}
 
-	//// オフセットをカメラの回転に合わせて回転
-	//offset = TransformNormal(offset, rotateMatrix);
+#pragma region カメラ操作
 
-	//// 座標をコピーしてオフセット分ずらす
-	//viewProjection_.translation_ = Add(worldTransform_.translation_, offset);
 	XINPUT_STATE joyState;
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		//// デッドゾーンの設定
@@ -90,6 +91,8 @@ void TitleScene::Update() {
 	if (Input::GetInstance()->PressKey(DIK_D)) {
 		viewProjection_.rotation_ = Add(viewProjection_.rotation_, { 0,0.01f,0 });
 	}
+
+#pragma endregion
 
 	viewProjection_.UpdateViewMatrix();
 	viewProjection_.TransferMatrix();
