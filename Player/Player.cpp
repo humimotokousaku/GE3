@@ -8,6 +8,8 @@
 
 Player::Player() {}
 Player::~Player() {
+	worldTransform_.constBuff_.ReleaseAndGetAddressOf();
+	worldTransform3DReticle_.constBuff_.ReleaseAndGetAddressOf();
 	delete sprite2DReticle_;
 }
 
@@ -46,11 +48,10 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 void Player::Update(const ViewProjection& viewProjection) {
 	// キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
-
 	// キャラクターの移動の速さ
 	const float kCharacterSpeed = 0.2f;
 
-#pragma region Move
+	/// 移動処理↓
 
 	XINPUT_STATE joyState;
 	// ゲームパッド状態取得
@@ -61,43 +62,29 @@ void Player::Update(const ViewProjection& viewProjection) {
 		move.x += (float)leftThumbX / SHRT_MAX * kCharacterSpeed;
 		move.y += (float)leftThumbY / SHRT_MAX * kCharacterSpeed;
 	}
-
 	// 移動限界座標
 	const Vector2 kMoveLimit = { 40 - 10, 30 - 15 };
-
 	// 範囲を超えない処理
 	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimit.x);
 	worldTransform_.translation_.x = min(worldTransform_.translation_.x, kMoveLimit.x);
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimit.y);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, kMoveLimit.y);
-
 	// 座標移動
 	worldTransform_.translation_.x += move.x;
 	worldTransform_.translation_.y += move.y;
 	worldTransform_.translation_.z += move.z;
 
-#pragma endregion
-
-#pragma region Rotate
+	/// 移動処理↑
 
 	// 旋回処理
 	Rotate();
 
-	// アフィン変換行列をワールド行列に代入
-	worldTransform_.matWorld_ = MakeAffineMatrix(
-		worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
-#pragma endregion
-
 	worldTransform_.UpdateMatrix();
+
 	// 弾の処理
 	Attack();
-	// 3Dレティクルの配置
-	Deploy3DReticle();
 
-	// 2Dレティクルの配置
-	Deploy2DReticle(viewProjection);
-
+	// 2Dレティクルの移動
 	Vector2 joyRange{};
 	// ジョイスティック状態取得
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
@@ -111,6 +98,7 @@ void Player::Update(const ViewProjection& viewProjection) {
 		// スプライトへの座標変更を反映
 		sprite2DReticle_->SetPosition(spritePosition_);
 	}
+#pragma region 2Dレティクルから3Dレティクルに変換
 
 	// ビューポート行列
 	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, (float)WinApp::kClientWidth_, (float)WinApp::kClientHeight_, 0, 1);
@@ -138,8 +126,11 @@ void Player::Update(const ViewProjection& viewProjection) {
 
 	worldTransform3DReticle_.UpdateMatrix();
 
+#pragma endregion
+
 	ImGui::Begin("GamePad_Info");
 	ImGui::Text("L_Stick:MovePlayer\nR_Stick:MoveReticle\nR_Trigger:Shot");
+	ImGui::DragFloat3("Reticle.translation", &worldTransform3DReticle_.translation_.x, 0.001f, -100, 100);
 	ImGui::End();
 }
 
@@ -227,18 +218,16 @@ void Player::Deploy3DReticle() {
 
 void Player::Deploy2DReticle(const ViewProjection& viewProjection) {
 	// 3Dレティクルのワールド座標を取得
-	Vector3 positionReticle = GetWorld3DReticlePosition();
-	// ビューポート行列
-	matViewport_ =
-		MakeViewportMatrix(0, 0, (float)WinApp::kClientWidth_, (float)WinApp::kClientHeight_, 0, 1);
-	// ビュー行列とプロジェクション行列、ビューポート行列を合成する
-	Matrix4x4 matViewProjectionViewport{};
-	matViewProjectionViewport =
-		Multiply(viewProjection.matView, Multiply(viewProjection.matProjection, matViewport_));
-	// ワールド→スクリーン座標変換
-	positionReticle = Transforms(positionReticle, matViewProjectionViewport);
-	// スプライトのレティクルに座標設定
-	sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
+	//Vector3 positionReticle = GetWorld3DReticlePosition();
+
+	//// ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	//Matrix4x4 matViewProjectionViewport{};
+	//matViewProjectionViewport =
+	//	Multiply(viewProjection.matView, Multiply(viewProjection.matProjection, matViewport_));
+	//// ワールド→スクリーン座標変換
+	//positionReticle = Transforms(positionReticle, matViewProjectionViewport);
+	//// スプライトのレティクルに座標設定
+	//sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
 }
 
 void Player::OnCollision() {}

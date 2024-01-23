@@ -60,6 +60,7 @@ void GameScene::Initialize() {
 	// スプライン曲線制御点（通過点）の初期化
 	controlPoints_ = {
 		{0,  0,  0},
+		{0,  0,  30},
 		{10, 10, 10},
 		{10, 15, 0},
 		{20, 15, 20},
@@ -81,13 +82,6 @@ void GameScene::Update() {
 	if (SceneTransition::GetInstance()->GetSceneChangeSignal()) {
 		sceneNum = GAMECLEAR_SCENE;
 	}
-
-	viewProjection_.UpdateMatrix();
-
-	// デバッグカメラの更新
-	railCamera_->Update(target_);
-	viewProjection_.matView = railCamera_->GetViewProjection().matView;
-	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
 
 	// 敵の出現するタイミングと座標
 	UpdateEnemyPopCommands();
@@ -144,27 +138,31 @@ void GameScene::Update() {
 
 	// カメラの移動
 	if (t_ < 0.99f) {
-		t_ += 1.0f / segmentCount / 10;
+		t_ += 1.0f / segmentCount / 100;
 	}
 	else {
 		t_ = 0.99f;
 	}
 	if (targetT_ < 0.99f) {
-		targetT_ += 1.0f / segmentCount / 10;
+		targetT_ += 1.0f / segmentCount / 100;
 	}
 	else {
 		targetT_ = 1.0f;
 	}
 	target_ = CatmullRomSpline(controlPoints_, targetT_);
 	UpdatePlayerPosition(t_);
+	viewProjection_.UpdateMatrix();
+	// デバッグカメラの更新
+	railCamera_->Update(target_);
+	viewProjection_.matView = railCamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+	// ビュープロジェクション行列の転送
+	viewProjection_.TransferMatrix();
 
 	// 当たり判定を必要とするObjectをまとめてセットする
 	collisionManager_->SetGameObject(player_, enemy_, enemyBullets_, playerBullets_);
 	// 衝突マネージャー(当たり判定)
 	collisionManager_->CheckAllCollisions(this, player_);
-
-	// ビュープロジェクション行列の転送
-	viewProjection_.TransferMatrix();
 }
 
 void GameScene::Draw() {
@@ -187,9 +185,10 @@ void GameScene::Draw() {
 	// 天球
 	skydome_->Draw(viewProjection_);
 
+
+
 	// 2Dレティクル
 	player_->DrawUI();
-
 	// 線
 	for (int i = 0; i < segmentCount - 1; i++) {
 		line_[i]->Draw(pointsDrawing_[i], pointsDrawing_[i + 1], viewProjection_);

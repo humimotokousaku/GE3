@@ -18,10 +18,6 @@ void RailCamera::Initialize(WorldTransform worldTransform, const Vector3& radian
 }
 
 void RailCamera::Update(Vector3 target) {
-	Vector3 radian{ 0.0f, 0.001f, 0.0f };
-	// 回転処理
-	//worldTransform_.rotation_ = Add(worldTransform_.rotation_, radian);
-
 	Vector3 velocity = Subtract(target, worldTransform_.translation_);
 	// Y軸周り角度(θy)
 	worldTransform_.rotation_.y = std::atan2(velocity.x, velocity.z);
@@ -34,7 +30,7 @@ void RailCamera::Update(Vector3 target) {
 	// 行列の更新
 	worldTransform_.UpdateMatrix();
 	// カメラオブジェクトのワールド行列からビュー行列を計算する
-	viewProjection_.matView = Inverse(worldTransform_.matWorld_);;
+	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
 
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("translation", &worldTransform_.translation_.x, 0.1f);

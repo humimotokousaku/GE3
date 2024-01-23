@@ -60,6 +60,8 @@ public:
 
 	// 完了ならtrueを返す
 	bool IsDead() const { return isDead_; }
+	// Setter
+	void SetIsDead(bool isDead) { isDead_ = isDead; }
 
 private:
 	// 状態遷移

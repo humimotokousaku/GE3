@@ -6,8 +6,18 @@ void TitleScene::Initialize() {
 	sceneNum = TITLE_SCENE;
 	textureNum_ = UVCHEKER;
 	input_ = Input::GetInstance();
-
+	// カメラの初期化
 	viewProjection_.Initialize();
+	viewProjection_.translation_ = { 0,2,-10 };
+	viewProjection_.UpdateMatrix();
+
+	// アニメーションするモデルの初期化
+	worldTransform_.Initialize();
+	worldTransform_.translation_ = { 0,0,0 };
+	worldTransform_.UpdateMatrix();
+
+	// モデル読み込み
+	block_.reset(Model::CreateModelFromObj("resources", "block.obj"));
 }
 
 void TitleScene::Update() {
@@ -94,14 +104,35 @@ void TitleScene::Update() {
 
 #pragma endregion
 
+	// アニメーション
+	AnimUpdate();
+
 	viewProjection_.UpdateViewMatrix();
 	viewProjection_.TransferMatrix();
+
+	ImGui::Begin("Keys Infomation");
+	ImGui::Text("SPACE:GameSTART!!");
+	ImGui::End();
 }
 
 void TitleScene::Draw() {
-
+	block_->Draw(worldTransform_, viewProjection_, ENEMY);
 }
 
 void TitleScene::Finalize() {
 	viewProjection_.constBuff_.ReleaseAndGetAddressOf();
+	worldTransform_.constBuff_.ReleaseAndGetAddressOf();
+	block_.reset();
+}
+
+void TitleScene::AnimUpdate() {
+	// モデルを上下させる
+	const float kSpeed = 1.0f / 600.0f;
+	theta_ += kSpeed;
+	worldTransform_.translation_.y = sinf(theta_ * 30.0f);
+
+	// モデルを回転させる
+	worldTransform_.rotation_.y = 6.28f * theta_;
+
+	worldTransform_.UpdateMatrix();
 }

@@ -33,6 +33,9 @@ public: // メンバ関数
 	// 衝突を検出したら呼び出されるコールバック関数
 	void OnCollision() override;
 
+	// Setter
+	void SetIsDead(bool isDead) { isDead_ = isDead; }
+
 private: // メンバ変数
 	// ワールド変換データ
 	WorldTransform worldTransform_;
