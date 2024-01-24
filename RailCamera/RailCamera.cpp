@@ -32,8 +32,12 @@ void RailCamera::Update(Vector3 target) {
 	// カメラオブジェクトのワールド行列からビュー行列を計算する
 	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
 
+#ifdef _DEBUG
+
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("translation", &worldTransform_.translation_.x, 0.1f);
 	ImGui::DragFloat3("rotation", &worldTransform_.rotation_.x, 0.1f);
 	ImGui::End();
+
+#endif // _DEBUG
 }

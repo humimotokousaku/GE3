@@ -15,7 +15,7 @@ class Sprite
 public:
 	~Sprite();
 
-	void Initialize();
+	void Initialize(Vector2 leftTop, Vector2 rightBottom, bool isBack);
 
 	/// <summary>
 	/// 描画処理
@@ -42,6 +42,8 @@ public:
 		worldTransform_.translation_.x = position.x;
 		worldTransform_.translation_.y = position.y;
 	}
+
+	void SetColor(Vector4 color) { materialData_->color = color; }
 
 	// Getter
 	Vector2 GetPosition() { 

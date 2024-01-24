@@ -8,8 +8,13 @@ void GameOver::Initialize() {
 }
 
 void GameOver::Update() {
+	XINPUT_STATE joyState;
+	// ゲームパッド未接続なら何もせず抜ける
+	if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
+		return;
+	}
 	// シーンチェンジ
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A || input_->TriggerKey(DIK_SPACE)) {
 		SceneTransition::sceneChangeType_ = FADE_IN;
 	}
 	if (SceneTransition::GetInstance()->GetSceneChangeSignal()) {

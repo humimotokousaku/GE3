@@ -20,10 +20,18 @@ public:
 	// 更新処理
 	void Update(Enemy* enemy);
 
+private:
+	float EaseOutBack(float x);
+
 public:
 	Enemy* enemy_;
 	// 発射間隔
 	static const int kFireInterval = 60;
 	// 時限発動
 	std::list<TimedCall*> timedCalls_;
+	// 
+	float t_;
+	// アニメーションをしているか
+	bool isAnimation_;
+	int animCount_;
 };

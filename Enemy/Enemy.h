@@ -57,6 +57,7 @@ public:
 
 	void SetPlayer(Player* player) { player_ = player; }
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+	void SetScale(Vector3 scale) { worldTransform_.scale_ = scale; }
 
 	// 完了ならtrueを返す
 	bool IsDead() const { return isDead_; }

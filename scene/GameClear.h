@@ -1,6 +1,7 @@
 #pragma once
 #include "IScene.h"
 #include "../components/Input.h"
+#include "../object/Sprite.h"
 
 class GameManager;
 class GameClear : public IScene
@@ -18,5 +19,11 @@ public:
 	void Finalize()override;
 private:
 	Input* input_;
+
+	Sprite* clear_;
+	Sprite* gamePad_A_;
+
+	// 背景
+	Sprite* backGround_;
 };
 

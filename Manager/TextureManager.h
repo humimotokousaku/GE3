@@ -25,6 +25,9 @@ enum TextureName {
 	BULLET,
 	SKYDOME,
 	RETICLE,
+	TITLENAME,
+	CLEAR,
+	GAMEPAD_A,
 	NULL_TEXTURE // 使わないで
 };
 

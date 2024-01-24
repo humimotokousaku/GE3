@@ -2,6 +2,7 @@
 #include "EnemyStateLeave.h"
 #include "Enemy.h"
 #include "../math/Vector3.h"
+#include "../math/Lerp.h"
 
 EnemyStateApproach::~EnemyStateApproach() {
 	for (TimedCall* timedCall : timedCalls_) {
@@ -10,6 +11,7 @@ EnemyStateApproach::~EnemyStateApproach() {
 }
 
 void EnemyStateApproach::FireAndResetTimer() {
+	isAnimation_ = true;
 	// 弾を発射する
 	enemy_->Fire();
 	// 発射タイマーをセットする
@@ -20,6 +22,7 @@ void EnemyStateApproach::FireAndResetTimer() {
 void EnemyStateApproach::Initialize(Enemy* enemy) {
 	enemy_ = enemy;
 	FireAndResetTimer();
+	animCount_ = 0;
 }
 
 void EnemyStateApproach::Update(Enemy* enemy) {
@@ -42,9 +45,35 @@ void EnemyStateApproach::Update(Enemy* enemy) {
 		timedCall->Update();
 	}
 
+	if (isAnimation_) {
+		animCount_++;
+		// アニメーション
+		t_ = EaseOutBack((float)animCount_ / 60);
+		enemy->SetScale(Lerp(Vector3{ 2,2,2 }, Vector3{ 1,1,1 }, t_));
+		
+		if (t_ > 1.0f) {
+			isAnimation_ = false;
+			t_ = 0;
+			animCount_ = 0;
+			enemy->SetScale(Vector3{ 1,1,1 });
+		}
+	}
+
 	// 既定の位置に到達したら離脱
 	if (enemy->GetEnemyPos().z < 60.0f) {
+		isAnimation_ = false;
+		t_ = 0;
+		animCount_ = 0;
+		enemy->SetScale(Vector3{ 1,1,1 });
 		timedCalls_.clear();
 		enemy->ChangeState(new EnemyStateLeave());
 	}
+
+}
+
+float EnemyStateApproach::EaseOutBack(float x) {
+	const float c1 = 1.70158f;
+	const float c3 = c1 + 1;
+
+	return 1 + c3 * (float)pow(x - 1, 3) + c1 * (float)pow(x - 1, 2);
 }

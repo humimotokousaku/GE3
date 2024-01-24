@@ -159,5 +159,7 @@ private: // メンバ変数
 
 	float t_;
 	float targetT_;
+
+	bool isMoveCamera_;
 };
 

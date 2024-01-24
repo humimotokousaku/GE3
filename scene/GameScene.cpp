@@ -70,6 +70,8 @@ void GameScene::Initialize() {
 	t_ = 0;
 	targetT_ = 1.0f / segmentCount;
 
+	isMoveCamera_ = false;
+
 	// 衝突マネージャーの生成
 	collisionManager_ = new CollisionManager();
 }
@@ -135,19 +137,22 @@ void GameScene::Update() {
 		// 描画用頂点リストに追加
 		pointsDrawing_.push_back(pos);
 	}
-
-	// カメラの移動
-	if (t_ < 0.99f) {
-		t_ += 1.0f / segmentCount / 100;
-	}
-	else {
-		t_ = 0.99f;
-	}
-	if (targetT_ < 0.99f) {
-		targetT_ += 1.0f / segmentCount / 100;
-	}
-	else {
-		targetT_ = 1.0f;
+	if (isMoveCamera_) {
+		// カメラの移動
+		if (t_ < 0.99f) {
+			t_ += 1.0f / segmentCount / 10;
+		}
+		else {
+			t_ = 0.99f;
+			SceneTransition::sceneChangeType_ = FADE_IN;
+			isMoveCamera_ = false;
+		}
+		if (targetT_ < 0.99f) {
+			targetT_ += 1.0f / segmentCount / 10;
+		}
+		else {
+			targetT_ = 1.0f;
+		}
 	}
 	target_ = CatmullRomSpline(controlPoints_, targetT_);
 	UpdatePlayerPosition(t_);
@@ -163,6 +168,16 @@ void GameScene::Update() {
 	collisionManager_->SetGameObject(player_, enemy_, enemyBullets_, playerBullets_);
 	// 衝突マネージャー(当たり判定)
 	collisionManager_->CheckAllCollisions(this, player_);
+
+	if (SceneTransition::GetInstance()->GetSceneChangeSignal()) {
+		sceneNum = GAMECLEAR_SCENE;
+	}
+
+	ImGui::Begin("RailParameter");
+	ImGui::DragFloat("target", &targetT_, 0.001f, 0, 1);
+	ImGui::DragFloat("eye", &t_, 0.001f, 0, 1);
+	ImGui::Checkbox("isStart", &isMoveCamera_);
+	ImGui::End();
 }
 
 void GameScene::Draw() {
@@ -184,8 +199,6 @@ void GameScene::Draw() {
 
 	// 天球
 	skydome_->Draw(viewProjection_);
-
-
 
 	// 2Dレティクル
 	player_->DrawUI();

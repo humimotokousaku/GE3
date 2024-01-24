@@ -26,7 +26,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle, const Vector3& pos
 	playerTexture_ = textureHandle;
 	// レティクル
 	sprite2DReticle_ = new Sprite();
-	sprite2DReticle_->Initialize();
+	sprite2DReticle_->Initialize(Vector2{0,0}, Vector2{32,32}, false);
 
 	// 衝突属性を設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
@@ -84,54 +84,84 @@ void Player::Update(const ViewProjection& viewProjection) {
 	// 弾の処理
 	Attack();
 
-	// 2Dレティクルの移動
+	// 3Dレティクルの配置
+	Deploy3DReticle();
+	// 2Dレティクルを配置
+	Deploy2DReticle(viewProjection);
+
+//	// 2Dレティクルの移動
+//	Vector2 joyRange{};
+//	// ジョイスティック状態取得
+//	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+//		// デッドゾーンの設定
+//		SHORT rightThumbX = Input::GetInstance()->ApplyDeadzone(joyState.Gamepad.sThumbRX);
+//		SHORT rightThumbY = Input::GetInstance()->ApplyDeadzone(joyState.Gamepad.sThumbRY);
+//		joyRange.x += (float)rightThumbX / SHRT_MAX * 10.0f;
+//		joyRange.y += (float)rightThumbY / SHRT_MAX * 10.0f;
+//		spritePosition_.x += joyRange.x;
+//		spritePosition_.y -= joyRange.y;
+//		// スプライトへの座標変更を反映
+//		sprite2DReticle_->SetPosition(spritePosition_);
+//	}
+//#pragma region 2Dレティクルから3Dレティクルに変換
+//
+//	// ビューポート行列
+//	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, (float)WinApp::kClientWidth_, (float)WinApp::kClientHeight_, 0, 1);
+//	// ビュープロジェクションビューポート合成行列
+//	Matrix4x4 matVPV = Multiply(viewProjection.matView, Multiply(viewProjection.matProjection, matViewport));
+//	// 合成行列の逆行列を計算する
+//	Matrix4x4 matInverseVPV = Inverse(matVPV);
+//
+//	// スクリーン座標
+//	Vector3 posNear = Vector3((float)sprite2DReticle_->GetPosition().x + 16, (float)sprite2DReticle_->GetPosition().y + 16, 0);
+//	Vector3 posFar = Vector3((float)sprite2DReticle_->GetPosition().x + 16, (float)sprite2DReticle_->GetPosition().y + 16, 1);
+//
+//	// スクリーン座標系からワールド座標系へ
+//	posNear = Transforms(posNear, matInverseVPV);
+//	posFar = Transforms(posFar, matInverseVPV);
+//	// マウスレイの方向
+//	Vector3 mouseDirection = Subtract(posFar, posNear);
+//	mouseDirection = Normalize(mouseDirection);
+//	// カメラから照準オブジェクトの距離
+//	const float kDistanceTestObject = 100.0f;
+//	// 3Dレティクルを2Dカーソルに配置
+//	worldTransform3DReticle_.translation_.x = posNear.x - mouseDirection.x * kDistanceTestObject;
+//	worldTransform3DReticle_.translation_.y = posNear.y - mouseDirection.y * kDistanceTestObject;
+//	worldTransform3DReticle_.translation_.z = posNear.z - mouseDirection.z * kDistanceTestObject;
+//
+//	worldTransform3DReticle_.UpdateMatrix();
+
+	// 3Dレティクルの移動
 	Vector2 joyRange{};
 	// ジョイスティック状態取得
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		// デッドゾーンの設定
 		SHORT rightThumbX = Input::GetInstance()->ApplyDeadzone(joyState.Gamepad.sThumbRX);
 		SHORT rightThumbY = Input::GetInstance()->ApplyDeadzone(joyState.Gamepad.sThumbRY);
-		joyRange.x += (float)rightThumbX / SHRT_MAX * 10.0f;
-		joyRange.y += (float)rightThumbY / SHRT_MAX * 10.0f;
-		spritePosition_.x += joyRange.x;
-		spritePosition_.y -= joyRange.y;
-		// スプライトへの座標変更を反映
-		sprite2DReticle_->SetPosition(spritePosition_);
+		joyRange.y += (float)rightThumbY / SHRT_MAX / 62.8f;
+		joyRange.x += (float)rightThumbX / SHRT_MAX / 62.8f;	
+		worldTransform_.rotation_.x -= joyRange.y;
+		worldTransform_.rotation_.y += joyRange.x;
+		worldTransform_.UpdateMatrix();
 	}
-#pragma region 2Dレティクルから3Dレティクルに変換
-
-	// ビューポート行列
-	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, (float)WinApp::kClientWidth_, (float)WinApp::kClientHeight_, 0, 1);
-	// ビュープロジェクションビューポート合成行列
-	Matrix4x4 matVPV = Multiply(viewProjection.matView, Multiply(viewProjection.matProjection, matViewport));
-	// 合成行列の逆行列を計算する
-	Matrix4x4 matInverseVPV = Inverse(matVPV);
-
-	// スクリーン座標
-	Vector3 posNear = Vector3((float)sprite2DReticle_->GetPosition().x + 16, (float)sprite2DReticle_->GetPosition().y + 16, 0);
-	Vector3 posFar = Vector3((float)sprite2DReticle_->GetPosition().x + 16, (float)sprite2DReticle_->GetPosition().y + 16, 1);
-
-	// スクリーン座標系からワールド座標系へ
-	posNear = Transforms(posNear, matInverseVPV);
-	posFar = Transforms(posFar, matInverseVPV);
-	// マウスレイの方向
-	Vector3 mouseDirection = Subtract(posFar, posNear);
-	mouseDirection = Normalize(mouseDirection);
-	// カメラから照準オブジェクトの距離
-	const float kDistanceTestObject = 100.0f;
-	// 3Dレティクルを2Dカーソルに配置
-	worldTransform3DReticle_.translation_.x = posNear.x - mouseDirection.x * kDistanceTestObject;
-	worldTransform3DReticle_.translation_.y = posNear.y - mouseDirection.y * kDistanceTestObject;
-	worldTransform3DReticle_.translation_.z = posNear.z - mouseDirection.z * kDistanceTestObject;
-
-	worldTransform3DReticle_.UpdateMatrix();
 
 #pragma endregion
 
-	ImGui::Begin("GamePad_Info");
-	ImGui::Text("L_Stick:MovePlayer\nR_Stick:MoveReticle\nR_Trigger:Shot");
-	ImGui::DragFloat3("Reticle.translation", &worldTransform3DReticle_.translation_.x, 0.001f, -100, 100);
-	ImGui::End();
+	worldTransform_.UpdateMatrix();
+
+#ifdef _DEBUG
+
+//ImGui::Begin("GamePad_Info");
+//	ImGui::Text("L_Stick:MovePlayer\nR_Stick:MoveReticle\nR_Trigger:Shot");
+//	ImGui::DragFloat3("Player.translation", &worldTransform_.translation_.x, 0.001f, -100, 100);
+//	ImGui::DragFloat3("Player.rotation", &worldTransform_.rotation_.x, 0.001f, -100, 100);
+//	ImGui::DragFloat3("Reticle.translation", &worldTransform3DReticle_.translation_.x, 0.001f, -100, 100);
+//	ImGui::DragFloat2("2Drethicle.translation", &spritePosition_.x, 1, -1000, 1000);
+//	ImGui::End();
+
+#endif // _DEBUG
+
+	
 }
 
 // Drawの関数定義
@@ -218,16 +248,18 @@ void Player::Deploy3DReticle() {
 
 void Player::Deploy2DReticle(const ViewProjection& viewProjection) {
 	// 3Dレティクルのワールド座標を取得
-	//Vector3 positionReticle = GetWorld3DReticlePosition();
+	Vector3 positionReticle = GetWorld3DReticlePosition();
 
-	//// ビュー行列とプロジェクション行列、ビューポート行列を合成する
-	//Matrix4x4 matViewProjectionViewport{};
-	//matViewProjectionViewport =
-	//	Multiply(viewProjection.matView, Multiply(viewProjection.matProjection, matViewport_));
-	//// ワールド→スクリーン座標変換
-	//positionReticle = Transforms(positionReticle, matViewProjectionViewport);
-	//// スプライトのレティクルに座標設定
-	//sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
+	// ビューポート行列
+	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, (float)WinApp::kClientWidth_, (float)WinApp::kClientHeight_, 0, 1);
+	// ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	Matrix4x4 matViewProjectionViewport{};
+	matViewProjectionViewport =
+		Multiply(viewProjection.matView, Multiply(viewProjection.matProjection, matViewport));
+	// ワールド→スクリーン座標変換
+	positionReticle = Transforms(positionReticle, matViewProjectionViewport);
+	// スプライトのレティクルに座標設定
+	sprite2DReticle_->SetPosition(Vector2(positionReticle.x - 16, positionReticle.y - 16));
 }
 
 void Player::OnCollision() {}
