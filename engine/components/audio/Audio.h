@@ -48,11 +48,7 @@ class Audio
 public:
 	static Audio* GetInstance();
 
-	// 初期化
 	void Initialize();
-
-	// 解放処理
-	void Finalize();
 
 	// 音声データの読み込み
 	SoundData SoundLoadWave(const char* filename);
@@ -61,12 +57,153 @@ public:
 	void SoundUnload(SoundData* soundData);
 
 	// 音声再生
-	void SoundPlayWave(const SoundData& soundData, float volume = 0.5f);
+	void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData, float volume = 0.5f);
 
 	// 音声のループ再生
-	void SoundPlayLoopingWave(const SoundData& soundData, float volume = 0.5f);
+	void SoundPlayLoopingWave(IXAudio2* xAudio2, const SoundData& soundData, float volume = 0.5f);
 
-private:
-	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;
+	//template <class T>
+	//void SafeRelease(T** ppT) {
+	//	if (*ppT) {
+	//		(*ppT)->Release();
+	//		*ppT = NULL;
+	//	}
+	//}
+
+	//HRESULT InitializeMediaFoundation();
+
+	//void ShutdownMediaFoundation();
+ //   HRESULT LoadMP3File(const wchar_t* mp3FilePath, IMFSourceReader** sourceReader) {
+ //       HRESULT hr = S_OK;
+
+ //       IMFSourceReader* pReader = NULL;
+
+ //       hr = MFCreateSourceReaderFromURL(mp3FilePath, NULL, &pReader);
+ //       if (SUCCEEDED(hr)) {
+ //           *sourceReader = pReader;
+ //       }
+ //       else {
+ //           SafeRelease(&pReader);
+ //       }
+
+ //       return hr;
+ //   }
+
+ //   HRESULT ConfigureAudioOutput(IMFSourceReader* sourceReader, const wchar_t* wavFilePath) {
+ //       HRESULT hr = S_OK;
+
+ //       IMFMediaType* pMediaType = NULL;
+ //       hr = sourceReader->GetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, &pMediaType);
+
+ //       if (SUCCEEDED(hr)) {
+ //           WAVEFORMATEX* pWaveFormat = NULL;
+ //           hr = MFCreateWaveFormatExFromMFMediaType(pMediaType, &pWaveFormat);
+ //           if (SUCCEEDED(hr)) {
+ //               // WAVファイルに書き出す
+ //               hr = WriteWavHeader(wavFilePath, pWaveFormat);
+ //               CoTaskMemFree(pWaveFormat);
+ //           }
+ //       }
+
+ //       SafeRelease(&pMediaType);
+
+ //       return hr;
+ //   }
+
+ //   HRESULT WriteWavHeader(const wchar_t* wavFilePath, WAVEFORMATEX* pWaveFormat) {
+ //       // WAVヘッダーを書き出す
+ //       std::ofstream wavFile(wavFilePath, std::ios::binary);
+ //       if (!wavFile.is_open()) {
+ //           return E_FAIL;
+ //       }
+
+ //       // WAVヘッダーの構築
+ //       WAVEFORMATEXTENSIBLE wfx = {};
+ //       wfx.Format = *pWaveFormat;
+ //       wfx.Samples.wValidBitsPerSample = wfx.Format.wBitsPerSample;
+ //       wfx.dwChannelMask = 0; // Assume mono
+
+ //       // RIFF チャンク
+ //       wavFile.write("RIFF", 4);
+ //       DWORD dataSize = 0; // 後で埋める
+ //       wavFile.write(reinterpret_cast<char*>(&dataSize), sizeof(DWORD));
+ //       wavFile.write("WAVE", 4);
+
+ //       // フォーマットチャンク
+ //       wavFile.write("fmt ", 4);
+ //       DWORD formatSize = sizeof(WAVEFORMATEXTENSIBLE);
+ //       wavFile.write(reinterpret_cast<char*>(&formatSize), sizeof(DWORD));
+ //       wavFile.write(reinterpret_cast<char*>(&wfx), sizeof(WAVEFORMATEXTENSIBLE));
+
+ //       // データチャンク
+ //       wavFile.write("data", 4);
+ //       DWORD dataSizePos = static_cast<DWORD>(wavFile.tellp());
+ //       dataSize = 0; // 後で埋める
+ //       wavFile.write(reinterpret_cast<char*>(&dataSize), sizeof(DWORD));
+
+ //       // ファイルを閉じる
+ //       wavFile.close();
+
+ //       return S_OK;
+ //   }
+
+ //   HRESULT DecodeAndWriteAudioData(IMFSourceReader* sourceReader, const wchar_t* wavFilePath) {
+ //       HRESULT hr = S_OK;
+
+ //       IMFMediaBuffer* pBuffer = NULL;
+ //       DWORD dwFlags = 0;
+ //       LONGLONG llTimestamp = 0;
+ //       IMFSample* pSample = NULL;
+
+ //       // ファイルをオープンしてバイナリデータを書き込む
+ //       std::ofstream wavFile(wavFilePath, std::ios::binary | std::ios::app);
+ //       if (!wavFile.is_open()) {
+ //           return E_FAIL;
+ //       }
+
+ //       while (true) {
+ //           hr = sourceReader->ReadSample(
+ //               (DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+ //               0,
+ //               NULL,
+ //               &dwFlags,
+ //               &llTimestamp,
+ //               &pSample
+ //           );
+
+ //           if (FAILED(hr) || dwFlags & MF_SOURCE_READERF_ENDOFSTREAM) {
+ //               break; // デコード終了またはエラー
+ //           }
+
+ //           if (SUCCEEDED(hr)) {
+ //               hr = pSample->ConvertToContiguousBuffer(&pBuffer);
+ //               if (SUCCEEDED(hr)) {
+ //                   BYTE* pAudioData = NULL;
+ //                   DWORD cbBuffer = 0;
+ //                   hr = pBuffer->Lock(&pAudioData, NULL, &cbBuffer);
+ //                   if (SUCCEEDED(hr)) {
+ //                       // WAVファイルにバイナリデータを書き込む
+ //                       wavFile.write(reinterpret_cast<char*>(pAudioData), cbBuffer);
+
+ //                       pBuffer->Unlock();
+ //                   }
+ //               }
+ //           }
+
+ //           SafeRelease(&pSample);
+ //           SafeRelease(&pBuffer);
+ //       }
+
+ //       // ファイルサイズを更新
+ //       if (SUCCEEDED(hr)) {
+ //           hr = UpdateWavFileSize(wavFilePath);
+ //       }
+
+ //       wavFile.close();
+
+ //       return hr;
+ //   }
+
+ //   HRESULT UpdateWavFileSize(const wchar_t* wavFilePath);
 };
 

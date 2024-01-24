@@ -10,17 +10,11 @@ Audio* Audio::GetInstance() {
 }
 
 void Audio::Initialize() {
-	IXAudio2MasteringVoice* masterVoice;
-	HRESULT result;
-	// Xaudio2エンジンのインスタンスを生成
-	result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
-	// マスターボイスを生成
-	result = xAudio2_->CreateMasteringVoice(&masterVoice);
-}
-
-void Audio::Finalize() {
-	xAudio2_.Reset();
-	//SoundUnload(&soundData1_);
+	//HRESULT result;
+	//// Xaudio2エンジンのインスタンスを生成
+	//result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	//// マスターボイスを生成
+	//result = xAudio2_->CreateMasteringVoice(&masterVoice_);
 }
 
 SoundData Audio::SoundLoadWave(const char* filename) {
@@ -94,12 +88,12 @@ void Audio::SoundUnload(SoundData* soundData) {
 	soundData->wfex = {};
 }
 
-void Audio::SoundPlayWave(const SoundData& soundData, float volume) {
+void Audio::SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData, float volume) {
 	HRESULT result;
 
 	//波形フォーマットもとにSourceVoiceの生成
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
-	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
+	result = xAudio2->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
 	assert(SUCCEEDED(result));
 
 	// 再生する波形データの設定
@@ -116,12 +110,12 @@ void Audio::SoundPlayWave(const SoundData& soundData, float volume) {
 	result = pSourceVoice->Start();
 }
 
-void Audio::SoundPlayLoopingWave(const SoundData& soundData, float volume) {
+void Audio::SoundPlayLoopingWave(IXAudio2* xAudio2, const SoundData& soundData, float volume) {
 	HRESULT result;
 
 	//波形フォーマットもとにSourceVoiceの生成
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
-	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
+	result = xAudio2->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
 	assert(SUCCEEDED(result));
 
 	// 再生する波形データの設定
@@ -138,3 +132,22 @@ void Audio::SoundPlayLoopingWave(const SoundData& soundData, float volume) {
 	// 再生開始
 	result = pSourceVoice->Start();
 }
+//
+//
+//HRESULT Audio::InitializeMediaFoundation() {
+//	return CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+//}
+//
+//void Audio::ShutdownMediaFoundation() {
+//	CoUninitialize();
+//}
+//
+//HRESULT LoadMP3File(const wchar_t* mp3FilePath, IMFSourceReader** sourceReader);
+//
+//HRESULT ConfigureAudioOutput(IMFSourceReader* sourceReader, const wchar_t* wavFilePath);
+//
+//HRESULT WriteWavHeader(const wchar_t* wavFilePath, WAVEFORMATEX* pWaveFormat);
+//
+//HRESULT DecodeAndWriteAudioData(IMFSourceReader* sourceReader, const wchar_t* wavFilePath);
+//
+//HRESULT UpdateWavFileSize(const wchar_t* wavFilePath);

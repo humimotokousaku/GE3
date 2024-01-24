@@ -19,7 +19,7 @@ void GameManager::Initialize() {
 	/// エンジン機能の生成
 	// windowの初期化
 	winApp_ = WinApp::GetInstance();
-	winApp_->Initialize(titleString.c_str(), 1920, 1080);
+	winApp_->Initialize(titleString.c_str(), 1280, 720);
 	// DirectXの初期化
 	directXCommon_ = DirectXCommon::GetInstance();
 	directXCommon_->DirectXCommon::GetInstance()->Initialize(winApp_->GetHwnd());
@@ -38,8 +38,8 @@ void GameManager::Initialize() {
 	// ブローバル変数の読み込み
 	//GlobalVariables::GetInstance()->LoadFiles();
 	// ポストエフェクト
-	//postEffect_ = new PostEffect();
-	//postEffect_->Initialize();
+	postEffect_ = new PostEffect();
+	postEffect_->Initialize();
 
 	/// Components
 	// 入力(キーボードとゲームパッド)
@@ -54,14 +54,17 @@ void GameManager::Initialize() {
 	// スポットライト
 	spotLight_ = SpotLight::GetInstance();
 	spotLight_->Initialize();
-	// Audioの初期化
-	audio_ = Audio::GetInstance();
-	audio_->Initialize();
-
-	// 音声読み込み
-	soundData1_ = audio_->SoundLoadWave("engine/resources/fanfare.wav");
-	// 音声再生
-	audio_->SoundPlayWave(soundData1_);
+	//// Audioの初期化
+	//audio_ = Audio::GetInstance();
+	//HRESULT result;
+	//// Xaudio2エンジンのインスタンスを生成
+	//result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	//// マスターボイスを生成
+	//result = xAudio2_->CreateMasteringVoice(&masterVoice_);
+	//// 音声読み込み
+	//soundData1_ = audio_->SoundLoadWave("resources/fanfare.wav");
+	//// 音声再生
+	//audio_->SoundPlayWave(xAudio2_.Get(), soundData1_);
 
 	//初期シーンの設定
 	sceneNum_ = TITLE_SCENE;
@@ -157,9 +160,9 @@ void GameManager::Finalize() {
 	imGuiManager_->Finalize();
 	textureManager_->Finalize();
 	directXCommon_->Finalize();
-	audio_->SoundUnload(&soundData1_);
-	audio_->Finalize();
 	CloseWindow(winApp_->GetHwnd());
+	xAudio2_.Reset();
+	audio_->SoundUnload(&soundData1_);
 	// Textureのゲーム終了処理
 	textureManager_->ComUninit();
 }
