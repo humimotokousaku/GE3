@@ -1,8 +1,5 @@
 #pragma once
 #include "MathStructs.h"
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include <vector>
 #include <fstream>
 #include <string>
@@ -38,16 +35,13 @@ struct MaterialData {
 
 MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
 
-struct Node {
-	Matrix4x4 localMatrix;
-	std::string name;
-	std::vector<Node> children;
-};
+//struct Node {
+//	Matrix4x4 localMatrix;
+//	std::string name;
+//	std::vector<Node> children;
+//};
 
 struct ModelData {
 	std::vector<VertexData> vertices;
 	MaterialData material;
-	Node rootNode;
 };
-
-Node ReadNode(aiNode* node);

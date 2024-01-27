@@ -62,7 +62,7 @@ namespace Easings {
 	}
 
 	float easeOutCubic(float x) {
-		return 1 - pow(1 - x, 3);
+		return 1 - (float)pow(1 - x, 3);
 	}
 
 	float easeInOutCubic(float x) {
@@ -70,7 +70,7 @@ namespace Easings {
 			return 4 * x * x * x;
 		}
 		else {
-			return 1 - pow(-2 * x + 2, 3) / 2;
+			return 1 - (float)pow(-2 * x + 2, 3) / 2;
 		}
 	}
 
@@ -85,7 +85,7 @@ namespace Easings {
 
 	// だんだん減速(ぎりぎりまで速度が速い)
 	float easeOutQuint(float x) {
-		return 1 - pow(1 - x, 5);
+		return 1 - (float)pow(1 - x, 5);
 	}
 
 	// easeInOut(一気に早くなって減速する)
@@ -94,7 +94,7 @@ namespace Easings {
 			return 16 * x * x * x * x * x;
 		}
 		else {
-			return 1 - pow(-2 * x + 2, 5) / 2;
+			return 1 - (float)pow(-2 * x + 2, 5) / 2;
 		}
 	}
 
@@ -103,19 +103,19 @@ namespace Easings {
 #pragma region Circ
 
 	float easeInCirc(float x) {
-		return 1 - sqrt(1 - pow(x, 2));
+		return 1 - (float)sqrt(1 - (float)pow(x, 2));
 	}
 
 	float easeOutCirc(float x) {
-		return sqrt(1 - pow(x - 1, 2));
+		return (float)sqrt(1 - (float)pow(x - 1, 2));
 	}
 
 	float easeInOutCirc(float x) {
 		if (x < 0.5f) {
-			return (1 - sqrt(1 - pow(2 * x, 2))) / 2;
+			return (1 - (float)sqrt(1 - (float)pow(2 * x, 2))) / 2;
 		}
 		else {
-			return (sqrt(1 - pow(-2 * x + 2, 2)) + 1) / 2;
+			return ((float)sqrt(1 - (float)pow(-2 * x + 2, 2)) + 1) / 2;
 		}
 	}
 
@@ -134,7 +134,7 @@ namespace Easings {
 		const float c1 = 1.70158f;
 		const float c3 = c1 + 1;
 
-		return 1 + c3 * pow(x - 1, 3) + c1 * pow(x - 1, 2);
+		return 1 + c3 * (float)pow(x - 1, 3) + c1 * (float)pow(x - 1, 2);
 	}
 
 	float easeInOutBack(float x) {
@@ -142,10 +142,10 @@ namespace Easings {
 		const float c2 = c1 * 1.525f;
 
 		if (x < 0.5f) {
-			return (pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2;
+			return ((float)pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2;
 		}
 		else {
-			return (pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
+			return ((float)pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
 		}
 	}
 
@@ -161,13 +161,13 @@ namespace Easings {
 			return n1 * x * x;
 		}
 		else if (x < 2 / d1) {
-			return n1 * (x -= 1.5 / d1) * x + 0.75f;
+			return n1 * (x -= 1.5f / d1) * x + 0.75f;
 		}
 		else if (x < 2.5 / d1) {
-			return n1 * (x -= 2.25 / d1) * x + 0.9375f;
+			return n1 * (x -= 2.25f / d1) * x + 0.9375f;
 		}
 		else {
-			return n1 * (x -= 2.625 / d1) * x + 0.984375f;
+			return n1 * (x -= 2.625f / d1) * x + 0.984375f;
 		}
 	}
 
@@ -198,7 +198,7 @@ namespace Easings {
 				return x = 1;
 			}
 			else {
-				return -pow(2, 10 * x - 10) * sin((x * 10 - 10.75) * c4);
+				return -(float)pow(2, 10 * x - 10) * (float)sin((x * 10 - 10.75) * c4);
 			}
 		}
 	}
@@ -213,7 +213,7 @@ namespace Easings {
 				return x = 1;
 			}
 			else {
-				return pow(2, -10 * x) * sin((x * 10 - 0.75f) * c4) + 1;
+				return (float)pow(2, -10 * x) * (float)sin((x * 10 - 0.75f) * c4) + 1;
 			}
 		}
 	}
@@ -229,10 +229,10 @@ namespace Easings {
 			}
 			else {
 				if (x < 0.5f) {
-					return -(pow(2, 20 * x - 10) * sin((20 * x - 11.125f) * c5)) / 2;
+					return -((float)pow(2, 20 * x - 10) * (float)sin((20 * x - 11.125f) * c5)) / 2;
 				}
 				else {
-					return (pow(2, -20 * x + 10) * sin((20 * x - 11.125f) * c5)) / 2 + 1;
+					return ((float)pow(2, -20 * x + 10) * (float)sin((20 * x - 11.125f) * c5)) / 2 + 1;
 				}
 			}
 		}
@@ -247,7 +247,7 @@ namespace Easings {
 	}
 
 	float easeOutQuart(float x) {
-		return 1 - pow(1 - x, 4);
+		return 1 - (float)pow(1 - x, 4);
 	}
 
 	float easeInOutQuart(float x) {
@@ -255,7 +255,7 @@ namespace Easings {
 			return 8 * x * x * x * x;
 		}
 		else {
-			return 1 - pow(-2 * x + 2, 4) / 2;
+			return 1 - (float)pow(-2 * x + 2, 4) / 2;
 		}
 	}
 
@@ -268,7 +268,7 @@ namespace Easings {
 			return x = 0;
 		}
 		else {
-			return pow(2, 10 * x - 10);
+			return (float)pow(2, 10 * x - 10);
 		}
 	}
 
@@ -277,7 +277,7 @@ namespace Easings {
 			return x = 1;
 		}
 		else {
-			return 1 - pow(2, -10 * x);
+			return 1 - (float)pow(2, -10 * x);
 		}
 	}
 
@@ -291,10 +291,10 @@ namespace Easings {
 			}
 			else {
 				if (x < 0.5f) {
-					return pow(2, 20 * x - 10) / 2;
+					return (float)pow(2, 20 * x - 10) / 2;
 				}
 				else {
-					return (2 - pow(2, -20 * x + 10)) / 2;
+					return (2 - (float)pow(2, -20 * x + 10)) / 2;
 				}
 			}
 		}

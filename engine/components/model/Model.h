@@ -28,7 +28,7 @@ private:
 
 	void CreateMaterialResource();
 
-	ModelData LoadModelFile(const std::string& directoryPath, const std::string& filename);
+	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 
 public:
 	// ワールド座標
