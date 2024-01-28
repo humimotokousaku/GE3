@@ -1,94 +1,41 @@
 #pragma once
+#include "Framework.h"
 
-#pragma region include
- 
-// Scene
-#include "IScene.h"
-#include "TitleScene.h"
-#include "GameScene.h"
-#include "GameClear.h"
-#include "GameOver.h"
-
-// PSO
-#include "PipelineManager.h"
-#include "LinePSO.h"
-
-// Base
-#include "WinApp.h"
-#include "DirectXCommon.h"
-
-// components
-#include "DirectionalLight.h"
-#include "PointLight.h"
-#include "SpotLight.h"
-#include "Input.h"
-#include "Audio.h"
-#include "PostEffect.h"
-
-#pragma endregion
-
-class GameManager
+class GameManager : public Framework
 {	
 public:
 	///
 	/// Default Method
 	/// 
 	// コンストラクタ
-	GameManager();
+	//GameManager();
 
 	// デストラクタ
-	//~GameManager();
+	~GameManager() override;
 
 	// 初期化
-	void Initialize();
+	void Initialize() override;
 
 	// 更新処理
-	//void Update();
+	void Update()override;
+
+	// 描画処理
+	void Draw() override;
 
 	// 解放処理
-	void Finalize();
+	void Finalize() override;
 
 	///
 	/// user method
 	///
-	// ループ処理
-	void Run();
 
 	// 描画前の処理
-	void BeginFrame();
+	void BeginFrame() override;
 
 	// 描画後の処理
-	void EndFrame();
-
-	// ImGuiのパラメータを入れる
-	void ImGuiAdjustParameter();
+	void EndFrame() override;
 
 private:
-	// base
-	WinApp* winApp_;
-	DirectXCommon* directXCommon_;
-	// PSO
-	PipelineManager* pipelineManager_;
-	LinePSO* linePSO_;
 
-	PostEffect* postEffect_;
-
-	// components
-	DirectionalLight* directionalLight_;
-	PointLight* pointLight_;
-	SpotLight* spotLight_;
-
-	TextureManager* textureManager_;
-	ImGuiManager* imGuiManager_;
-	Input* input_;
-	Audio* audio_;
-	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;
-	IXAudio2MasteringVoice* masterVoice_;
-	SoundData soundData1_;
-
-	// scene
-	IScene* sceneArr_[4];
-	int sceneNum_;
-	int preSceneNum_;
 };
 

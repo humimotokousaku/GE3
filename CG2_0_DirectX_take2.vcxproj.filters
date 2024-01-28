@@ -240,6 +240,9 @@
     <ClCompile Include="engine\primitive\Line.cpp">
       <Filter>ソース ファイル\Engine\primitive</Filter>
     </ClCompile>
+    <ClCompile Include="engine\Manager\Framework.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\ImGui\imconfig.h">
@@ -376,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="engine\pso\LinePSO.h">
       <Filter>ヘッダー ファイル\pso</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Manager\Framework.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

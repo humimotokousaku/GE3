@@ -139,6 +139,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="engine\math\Lerp.cpp" />
     <ClCompile Include="engine\primitive\Line.cpp" />
     <ClCompile Include="engine\pso\LinePSO.cpp" />
+    <ClCompile Include="engine\Manager\Framework.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\scene\GameClear.cpp" />
     <ClCompile Include="engine\scene\GameOver.cpp" />
@@ -195,6 +196,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="engine\math\Lerp.h" />
     <ClInclude Include="engine\primitive\Line.h" />
     <ClInclude Include="engine\pso\LinePSO.h" />
+    <ClInclude Include="engine\Manager\Framework.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\ImGui\LICENSE.txt" />
