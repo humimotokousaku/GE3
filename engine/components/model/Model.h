@@ -8,7 +8,8 @@
 class Model
 {
 public:
-	ModelData GetModelData() { return modelData_; }
+	Model() = default;
+	~Model() = default;
 
 	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
 
@@ -16,7 +17,20 @@ public:
 
 	void Draw(const ViewProjection& viewProjection, uint32_t textureNum);
 
-	// Setter
+	void AdjustParameter();
+
+	///
+	/// User Method
+	/// 
+
+	/// Getter
+	// モデルデータ
+	ModelData GetModelData() { return modelData_; }
+
+	/// Setter
+	// モデルをセット
+	static Model* SetModel(const std::string& filePath);
+
 	void SetIsLighting(bool isActive) { materialData_->enableLighting = isActive; }
 
 private:
@@ -32,7 +46,7 @@ private:
 
 public:
 	// ワールド座標
-	WorldTransform worldTransform;
+	//WorldTransform worldTransform;
 private:
 	// Material
 	Material* materialData_;

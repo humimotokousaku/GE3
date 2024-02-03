@@ -16,9 +16,6 @@
     <Filter Include="ソース ファイル\Engine">
       <UniqueIdentifier>{631a231a-e916-48a4-a7f0-fcea517f4f0d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Engine\model">
-      <UniqueIdentifier>{3b959b16-c9a3-4a42-afe1-aaa355897a01}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Engine\components">
       <UniqueIdentifier>{a9e3be61-5c86-4143-85c9-979a85523365}</UniqueIdentifier>
     </Filter>
@@ -48,9 +45,6 @@
     </Filter>
     <Filter Include="ソース ファイル\Engine\postProcess">
       <UniqueIdentifier>{1dca0b38-3c89-4973-941d-c3f0f02f8d10}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\scene">
-      <UniqueIdentifier>{5ac8985e-ee07-4f83-b923-fe82db1f6301}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\Engine\utility">
       <UniqueIdentifier>{d46d68d6-a7e4-4ad7-aeb6-37424d639113}</UniqueIdentifier>
@@ -91,9 +85,6 @@
     <Filter Include="ヘッダー ファイル\Engine\postProcess">
       <UniqueIdentifier>{45a7bbca-dd61-44ad-973b-3d3d44954e2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Engine\scene">
-      <UniqueIdentifier>{4039a4ee-4ef4-4b3a-a198-1d40d5dc44e8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Engine\utility">
       <UniqueIdentifier>{89962479-26d1-4ba5-9ba9-89faace88398}</UniqueIdentifier>
     </Filter>
@@ -112,8 +103,23 @@
     <Filter Include="ヘッダー ファイル\pso">
       <UniqueIdentifier>{4e160585-d5d9-4253-a7c3-6b03eaef2f4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\pso">
+    <Filter Include="ヘッダー ファイル\Project">
+      <UniqueIdentifier>{9a11cab4-e50f-436d-9552-9de537afd026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project">
+      <UniqueIdentifier>{1c1a860d-c03b-4166-af0a-ba6df1ebc7db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\scene">
+      <UniqueIdentifier>{5ac8985e-ee07-4f83-b923-fe82db1f6301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\pso">
       <UniqueIdentifier>{35534473-80f0-4829-ba0c-eff2a95082e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\components\model">
+      <UniqueIdentifier>{3b959b16-c9a3-4a42-afe1-aaa355897a01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\scene">
+      <UniqueIdentifier>{4039a4ee-4ef4-4b3a-a198-1d40d5dc44e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,9 +156,6 @@
     <ClCompile Include="engine\math\Matrix4x4.cpp">
       <Filter>ソース ファイル\Engine\math</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Manager\GameManager.cpp">
-      <Filter>ソース ファイル\Engine\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="engine\Manager\ImGuiManager.cpp">
       <Filter>ソース ファイル\Engine\Manager</Filter>
     </ClCompile>
@@ -171,14 +174,14 @@
     <ClCompile Include="engine\primitive\Triangle.cpp">
       <Filter>ソース ファイル\Engine\primitive</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\GameScene.cpp">
-      <Filter>ソース ファイル\Engine\scene</Filter>
+    <ClCompile Include="project\scene\GameScene.cpp">
+      <Filter>ソース ファイル\Project\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\IScene.cpp">
-      <Filter>ソース ファイル\Engine\scene</Filter>
+    <ClCompile Include="project\scene\IScene.cpp">
+      <Filter>ソース ファイル\Project\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\TitleScene.cpp">
-      <Filter>ソース ファイル\Engine\scene</Filter>
+    <ClCompile Include="project\scene\TitleScene.cpp">
+      <Filter>ソース ファイル\Project\scene</Filter>
     </ClCompile>
     <ClCompile Include="engine\Manager\PipelineManager.cpp">
       <Filter>ソース ファイル\Engine\Manager</Filter>
@@ -186,11 +189,11 @@
     <ClCompile Include="engine\utility\GlobalVariables.cpp">
       <Filter>ソース ファイル\Engine\utility</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\GameClear.cpp">
-      <Filter>ソース ファイル\Engine\scene</Filter>
+    <ClCompile Include="project\scene\GameClear.cpp">
+      <Filter>ソース ファイル\Project\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\GameOver.cpp">
-      <Filter>ソース ファイル\Engine\scene</Filter>
+    <ClCompile Include="project\scene\GameOver.cpp">
+      <Filter>ソース ファイル\Project\scene</Filter>
     </ClCompile>
     <ClCompile Include="engine\primitive\Cube.cpp">
       <Filter>ソース ファイル\Engine\primitive</Filter>
@@ -205,13 +208,13 @@
       <Filter>ソース ファイル\Engine\components</Filter>
     </ClCompile>
     <ClCompile Include="engine\components\model\Model.cpp">
-      <Filter>ソース ファイル\Engine\model</Filter>
+      <Filter>ソース ファイル\Engine\components\model</Filter>
     </ClCompile>
     <ClCompile Include="engine\components\camera\ViewProjection.cpp">
       <Filter>ソース ファイル\Engine\components\camera</Filter>
     </ClCompile>
     <ClCompile Include="engine\components\model\ModelStructs.cpp">
-      <Filter>ソース ファイル\Engine\model</Filter>
+      <Filter>ソース ファイル\Engine\components\model</Filter>
     </ClCompile>
     <ClCompile Include="engine\math\Vector3.cpp">
       <Filter>ソース ファイル\Engine\math</Filter>
@@ -231,17 +234,26 @@
     <ClCompile Include="engine\components\light\DirectionalLight.cpp">
       <Filter>ソース ファイル\Engine\components\light</Filter>
     </ClCompile>
-    <ClCompile Include="engine\math\Lerp.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="engine\pso\LinePSO.cpp">
-      <Filter>ソース ファイル\pso</Filter>
+      <Filter>ソース ファイル\Engine\pso</Filter>
     </ClCompile>
     <ClCompile Include="engine\primitive\Line.cpp">
       <Filter>ソース ファイル\Engine\primitive</Filter>
     </ClCompile>
+    <ClCompile Include="project\scene\GameManager.cpp">
+      <Filter>ソース ファイル\Project\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\math\Lerp.cpp">
+      <Filter>ソース ファイル\Engine\math</Filter>
+    </ClCompile>
     <ClCompile Include="engine\Manager\Framework.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Engine\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\components\model\ModelManager.cpp">
+      <Filter>ソース ファイル\Engine\components\model</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\components\model\Object3D.cpp">
+      <Filter>ソース ファイル\Engine\components\model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -290,9 +302,6 @@
     <ClInclude Include="engine\math\Matrix3x3.h">
       <Filter>ヘッダー ファイル\Engine\math</Filter>
     </ClInclude>
-    <ClInclude Include="engine\Manager\GameManager.h">
-      <Filter>ヘッダー ファイル\Engine\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="engine\Manager\ImGuiManager.h">
       <Filter>ヘッダー ファイル\Engine\Manager</Filter>
     </ClInclude>
@@ -311,14 +320,14 @@
     <ClInclude Include="engine\primitive\Triangle.h">
       <Filter>ヘッダー ファイル\Engine\primitive</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\GameScene.h">
-      <Filter>ヘッダー ファイル\Engine\scene</Filter>
+    <ClInclude Include="project\scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Project\scene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\IScene.h">
-      <Filter>ヘッダー ファイル\Engine\scene</Filter>
+    <ClInclude Include="project\scene\IScene.h">
+      <Filter>ヘッダー ファイル\Project\scene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\TitleScene.h">
-      <Filter>ヘッダー ファイル\Engine\scene</Filter>
+    <ClInclude Include="project\scene\TitleScene.h">
+      <Filter>ヘッダー ファイル\Project\scene</Filter>
     </ClInclude>
     <ClInclude Include="engine\Manager\PipelineManager.h">
       <Filter>ヘッダー ファイル\Engine\Manager</Filter>
@@ -329,11 +338,11 @@
     <ClInclude Include="engine\components\light\DirectionalLight.h">
       <Filter>ヘッダー ファイル\Engine\components\light</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\GameClear.h">
-      <Filter>ヘッダー ファイル\Engine\scene</Filter>
+    <ClInclude Include="project\scene\GameClear.h">
+      <Filter>ヘッダー ファイル\Project\scene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\GameOver.h">
-      <Filter>ヘッダー ファイル\Engine\scene</Filter>
+    <ClInclude Include="project\scene\GameOver.h">
+      <Filter>ヘッダー ファイル\Project\scene</Filter>
     </ClInclude>
     <ClInclude Include="engine\primitive\Cube.h">
       <Filter>ヘッダー ファイル\Engine\primitive</Filter>
@@ -371,17 +380,26 @@
     <ClInclude Include="engine\postProcess\PostEffect.h">
       <Filter>ヘッダー ファイル\Engine\postProcess</Filter>
     </ClInclude>
-    <ClInclude Include="engine\math\Lerp.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="engine\primitive\Line.h">
       <Filter>ヘッダー ファイル\Engine\primitive</Filter>
     </ClInclude>
     <ClInclude Include="engine\pso\LinePSO.h">
       <Filter>ヘッダー ファイル\pso</Filter>
     </ClInclude>
+    <ClInclude Include="project\scene\GameManager.h">
+      <Filter>ヘッダー ファイル\Project\scene</Filter>
+    </ClInclude>
     <ClInclude Include="engine\Manager\Framework.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Engine\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\math\Lerp.h">
+      <Filter>ヘッダー ファイル\Engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\components\model\Object3D.h">
+      <Filter>ヘッダー ファイル\Engine\components</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\components\model\ModelManager.h">
+      <Filter>ヘッダー ファイル\Engine\components\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

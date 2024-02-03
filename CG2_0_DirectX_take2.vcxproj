@@ -62,7 +62,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>false</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\scene;$(ProjectDir)engine\primitive;$(ProjectDir)engine\utility;$(ProjectDir)engine\math;$(ProjectDir)engine\Manager;$(ProjectDir)engine\components;$(ProjectDir)engine\base;$(ProjectDir)engine\components\model;$(ProjectDir)engine\components\input;$(ProjectDir)engine\components\audio;$(ProjectDir)engine\components\camera;$(ProjectDir)engine\components\light;$(ProjectDir)engine\postProcess;$(ProjectDir)engine\particle;$(ProjectDir)engine\pso;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)project\scene;$(ProjectDir)engine\primitive;$(ProjectDir)engine\utility;$(ProjectDir)engine\math;$(ProjectDir)engine\Manager;$(ProjectDir)engine\components;$(ProjectDir)engine\base;$(ProjectDir)engine\components\model;$(ProjectDir)engine\components\input;$(ProjectDir)engine\components\audio;$(ProjectDir)engine\components\camera;$(ProjectDir)engine\components\light;$(ProjectDir)engine\postProcess;$(ProjectDir)engine\particle;$(ProjectDir)engine\pso;$(ProjectDir)project;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -88,7 +88,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>false</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)engine\scene;$(ProjectDir)engine\primitive;$(ProjectDir)engine\utility;$(ProjectDir)engine\math;$(ProjectDir)engine\Manager;$(ProjectDir)engine\components;$(ProjectDir)engine\base;$(ProjectDir)engine\components\model;$(ProjectDir)engine\components\input;$(ProjectDir)engine\components\audio;$(ProjectDir)engine\components\camera;$(ProjectDir)engine\components\light;$(ProjectDir)engine\postProcess;$(ProjectDir)engine\particle;$(ProjectDir)engine\pso;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)project\scene;$(ProjectDir)engine\primitive;$(ProjectDir)engine\utility;$(ProjectDir)engine\math;$(ProjectDir)engine\Manager;$(ProjectDir)engine\components;$(ProjectDir)engine\base;$(ProjectDir)engine\components\model;$(ProjectDir)engine\components\input;$(ProjectDir)engine\components\audio;$(ProjectDir)engine\components\camera;$(ProjectDir)engine\components\light;$(ProjectDir)engine\postProcess;$(ProjectDir)engine\particle;$(ProjectDir)engine\pso;$(ProjectDir)project;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -118,7 +118,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="engine\components\model\Model.cpp" />
     <ClCompile Include="engine\components\model\ModelStructs.cpp" />
     <ClCompile Include="engine\components\WorldTransform.cpp" />
-    <ClCompile Include="engine\Manager\GameManager.cpp" />
+    <ClCompile Include="project\scene\GameManager.cpp" />
     <ClCompile Include="engine\Manager\ImGuiManager.cpp" />
     <ClCompile Include="engine\Manager\PipelineManager.cpp" />
     <ClCompile Include="engine\Manager\TextureManager.cpp" />
@@ -141,14 +141,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="engine\pso\LinePSO.cpp" />
     <ClCompile Include="engine\Manager\Framework.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="engine\scene\GameClear.cpp" />
-    <ClCompile Include="engine\scene\GameOver.cpp" />
-    <ClCompile Include="engine\scene\GameScene.cpp" />
-    <ClCompile Include="engine\scene\IScene.cpp" />
-    <ClCompile Include="engine\scene\TitleScene.cpp" />
+    <ClCompile Include="project\scene\GameClear.cpp" />
+    <ClCompile Include="project\scene\GameOver.cpp" />
+    <ClCompile Include="project\scene\GameScene.cpp" />
+    <ClCompile Include="project\scene\IScene.cpp" />
+    <ClCompile Include="project\scene\TitleScene.cpp" />
     <ClCompile Include="engine\utility\ConvertString.cpp" />
     <ClCompile Include="engine\utility\GlobalVariables.cpp" />
     <ClCompile Include="engine\postProcess\PostEffect.cpp" />
+    <ClCompile Include="engine\components\model\ModelManager.cpp" />
+    <ClCompile Include="engine\components\model\Object3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\base\DirectXCommon.h" />
@@ -162,7 +164,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="engine\components\model\Model.h" />
     <ClInclude Include="engine\components\model\ModelStructs.h" />
     <ClInclude Include="engine\components\WorldTransform.h" />
-    <ClInclude Include="engine\Manager\GameManager.h" />
+    <ClInclude Include="project\scene\GameManager.h" />
     <ClInclude Include="engine\Manager\ImGuiManager.h" />
     <ClInclude Include="engine\Manager\PipelineManager.h" />
     <ClInclude Include="engine\Manager\TextureManager.h" />
@@ -185,11 +187,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="engine\primitive\Sphere.h" />
     <ClInclude Include="engine\primitive\Sprite.h" />
     <ClInclude Include="engine\primitive\Triangle.h" />
-    <ClInclude Include="engine\scene\GameClear.h" />
-    <ClInclude Include="engine\scene\GameOver.h" />
-    <ClInclude Include="engine\scene\GameScene.h" />
-    <ClInclude Include="engine\scene\IScene.h" />
-    <ClInclude Include="engine\scene\TitleScene.h" />
+    <ClInclude Include="project\scene\GameClear.h" />
+    <ClInclude Include="project\scene\GameOver.h" />
+    <ClInclude Include="project\scene\GameScene.h" />
+    <ClInclude Include="project\scene\IScene.h" />
+    <ClInclude Include="project\scene\TitleScene.h" />
     <ClInclude Include="engine\utility\ConvertString.h" />
     <ClInclude Include="engine\utility\GlobalVariables.h" />
     <ClInclude Include="engine\postProcess\PostEffect.h" />
@@ -197,6 +199,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="engine\primitive\Line.h" />
     <ClInclude Include="engine\pso\LinePSO.h" />
     <ClInclude Include="engine\Manager\Framework.h" />
+    <ClInclude Include="engine\components\model\ModelManager.h" />
+    <ClInclude Include="engine\components\model\Object3D.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\ImGui\LICENSE.txt" />

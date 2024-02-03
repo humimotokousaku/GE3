@@ -20,6 +20,7 @@
 #include "SpotLight.h"
 #include "Input.h"
 #include "Audio.h"
+#include "ModelManager.h"
 #include "PostEffect.h"
 
 class Framework {
@@ -81,6 +82,7 @@ protected:
 	DirectionalLight* directionalLight_;
 	PointLight* pointLight_;
 	SpotLight* spotLight_;
+	//ModelManager* modelManager_;
 
 	TextureManager* textureManager_;
 	ImGuiManager* imGuiManager_;

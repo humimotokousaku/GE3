@@ -2,9 +2,11 @@
 #include "IScene.h"
 
 class GameManager;
-class GameScene : public IScene
+class GameOver : public IScene
 {
 public:
+	~GameOver()override = default;
+
 	// 初期化
 	void Initialize()override;
 

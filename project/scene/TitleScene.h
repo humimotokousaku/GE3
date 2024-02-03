@@ -8,6 +8,7 @@
 #include "PostEffect.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Object3D.h"
 
 class GameManager;
 
@@ -17,6 +18,8 @@ public:
 	/// 
 	/// Default Method
 	/// 
+
+	~TitleScene()override = default;
 
 	// 初期化
 	void Initialize() override;
@@ -32,16 +35,12 @@ public:
 	/// 
 
 private:
-	PostEffect* postEffect_;
-	const static int kMaxCube = 2;
-	Model* plane_;
-	Model* axis_;
+	Object3D* plane_;
+	Object3D* axis_;
 	Sprite* sprite_;
 	Particles* particles_;
 
 	int textureNum_;
 	Input* input_;
-	WorldTransform cubeWorldTransform_[kMaxCube];
-	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 };

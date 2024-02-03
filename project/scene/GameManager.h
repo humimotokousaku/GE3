@@ -8,7 +8,7 @@ public:
 	/// Default Method
 	/// 
 	// コンストラクタ
-	//GameManager();
+	GameManager();
 
 	// デストラクタ
 	~GameManager() override;

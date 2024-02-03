@@ -3,11 +3,7 @@
 #include "GlobalVariables.h"
 
 Framework::Framework() {
-	// 各シーンの配列
-	sceneArr_[TITLE_SCENE] = new TitleScene();
-	sceneArr_[GAME_SCENE] = new GameScene();
-	sceneArr_[GAMECLEAR_SCENE] = new GameClear();
-	sceneArr_[GAMEOVER_SCENE] = new GameOver();
+
 }
 
 void Framework::Initialize() {
@@ -37,6 +33,9 @@ void Framework::Initialize() {
 	imGuiManager_->Initialize(winApp_->GetHwnd());
 	// ブローバル変数の読み込み
 	//GlobalVariables::GetInstance()->LoadFiles();
+	// モデルマネージャ
+	ModelManager::GetInstance()->Initialize();
+
 	// ポストエフェクト
 	//postEffect_ = new PostEffect();
 	//postEffect_->Initialize();
@@ -65,28 +64,10 @@ void Framework::Initialize() {
 	//soundData1_ = audio_->SoundLoadWave("resources/fanfare.wav");
 	//// 音声再生
 	//audio_->SoundPlayWave(xAudio2_.Get(), soundData1_);
-
-	//初期シーンの設定
-	sceneNum_ = TITLE_SCENE;
-	// シーンごとの初期化
-	sceneArr_[sceneNum_]->Initialize();
 }
 
 void Framework::Update() {
-	// シーンチェック
-	preSceneNum_ = sceneNum_;
-	sceneNum_ = sceneArr_[sceneNum_]->GetSceneNum();
 
-	//シーン変更チェック
-	if (sceneNum_ != preSceneNum_) {
-		sceneArr_[preSceneNum_]->Finalize();
-		sceneArr_[sceneNum_]->Initialize();
-	}
-
-	///
-	/// 更新処理
-	/// 
-	sceneArr_[sceneNum_]->Update();
 }
 
 void Framework::Run() {
@@ -120,10 +101,7 @@ void Framework::Run() {
 }
 
 void Framework::Finalize() {
-	for (int i = 0; i < 4; i++) {
-		sceneArr_[i]->Finalize();
-		delete sceneArr_[i];
-	}
+	ModelManager::GetInstance()->Finalize();
 	// ImGui
 	imGuiManager_->Finalize();
 	textureManager_->Finalize();

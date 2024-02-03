@@ -5,6 +5,8 @@ class GameManager;
 class GameClear : public IScene
 {
 public:
+	~GameClear()override = default;
+
 	// 初期化
 	void Initialize()override;
 
