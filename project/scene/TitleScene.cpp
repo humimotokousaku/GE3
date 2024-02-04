@@ -50,14 +50,16 @@ void TitleScene::Update() {
 	ImGui::DragFloat3("translation", &camera_->viewProjection_.translation_.x, 0.1f, -100, 100);
 	ImGui::DragFloat3("rotation", &camera_->viewProjection_.rotation_.x, 0.01f, -6.28f, 6.28f);
 	ImGui::End();
-	//ImGui::Begin("plane");
-	//ImGui::DragFloat3("translation", &plane_->worldTransform.translation_.x, 0.01f, -100, 100);
-	//ImGui::End();
-	//ImGui::Begin("axis");
-	//ImGui::DragFloat3("translation", &axis_->worldTransform.translation_.x, 0.01f, -100, 100);
-	//ImGui::End();
+	ImGui::Begin("plane");
+	ImGui::DragFloat3("translation", &plane_->worldTransform.translation_.x, 0.01f, -100, 100);
+	ImGui::End();
+	ImGui::Begin("axis");
+	ImGui::DragFloat3("translation", &axis_->worldTransform.translation_.x, 0.01f, -100, 100);
+	ImGui::End();
 
 	sprite_->ImGuiAdjustParameter();
+
+	particles_->ImGuiAdjustParameter();
 
 	ImGui::Begin("Current Scene");
 	ImGui::Text("TITLE");

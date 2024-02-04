@@ -173,17 +173,15 @@ void Sprite::AdjustTextureSize() {
 }
 
 void Sprite::ImGuiAdjustParameter() {
-#ifdef _DEBUG
 	// ウィンドウの初期サイズを指定
 	ImGui::Begin("Sprite");
 	ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.5f, 0, 1280, "%.1f");
 	ImGui::DragFloat3("Scale", &worldTransform_.scale_.x, 0.1f, -5, 5, "%.1f");
 	ImGui::DragFloat3("Rotate.z", &worldTransform_.rotation_.x, 0.1f, -6.28f, 6.28f, "%.1f");
 	ImGui::DragFloat2("AnchorPoint", &anchorPoint_.x, 0.01f, -1.0f, 1.0f, "%.2f");
-	ImGui::DragFloat2("Size", &size_.x, 0.1f, 0,1280,"%.1f");
+	ImGui::DragFloat2("Size", &size_.x, 0.1f, 0, 1280, "%.1f");
 	ImGui::CheckboxFlags("isLighting", &materialData_->enableLighting, 1);
 	ImGui::End();
-#endif
 }
 
 Microsoft::WRL::ComPtr<ID3D12Resource> Sprite::CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes) {
