@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 Camera::~Camera() {
-	viewProjection_.constBuff_.ReleaseAndGetAddressOf();
+	//viewProjection_.constBuff_.ReleaseAndGetAddressOf();
 }
 
 void Camera::Initialize() {

@@ -3,8 +3,9 @@
 #include "ModelManager.h"
 
 Object3D::~Object3D() {
-	worldTransform.constBuff_.ReleaseAndGetAddressOf();
 	delete model_;
+	worldTransform.constBuff_.ReleaseAndGetAddressOf();
+	viewProjection.constBuff_.ReleaseAndGetAddressOf();
 }
 
 void Object3D::Initialize(const std::string& filePath) {

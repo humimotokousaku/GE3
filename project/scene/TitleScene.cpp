@@ -8,19 +8,19 @@ void TitleScene::Initialize() {
 	viewProjection_.Initialize();
 
 	// カメラの初期化
-	camera_ = new Camera();
+	camera_ = std::make_unique<Camera>();
 	camera_->Initialize();
 
 	// objモデル
 	ModelManager::GetInstance()->LoadModel("plane.obj");
 	plane_ = new Object3D();
 	plane_->Initialize("plane.obj");
-	plane_->SetCamera(camera_);
+	plane_->SetCamera(camera_.get());
 
 	ModelManager::GetInstance()->LoadModel("teapot.obj");
 	axis_ = new Object3D();
 	axis_->Initialize("teapot.obj");
-	axis_->SetCamera(camera_);
+	axis_->SetCamera(camera_.get());
 
 	// Sprite
 	sprite_ = Sprite::Create(UVCHEKER);
@@ -28,7 +28,7 @@ void TitleScene::Initialize() {
 	// particle
 	particles_ = new Particles();
 	particles_->Initialize();
-	particles_->SetCamera(camera_);
+	particles_->SetCamera(camera_.get());
 
 	camera_->SetCameraPos(Vector3{0,0,-12});
 }
@@ -75,10 +75,9 @@ void TitleScene::Draw() {
 }
 
 void TitleScene::Finalize() {
-	delete particles_;
-	delete sprite_;
 	delete axis_;
 	delete plane_;
-	delete camera_;
+	delete particles_;
+	delete sprite_;
 	viewProjection_.constBuff_.ReleaseAndGetAddressOf();
 }

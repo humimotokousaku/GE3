@@ -43,5 +43,5 @@ private:
 	int textureNum_;
 	Input* input_;
 	ViewProjection viewProjection_;
-	Camera* camera_;
+	std::unique_ptr<Camera> camera_;
 };

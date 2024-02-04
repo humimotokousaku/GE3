@@ -50,6 +50,9 @@ public:
 	/// Default Method
 	///
 
+	Particles() = default;
+	~Particles();
+
 	// 初期化
 	void Initialize();
 

@@ -8,6 +8,10 @@
 #include <numbers>
 #include <vector>
 
+Particles::~Particles() {
+	viewProjection_.constBuff_.ReleaseAndGetAddressOf();
+}
+
 void Particles::Initialize() {
 	// 頂点の座標
 	modelData_.vertices.push_back({ .position = {-1.0f,1.0f,0.0f,1.0f}, .texcoord = {0.0f,0.0f},.normal = {0.0f,0.0f,1.0f} }); // 左上
