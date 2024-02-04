@@ -45,27 +45,15 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f}
 	};
-
-	// ワールド座標の初期化
-	//worldTransform.Initialize();
 }
 
 void Model::Draw(const ViewProjection& viewProjection, uint32_t textureNum) {
-	//// ワールド座標の更新
-	//worldTransform.UpdateMatrix();
-	///// コマンドを積む
-	//// RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetRootSignature()[1].Get());
-	//DirectXCommon::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetGraphicsPipelineState()[1].Get()); // PSOを設定
 
 	//// 形状を設定
-	//DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
 
 	/// CBVの設定
 
-	//// worldTransform
-	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuff_->GetGPUVirtualAddress());
 	// viewProjection
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraPosResource_.Get()->GetGPUVirtualAddress());
@@ -85,7 +73,7 @@ void Model::Draw(const ViewProjection& viewProjection, uint32_t textureNum) {
 Model* Model::SetModel(const std::string& filePath) {
 	Model* model = new Model();
 	model = ModelManager::GetInstance()->FindModel(filePath);
-	return /*ModelManager::GetInstance()->FindModel(filePath);*/model;
+	return model;
 }
 
 void Model::AdjustParameter() {

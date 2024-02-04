@@ -43,4 +43,5 @@ private:
 	int textureNum_;
 	Input* input_;
 	ViewProjection viewProjection_;
+	Camera* camera_;
 };

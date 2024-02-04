@@ -1,6 +1,7 @@
 #pragma once
 #include "Model.h"
 #include "WorldTransform.h"
+#include "Camera.h"
 
 class Object3D
 {
@@ -26,10 +27,27 @@ public:
 	/// </summary>
 	/// <param name="viewProjection">カメラ</param>
 	/// <param name="textureNum">テクスチャ番号</param>
-	void Draw(ViewProjection viewProjection, uint32_t textureNum);
+	void Draw(uint32_t textureNum);
+
+	///
+	/// Default Method
+	/// 
+
+	/// Getter
+
+
+	/// Setter
+	// カメラ
+	void SetCamera(Camera* camera) { camera_ = camera; }
+
+	// カメラをセットしていないとき用
+	void SetSubCamera(ViewProjection viewProjection) { this->viewProjection = viewProjection; }
 
 public:
 	WorldTransform worldTransform;
+	ViewProjection viewProjection;
+	Camera* camera_;
+
 private:
 	Model* model_;
 };

@@ -2,6 +2,7 @@
 #include "MathStructs.h"
 #include "ModelStructs.h"
 #include "Model.h"
+#include "Camera.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "PipelineManager.h"
@@ -56,7 +57,7 @@ public:
 	void Update();
 
 	// 描画
-	void Draw(const ViewProjection& viewProjection, int textureNum);
+	void Draw(int textureNum);
 
 	ModelData GetModelData() { return modelData_; }
 
@@ -64,6 +65,8 @@ public:
 	/// User Method
 	///
 	/// Setter
+	// カメラ
+	void SetCamera(Camera* camera) { camera_ = camera; }
 
 	// パーティクルの発生源の座標
 	void SetEmitterPos(Vector3 translate) { emitter_.transform.translate = translate; }
@@ -152,5 +155,9 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
 	ParticleForGPU* instancingData_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource_;
+
+	// カメラ
+	Camera* camera_;
+	ViewProjection viewProjection_;
 };
 

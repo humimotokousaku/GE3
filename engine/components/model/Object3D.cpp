@@ -11,11 +11,21 @@ void Object3D::Initialize(const std::string& filePath) {
 	worldTransform.Initialize();
 	model_ = new Model();
 	model_ = ModelManager::GetInstance()->SetModel(filePath);
+
+	viewProjection.Initialize();
 }
 
-void Object3D::Draw(ViewProjection viewProjection, uint32_t textureNum) {
+void Object3D::Draw(uint32_t textureNum) {
+	// カメラ
+	if (camera_) {
+		camera_->Update();
+		viewProjection = camera_->GetViewProjection();	
+	}
+
+	viewProjection.UpdateMatrix();
 	// ワールド座標の更新
 	worldTransform.UpdateMatrix();
+
 	/// コマンドを積む
 	// RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetRootSignature()[1].Get());

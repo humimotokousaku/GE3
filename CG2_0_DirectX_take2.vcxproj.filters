@@ -255,6 +255,9 @@
     <ClCompile Include="engine\components\model\Object3D.cpp">
       <Filter>ソース ファイル\Engine\components\model</Filter>
     </ClCompile>
+    <ClCompile Include="engine\components\camera\Camera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\ImGui\imconfig.h">
@@ -400,6 +403,9 @@
     </ClInclude>
     <ClInclude Include="engine\components\model\ModelManager.h">
       <Filter>ヘッダー ファイル\Engine\components\model</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\components\camera\Camera.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

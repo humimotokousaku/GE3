@@ -73,6 +73,8 @@ void Particles::Initialize() {
 	accField_.area.min = { -10,-10,-10 };
 	accField_.area.max = { 10,10,10 };
 	accField_.isActive = true;
+
+	viewProjection_.Initialize();
 }
 
 void Particles::Update() {
@@ -113,9 +115,15 @@ void Particles::Update() {
 	}
 }
 
-void Particles::Draw(const ViewProjection& viewProjection, int textureNum) {
+void Particles::Draw(int textureNum) {
+	// カメラ
+	if (camera_) {
+		camera_->Update();
+		this->viewProjection_ = camera_->GetViewProjection();
+	}
+
 	// カメラ行列
-	Matrix4x4 cameraMatrix = MakeAffineMatrix(Vector3{ 1,1,1 }, viewProjection.rotation_, viewProjection.translation_);
+	Matrix4x4 cameraMatrix = MakeAffineMatrix(Vector3{ 1,1,1 }, viewProjection_.rotation_, viewProjection_.translation_);
 	// 板ポリを正面に向ける
 	Matrix4x4 backToFrontMatrix = MakeIdentity4x4();
 	// billboardMatrixを作成
@@ -133,10 +141,9 @@ void Particles::Draw(const ViewProjection& viewProjection, int textureNum) {
 		}
 
 		if (numInstance < kNumMaxInstance) {
-
 			// WVPとworldMatrixの計算
 			Matrix4x4 worldMatrix = AffineMatrix((*particleIterator).transform.scale, billboardMatrix, (*particleIterator).transform.translate);
-			instancingData_[numInstance].World = Multiply(worldMatrix, Multiply(viewProjection.matView, viewProjection.matProjection));
+			instancingData_[numInstance].World = Multiply(worldMatrix, Multiply(viewProjection_.matView, viewProjection_.matProjection));
 			instancingData_[numInstance].WVP = instancingData_[numInstance].World;
 			++numInstance;
 
@@ -146,6 +153,8 @@ void Particles::Draw(const ViewProjection& viewProjection, int textureNum) {
 
 		++particleIterator;
 	}
+
+	viewProjection_.UpdateMatrix();
 
 	// RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetRootSignature()[6].Get());
