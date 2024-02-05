@@ -46,6 +46,7 @@ void TitleScene::Update() {
 	// パーティクルの更新処理
 	particles_->Update();
 
+#ifdef USE_IMGUI
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("translation", &camera_->viewProjection_.translation_.x, 0.1f, -100, 100);
 	ImGui::DragFloat3("rotation", &camera_->viewProjection_.rotation_.x, 0.01f, -6.28f, 6.28f);
@@ -65,6 +66,7 @@ void TitleScene::Update() {
 	ImGui::Text("TITLE");
 	ImGui::Text("SPACE:scene change");
 	ImGui::End();
+#endif
 }
 
 void TitleScene::Draw() {

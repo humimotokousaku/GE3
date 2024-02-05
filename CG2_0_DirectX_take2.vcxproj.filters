@@ -100,9 +100,6 @@
     <Filter Include="External\imgui">
       <UniqueIdentifier>{a3dee17f-dd6e-43a8-ad94-de15e89a0747}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\pso">
-      <UniqueIdentifier>{4e160585-d5d9-4253-a7c3-6b03eaef2f4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Project">
       <UniqueIdentifier>{9a11cab4-e50f-436d-9552-9de537afd026}</UniqueIdentifier>
     </Filter>
@@ -120,6 +117,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Project\scene">
       <UniqueIdentifier>{4039a4ee-4ef4-4b3a-a198-1d40d5dc44e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\pso">
+      <UniqueIdentifier>{4e160585-d5d9-4253-a7c3-6b03eaef2f4f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -256,7 +256,7 @@
       <Filter>ソース ファイル\Engine\components\model</Filter>
     </ClCompile>
     <ClCompile Include="engine\components\camera\Camera.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Engine\components\camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -377,9 +377,6 @@
     <ClInclude Include="engine\components\light\PointLight.h">
       <Filter>ヘッダー ファイル\Engine\components\light</Filter>
     </ClInclude>
-    <ClInclude Include="engine\particle\Particles.h">
-      <Filter>ヘッダー ファイル\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="engine\postProcess\PostEffect.h">
       <Filter>ヘッダー ファイル\Engine\postProcess</Filter>
     </ClInclude>
@@ -387,7 +384,7 @@
       <Filter>ヘッダー ファイル\Engine\primitive</Filter>
     </ClInclude>
     <ClInclude Include="engine\pso\LinePSO.h">
-      <Filter>ヘッダー ファイル\pso</Filter>
+      <Filter>ヘッダー ファイル\Engine\pso</Filter>
     </ClInclude>
     <ClInclude Include="project\scene\GameManager.h">
       <Filter>ヘッダー ファイル\Project\scene</Filter>
@@ -404,8 +401,11 @@
     <ClInclude Include="engine\components\model\ModelManager.h">
       <Filter>ヘッダー ファイル\Engine\components\model</Filter>
     </ClInclude>
+    <ClInclude Include="engine\particle\Particles.h">
+      <Filter>ヘッダー ファイル\Engine\particle</Filter>
+    </ClInclude>
     <ClInclude Include="engine\components\camera\Camera.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Engine\components\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
