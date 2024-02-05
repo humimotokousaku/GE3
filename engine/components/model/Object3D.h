@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "Camera.h"
+#include "ModelManager.h"
 
 class Object3D
 {
@@ -42,6 +43,9 @@ public:
 
 	// カメラをセットしていないとき用
 	void SetSubCamera(ViewProjection viewProjection) { this->viewProjection = viewProjection; }
+
+	// モデルのセット
+	void SetModel(const std::string& filePath) { model_ = ModelManager::GetInstance()->FindModel(filePath); }
 
 public:
 	WorldTransform worldTransform;

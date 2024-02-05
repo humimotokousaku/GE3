@@ -1,10 +1,13 @@
 #include "ModelManager.h"
 #include "WinApp.h"
 
-ModelManager* ModelManager::GetInstance() {
-	static ModelManager instance;
+ModelManager* ModelManager::instance = nullptr;
 
-	return &instance;
+ModelManager* ModelManager::GetInstance() {
+	if (instance == nullptr) {
+		instance = new ModelManager();
+	}
+	return instance;
 }
 
 void ModelManager::Initialize() {
@@ -19,16 +22,17 @@ void ModelManager::LoadModel(const std::string& filePath) {
 	}
 
 	// モデル生成とファイル読み込み
-	std::unique_ptr<Model> model;
-	model.reset(Model::CreateModelFromObj("engine/resources", filePath));
-	//model->Initialize("engine/resources", filePath);
+	std::unique_ptr<Model> model = std::make_unique<Model>();
+	//model.reset(Model::CreateModelFromObj("engine/resources", filePath));
+	model->Initialize("engine/resources", filePath);
 
 	// モデルをmapコンテナに格納
 	models_.insert(std::make_pair(filePath, std::move(model)));
 }
 
 void ModelManager::Finalize() {
-	//delete instance;
+	delete instance;
+	instance = nullptr;
 }
 
 Model* ModelManager::FindModel(const std::string& filePath) {

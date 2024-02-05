@@ -10,10 +10,12 @@ void GameOver::Update() {
 		sceneNum = TITLE_SCENE;
 	}
 
+#ifdef USE_IMGUI
 	ImGui::Begin("Current Scene");
 	ImGui::Text("GAMEOVER");
 	ImGui::Text("SPACE:scene change");
 	ImGui::End();
+#endif
 }
 
 void GameOver::Draw() {

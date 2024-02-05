@@ -35,10 +35,10 @@ public:
 	/// 
 
 private:
-	Object3D* plane_;
-	Object3D* axis_;
-	Sprite* sprite_;
-	Particles* particles_;
+	std::unique_ptr<Object3D> plane_;
+	std::unique_ptr<Object3D> axis_;
+	std::unique_ptr<Sprite> sprite_;
+	std::unique_ptr<Particles> particles_;
 
 	int textureNum_;
 	Input* input_;

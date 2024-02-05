@@ -34,7 +34,8 @@ public:
 	// モデルをセット
 	Model* SetModel(const std::string& filePath);
 
-public:
+private:
+	static ModelManager* instance;
 	ModelManager() = default;
 	~ModelManager() = default;
 	ModelManager(const ModelManager& obj) = default;
