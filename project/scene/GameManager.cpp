@@ -2,10 +2,10 @@
 
 GameManager::GameManager() {
 	// 各シーンの配列
-	sceneArr_[TITLE_SCENE] = new TitleScene();
-	sceneArr_[GAME_SCENE] = new GameScene();
-	sceneArr_[GAMECLEAR_SCENE] = new GameClear();
-	sceneArr_[GAMEOVER_SCENE] = new GameOver();
+	sceneArr_[TITLE_SCENE] = std::make_unique<TitleScene>();
+	sceneArr_[GAME_SCENE] = std::make_unique<GameScene>();
+	sceneArr_[GAMECLEAR_SCENE] = std::make_unique<GameClear>();
+	sceneArr_[GAMEOVER_SCENE] = std::make_unique<GameOver>();
 }
 
 GameManager::~GameManager() {
@@ -60,7 +60,7 @@ void GameManager::EndFrame() {
 
 void GameManager::Finalize() {
 	Framework::Finalize();
-	for (int i = 0; i < 4; i++) {
-		delete sceneArr_[i];
+	for (auto& scene : sceneArr_) {
+		scene.reset();
 	}
 }

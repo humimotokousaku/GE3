@@ -36,6 +36,9 @@ public:
 	void EndFrame() override;
 
 private:
-
+	// scene
+	std::array<std::unique_ptr<IScene>, 4u> sceneArr_;
+	int sceneNum_;
+	int preSceneNum_;
 };
 

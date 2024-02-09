@@ -89,8 +89,4 @@ protected:
 	Input* input_;
 	Audio* audio_;
 
-	// scene
-	IScene* sceneArr_[4];
-	int sceneNum_;
-	int preSceneNum_;
 };
