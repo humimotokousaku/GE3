@@ -48,7 +48,5 @@ Model* ModelManager::FindModel(const std::string& filePath) {
 }
 
 Model* ModelManager::SetModel(const std::string& filePath) {
-	//Model* model = new Model();
-	//model = FindModel(filePath);
 	return ModelManager::GetInstance()->FindModel(filePath);
 }
