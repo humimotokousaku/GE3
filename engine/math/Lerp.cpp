@@ -14,10 +14,10 @@ namespace Lerps {
 
 	Vector3 Slerp(Vector3 start, Vector3 end, float t) {
 		float dot = Dot(start, end);
-		float theta = acos((dot * (float)M_PI) / 180);
-		float sinTheta = sin(theta);
-		float weightStart = sin((1 - t) * theta) / sinTheta;
-		float weightEnd = sin(t * theta) / sinTheta;
+		float theta = (float)acos((dot * (float)(float)M_PI) / 180);
+		float sinTheta = (float)sin(theta);
+		float weightStart = (float)sin((1 - t) * theta) / sinTheta;
+		float weightEnd = (float)sin(t * theta) / sinTheta;
 
 		Vector3 result;
 		result.x = (weightStart * start.x + weightEnd * end.x);
@@ -189,7 +189,7 @@ namespace Easings {
 #pragma region Elastic
 
 	float easeInElastic(float x) {
-		const float c4 = (2 * M_PI) / 3;
+		const float c4 = (2 * (float)M_PI) / 3;
 		if (x == 0) {
 			return x = 0;
 		}
@@ -204,7 +204,7 @@ namespace Easings {
 	}
 
 	float easeOutElastic(float x) {
-		const float c4 = (2 * M_PI) / 3;
+		const float c4 = (2 * (float)M_PI) / 3;
 		if (x == 0) {
 			return x = 0;
 		}
@@ -219,7 +219,7 @@ namespace Easings {
 	}
 
 	float easeInOutElastic(float x) {
-		const float c5 = (2 * M_PI) / 4.5f;
+		const float c5 = (2 * (float)M_PI) / 4.5f;
 		if (x == 0) {
 			return x = 0;
 		}

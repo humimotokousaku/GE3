@@ -7,7 +7,7 @@ Object3D::~Object3D() {
 	viewProjection.constBuff_.ReleaseAndGetAddressOf();
 }
 
-void Object3D::Initialize(const std::string& filePath) {
+void Object3D::Initialize() {
 	worldTransform.Initialize();
 
 	viewProjection.Initialize();

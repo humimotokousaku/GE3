@@ -14,13 +14,13 @@ void TitleScene::Initialize() {
 	// objモデル
 	ModelManager::GetInstance()->LoadModel("plane.obj");
 	plane_ = std::make_unique<Object3D>();
-	plane_->Initialize("plane.obj");
+	plane_->Initialize();
 	plane_->SetModel("plane.obj");
 	plane_->SetCamera(camera_.get());
 
 	ModelManager::GetInstance()->LoadModel("teapot.obj");
 	axis_ = std::make_unique<Object3D>();
-	axis_->Initialize("teapot.obj");
+	axis_->Initialize();
 	axis_->SetModel("teapot.obj");
 	axis_->SetCamera(camera_.get());
 

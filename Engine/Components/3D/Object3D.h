@@ -19,7 +19,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const std::string& filePath);
+	void Initialize();
 
 	//void Update();
 
