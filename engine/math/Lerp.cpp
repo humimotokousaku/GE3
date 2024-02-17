@@ -12,7 +12,7 @@ namespace Lerps {
 		return Vector3(newX, newY, newZ);
 	}
 
-	Vector3 Slerp(Vector3 start, Vector3 end, float t) {
+	Vector3 Slerp(const Vector3& start, const Vector3& end, float t) {
 		float dot = Dot(start, end);
 		float theta = (float)acos((dot * (float)(float)M_PI) / 180);
 		float sinTheta = (float)sin(theta);
@@ -57,15 +57,15 @@ namespace Lerps {
 namespace Easings {
 #pragma region Cubic
 
-	float easeInCubic(float x) {
+	float EaseInCubic(float x) {
 		return x * x * x;
 	}
 
-	float easeOutCubic(float x) {
+	float EaseOutCubic(float x) {
 		return 1 - (float)pow(1 - x, 3);
 	}
 
-	float easeInOutCubic(float x) {
+	float EaseInOutCubic(float x) {
 		if (x < 0.5f) {
 			return 4 * x * x * x;
 		}
@@ -79,17 +79,17 @@ namespace Easings {
 #pragma region Quint
 
 	// だんだん早くなる(一気に早くなる)
-	float easeInQuint(float x) {
+	float EaseInQuint(float x) {
 		return x * x * x * x * x;
 	}
 
 	// だんだん減速(ぎりぎりまで速度が速い)
-	float easeOutQuint(float x) {
+	float EaseOutQuint(float x) {
 		return 1 - (float)pow(1 - x, 5);
 	}
 
-	// easeInOut(一気に早くなって減速する)
-	float easeInOutQuint(float x) {
+	// EaseInOut(一気に早くなって減速する)
+	float EaseInOutQuint(float x) {
 		if (x < 0.5) {
 			return 16 * x * x * x * x * x;
 		}
@@ -102,15 +102,15 @@ namespace Easings {
 
 #pragma region Circ
 
-	float easeInCirc(float x) {
+	float EaseInCirc(float x) {
 		return 1 - (float)sqrt(1 - (float)pow(x, 2));
 	}
 
-	float easeOutCirc(float x) {
+	float EaseOutCirc(float x) {
 		return (float)sqrt(1 - (float)pow(x - 1, 2));
 	}
 
-	float easeInOutCirc(float x) {
+	float EaseInOutCirc(float x) {
 		if (x < 0.5f) {
 			return (1 - (float)sqrt(1 - (float)pow(2 * x, 2))) / 2;
 		}
@@ -123,21 +123,21 @@ namespace Easings {
 
 #pragma region Back
 
-	float easeInBack(float x) {
+	float EaseInBack(float x) {
 		const float c1 = 1.70158f;
 		const float c3 = c1 + 1;
 
 		return c3 * x * x * x - c1 * x * x;
 	}
 
-	float easeOutBack(float x) {
+	float EaseOutBack(float x) {
 		const float c1 = 1.70158f;
 		const float c3 = c1 + 1;
 
 		return 1 + c3 * (float)pow(x - 1, 3) + c1 * (float)pow(x - 1, 2);
 	}
 
-	float easeInOutBack(float x) {
+	float EaseInOutBack(float x) {
 		const float c1 = 1.70158f;
 		const float c2 = c1 * 1.525f;
 
@@ -153,7 +153,7 @@ namespace Easings {
 
 #pragma region Bounce
 
-	float easeOutBounce(float x) {
+	float EaseOutBounce(float x) {
 		const float n1 = 7.5625f;
 		const float d1 = 2.75f;
 
@@ -171,16 +171,16 @@ namespace Easings {
 		}
 	}
 
-	float easeInBounce(float x) {
-		return 1 - easeOutBounce(1 - x);
+	float EaseInBounce(float x) {
+		return 1 - EaseOutBounce(1 - x);
 	}
 
-	float easeInOutBounce(float x) {
+	float EaseInOutBounce(float x) {
 		if (x < 0.5f) {
-			return (1 - easeOutBounce(1 - 2 * x)) / 2;
+			return (1 - EaseOutBounce(1 - 2 * x)) / 2;
 		}
 		else {
-			return (1 + easeOutBounce(2 * x - 1)) / 2;
+			return (1 + EaseOutBounce(2 * x - 1)) / 2;
 		}
 	}
 
@@ -188,7 +188,7 @@ namespace Easings {
 
 #pragma region Elastic
 
-	float easeInElastic(float x) {
+	float EaseInElastic(float x) {
 		const float c4 = (2 * (float)M_PI) / 3;
 		if (x == 0) {
 			return x = 0;
@@ -203,7 +203,7 @@ namespace Easings {
 		}
 	}
 
-	float easeOutElastic(float x) {
+	float EaseOutElastic(float x) {
 		const float c4 = (2 * (float)M_PI) / 3;
 		if (x == 0) {
 			return x = 0;
@@ -218,7 +218,7 @@ namespace Easings {
 		}
 	}
 
-	float easeInOutElastic(float x) {
+	float EaseInOutElastic(float x) {
 		const float c5 = (2 * (float)M_PI) / 4.5f;
 		if (x == 0) {
 			return x = 0;
@@ -242,15 +242,15 @@ namespace Easings {
 
 #pragma region Quart
 
-	float easeInQuart(float x) {
+	float EaseInQuart(float x) {
 		return x * x * x * x;
 	}
 
-	float easeOutQuart(float x) {
+	float EaseOutQuart(float x) {
 		return 1 - (float)pow(1 - x, 4);
 	}
 
-	float easeInOutQuart(float x) {
+	float EaseInOutQuart(float x) {
 		if (x < 0.5f) {
 			return 8 * x * x * x * x;
 		}
@@ -263,7 +263,7 @@ namespace Easings {
 
 #pragma region Expo
 
-	float easeInExpo(float x) {
+	float EaseInExpo(float x) {
 		if (x == 0) {
 			return x = 0;
 		}
@@ -272,7 +272,7 @@ namespace Easings {
 		}
 	}
 
-	float easeOutExpo(float x) {
+	float EaseOutExpo(float x) {
 		if (x == 1) {
 			return x = 1;
 		}
@@ -281,7 +281,7 @@ namespace Easings {
 		}
 	}
 
-	float easeInOutExpo(float x) {
+	float EaseInOutExpo(float x) {
 		if (x == 0) {
 			return x = 0;
 		}

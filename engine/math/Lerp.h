@@ -4,9 +4,9 @@
 
 namespace Lerps {
 	// 線形補間
-	Vector3 Lerp(Vector3 start, Vector3 end, float t);
+	Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
 	// 球面線形補間
-	Vector3 Slerp(Vector3 start, Vector3 end, float t);
+	Vector3 Slerp(const Vector3& start, const Vector3& end, float t);
 	// Cat-mullRom曲線
 	Vector3 CatmullRomSpline(const std::vector<Vector3>& controlPoints, float t);
 };
@@ -15,82 +15,82 @@ namespace Easings {
 #pragma region Quint
 
 	// だんだん減速(ぎりぎりまで速度が速い)
-	float easeOutQuint(float x);
+	float EaseOutQuint(float x);
 
 	// だんだん早くなる(一気に早くなる)
-	float easeInQuint(float x);
+	float EaseInQuint(float x);
 
-	float easeInOutQuint(float x);
+	float EaseInOutQuint(float x);
 
 #pragma endregion
 
 #pragma region Circ
 
-	float easeInCirc(float x);
+	float EaseInCirc(float x);
 
-	float easeOutCirc(float x);
+	float EaseOutCirc(float x);
 
-	float easeInOutCirc(float x);
+	float EaseInOutCirc(float x);
 
 #pragma endregion
 
 #pragma region Cubic
 
-	float easeInCubic(float x);
+	float EaseInCubic(float x);
 
-	float easeOutCubic(float x);
+	float EaseOutCubic(float x);
 
-	float easeInOutCubic(float x);
+	float EaseInOutCubic(float x);
 
 #pragma endregion
 
 #pragma region Back
 
-	float easeInBack(float x);
+	float EaseInBack(float x);
 
-	float easeOutBack(float x);
+	float EaseOutBack(float x);
 
-	float easeInOutBack(float x);
+	float EaseInOutBack(float x);
 
 #pragma endregion
 
 #pragma region Bounce
 
-	float easeOutBounce(float x);
+	float EaseOutBounce(float x);
 
-	float easeInBounce(float x);
+	float EaseInBounce(float x);
 
-	float easeInOutBounce(float x);
+	float EaseInOutBounce(float x);
 
 #pragma endregion
 
 #pragma region Elastic
 
-	float easeInElastic(float x);
+	float EaseInElastic(float x);
 
-	float easeOutElastic(float x);
+	float EaseOutElastic(float x);
 
-	float easeInOutElastic(float x);
+	float EaseInOutElastic(float x);
 
 #pragma endregion
 
 #pragma region Quart
 
-	float easeInQuart(float x);
+	float EaseInQuart(float x);
 
-	float easeOutQuart(float x);
+	float EaseOutQuart(float x);
 
-	float easeInOutQuart(float x);
+	float EaseInOutQuart(float x);
 
 #pragma endregion
 
 #pragma region Expo
 
-	float easeInExpo(float x);
+	float EaseInExpo(float x);
 
-	float easeOutExpo(float x);
+	float EaseOutExpo(float x);
 
-	float easeInOutExpo(float x);
+	float EaseInOutExpo(float x);
 
 #pragma endregion
 }

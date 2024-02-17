@@ -241,15 +241,15 @@ void Particles::ImGuiAdjustParameter()
 {
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
-
-	ImGui::Begin("Particles");
-	if (ImGui::Button("Add Particle")) {
-		particles_.splice(particles_.end(), Emission(emitter_, randomEngine));
+	if (ImGui::TreeNode("Particles")) {
+		if (ImGui::Button("Add Particle")) {
+			particles_.splice(particles_.end(), Emission(emitter_, randomEngine));
+		}
+		ImGui::Text("Emitter.frquencyTime:%f", emitter_.frequencyTime);
+		ImGui::DragFloat3("Emitter.Translate", &emitter_.transform.translate.x, 0.01f, -100.0f, 100.0f);
+		ImGui::Checkbox("isFieldAcceleration", &accField_.isActive);
+		ImGui::TreePop();
 	}
-	ImGui::Text("Emitter.frquencyTime:%f", emitter_.frequencyTime);
-	ImGui::DragFloat3("Emitter.Translate", &emitter_.transform.translate.x, 0.01f, -100.0f, 100.0f);
-	ImGui::Checkbox("isFieldAcceleration", &accField_.isActive);
-	ImGui::End();
 }
 
 std::list<Particle> Particles::ShapePlacement(const Emitter& emitter) {

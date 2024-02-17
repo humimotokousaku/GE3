@@ -139,6 +139,18 @@
     <Filter Include="ヘッダー ファイル\Engine\Components\2D\Primitive">
       <UniqueIdentifier>{8afa4cd1-77aa-44ae-a61b-391591a23ba2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Project\Collision">
+      <UniqueIdentifier>{23e40c8f-71bb-4a04-95c1-aeda628902ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Collision">
+      <UniqueIdentifier>{eed51365-9c55-47a9-bec5-273507d6e1f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\Components\Animation">
+      <UniqueIdentifier>{c719a0f9-a721-4ba5-a211-08a2e6d1e3ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\Components\Animation">
+      <UniqueIdentifier>{d0d65678-70b9-4aef-a06d-30dfd1841ffc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -275,6 +287,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Pso\PipelineManager.cpp">
       <Filter>ソース ファイル\Engine\Pso</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Collision\CollisionManager.cpp">
+      <Filter>ソース ファイル\Project\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Components\Animation\Animation.cpp">
+      <Filter>ソース ファイル\Engine\Components\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Collision\Collider.cpp">
+      <Filter>ソース ファイル\Project\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Components\3D\Primitive\Plane.cpp">
+      <Filter>ソース ファイル\Engine\Components\3D\Primitive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -424,6 +448,21 @@
     </ClInclude>
     <ClInclude Include="Engine\Pso\PipelineManager.h">
       <Filter>ヘッダー ファイル\Engine\Pso</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Collision\Collider.h">
+      <Filter>ヘッダー ファイル\Project\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Collision\CollisionConfig.h">
+      <Filter>ヘッダー ファイル\Project\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Collision\CollisionManager.h">
+      <Filter>ヘッダー ファイル\Project\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Components\3D\Primitive\Plane.h">
+      <Filter>ヘッダー ファイル\Engine\Components\3D\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Components\Animation\Animation.h">
+      <Filter>ヘッダー ファイル\Engine\Components\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

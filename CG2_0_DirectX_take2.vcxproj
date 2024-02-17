@@ -81,8 +81,9 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>false</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Project\Scene;$(ProjectDir)Engine\Utility;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Components;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Components\Model;$(ProjectDir)Engine\Components\Input;$(ProjectDir)Engine\Components\Audio;$(ProjectDir)Engine\Components\Camera;$(ProjectDir)Engine\Components\Light;$(ProjectDir)Engine\PostProcess;$(ProjectDir)Engine\Components\Particle;$(ProjectDir)Engine\Pso;$(ProjectDir)Project;$(ProjectDir)Engine\Components\3D;$(ProjectDir)Engine\Components\2D;$(ProjectDir)Engine\Components\3D\Primitive;$(ProjectDir)Engine\Components\2D\Primitive;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Project\Scene;$(ProjectDir)Engine\Utility;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Components;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Components\Model;$(ProjectDir)Engine\Components\Input;$(ProjectDir)Engine\Components\Audio;$(ProjectDir)Engine\Components\Camera;$(ProjectDir)Engine\Components\Light;$(ProjectDir)Engine\PostProcess;$(ProjectDir)Engine\Components\Particle;$(ProjectDir)Engine\Pso;$(ProjectDir)Project;$(ProjectDir)Engine\Components\3D;$(ProjectDir)Engine\Components\2D;$(ProjectDir)Engine\Components\3D\Primitive;$(ProjectDir)Engine\Components\2D\Primitive;$(ProjectDir)Engine\Components\Animation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,9 +108,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>false</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Project\Scene;$(ProjectDir)Engine\Utility;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Components;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Components\Model;$(ProjectDir)Engine\Components\Input;$(ProjectDir)Engine\Components\Audio;$(ProjectDir)Engine\Components\Camera;$(ProjectDir)Engine\Components\Light;$(ProjectDir)Engine\PostProcess;$(ProjectDir)Engine\Components\Particle;$(ProjectDir)Engine\Pso;$(ProjectDir)Project;$(ProjectDir)Engine\Components\3D;$(ProjectDir)Engine\Components\2D;$(ProjectDir)Engine\Components\3D\Primitive;$(ProjectDir)Engine\Components\2D\Primitive;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Project\Scene;$(ProjectDir)Engine\Utility;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Components;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Components\Model;$(ProjectDir)Engine\Components\Input;$(ProjectDir)Engine\Components\Audio;$(ProjectDir)Engine\Components\Camera;$(ProjectDir)Engine\Components\Light;$(ProjectDir)Engine\PostProcess;$(ProjectDir)Engine\Components\Particle;$(ProjectDir)Engine\Pso;$(ProjectDir)Project;$(ProjectDir)Engine\Components\3D;$(ProjectDir)Engine\Components\2D;$(ProjectDir)Engine\Components\3D\Primitive;$(ProjectDir)Engine\Components\2D\Primitive;$(ProjectDir)Engine\Components\Animation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,9 +138,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>false</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Project\Scene;$(ProjectDir)Engine\Utility;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Components;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Components\Model;$(ProjectDir)Engine\Components\Input;$(ProjectDir)Engine\Components\Audio;$(ProjectDir)Engine\Components\Camera;$(ProjectDir)Engine\Components\Light;$(ProjectDir)Engine\PostProcess;$(ProjectDir)Engine\Components\Particle;$(ProjectDir)Engine\Pso;$(ProjectDir)Project;$(ProjectDir)Engine\Components\3D;$(ProjectDir)Engine\Components\2D;$(ProjectDir)Engine\Components\3D\Primitive;$(ProjectDir)Engine\Components\2D\Primitive;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Project\Scene;$(ProjectDir)Engine\Utility;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Components;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Components\Model;$(ProjectDir)Engine\Components\Input;$(ProjectDir)Engine\Components\Audio;$(ProjectDir)Engine\Components\Camera;$(ProjectDir)Engine\Components\Light;$(ProjectDir)Engine\PostProcess;$(ProjectDir)Engine\Components\Particle;$(ProjectDir)Engine\Pso;$(ProjectDir)Project;$(ProjectDir)Engine\Components\3D;$(ProjectDir)Engine\Components\2D;$(ProjectDir)Engine\Components\3D\Primitive;$(ProjectDir)Engine\Components\2D\Primitive;$(ProjectDir)Engine\Components\Animation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,6 +158,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Components\Animation\Animation.cpp" />
+    <ClCompile Include="Engine\Components\3D\Primitive\Plane.cpp" />
+    <ClCompile Include="Project\Collision\Collider.cpp" />
+    <ClCompile Include="Project\Collision\CollisionManager.cpp" />
     <ClCompile Include="engine\Components\camera\Camera.cpp" />
     <ClCompile Include="engine\Components\light\DirectionalLight.cpp" />
     <ClCompile Include="engine\Base\DirectXCommon.cpp" />
@@ -202,6 +209,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="Engine\Components\3D\Object3D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Components\Animation\Animation.h" />
+    <ClInclude Include="Engine\Components\3D\Primitive\Plane.h" />
+    <ClInclude Include="Project\Collision\Collider.h" />
+    <ClInclude Include="Project\Collision\CollisionConfig.h" />
+    <ClInclude Include="Project\Collision\CollisionManager.h" />
     <ClInclude Include="engine\Components\camera\Camera.h" />
     <ClInclude Include="engine\Base\DirectXCommon.h" />
     <ClInclude Include="engine\Base\WinApp.h" />

@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "ImGuiManager.h"
 #include "ModelManager.h"
+#include "Lerp.h"
 
 void TitleScene::Initialize() {
 	sceneNum = TITLE_SCENE;
@@ -31,24 +32,46 @@ void TitleScene::Initialize() {
 	particles_ = std::make_unique<Particles>();
 	particles_->Initialize();
 	particles_->SetCamera(camera_.get());
+	// パーティクルの発生位置を指定
+	particles_->SetEmitterPos(Vector3{ 5,5,0 });
 
-	camera_->SetCameraPos(Vector3{0,0,-12});
+	//particles_1 = std::make_unique<Particles>();
+	//particles_1->Initialize();
+	//particles_1->SetCamera(camera_.get());
+	//// パーティクルの発生位置を指定
+	//particles_1->SetEmitterPos(Vector3{ 0,0,0 });
+
+	camera_->SetCameraPos(Vector3{0,0,-20});
+
+	anim_ = std::make_unique<Animation>();
+	anim_->SetAnimData(&plane_->worldTransform.translation_, Vector3{ 0,0,0 }, Vector3{10,0,0}, 60, "PlaneAnim0", Easings::EaseOutBack);
+	anim_->SetAnimData(&plane_->worldTransform.translation_, Vector3{ 10,0,0 }, Vector3{ 0,0,0 }, 60, "PlaneAnim1",Easings::EaseOutBack);
+	anim_->SetAnimData(&plane_->worldTransform.translation_, Vector3{ 0,0,0 }, Vector3{ 0,5,0 }, 120, "PlaneAnim2",Easings::EaseOutBack);
+	anim_->SetAnimData(&plane_->worldTransform.translation_, Vector3{ 0,5,0 }, Vector3{ 0,0,0 }, 120, "PlaneAnim3",Easings::EaseOutBack);
 }
 
 void TitleScene::Update() {
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		sceneNum = GAME_SCENE;
+		//sceneNum = GAME_SCENE;
+		anim_->SetIsStart(true);
 	}
+
+	anim_->Update();
 
 	viewProjection_.UpdateViewMatrix();
 	viewProjection_.TransferMatrix();
 
-	// パーティクルの発生位置を指定
-	particles_->SetEmitterPos(Vector3{ 5,5,0 });
 	// パーティクルの更新処理
 	particles_->Update();
 
+	//// パーティクルの更新処理
+	//particles_1->Update();
+
 #ifdef USE_IMGUI
+	ImGui::Begin("Animation");
+	ImGui::Text("isStart:%d", anim_->GetIsStart());
+	ImGui::End();
+
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("translation", &camera_->viewProjection_.translation_.x, 0.1f, -100, 100);
 	ImGui::DragFloat3("rotation", &camera_->viewProjection_.rotation_.x, 0.01f, -6.28f, 6.28f);
@@ -62,7 +85,18 @@ void TitleScene::Update() {
 
 	sprite_->ImGuiAdjustParameter();
 
-	particles_->ImGuiAdjustParameter();
+	ImGui::Begin("Particles");
+	if (ImGui::TreeNode("Particle")) {
+		particles_->ImGuiAdjustParameter();
+		ImGui::TreePop();
+	}
+	//if (ImGui::TreeNode("Particle1")) {
+	//	particles_1->ImGuiAdjustParameter();
+	//	ImGui::TreePop();
+	//}
+
+
+	ImGui::End();
 
 	ImGui::Begin("Current Scene");
 	ImGui::Text("TITLE");
@@ -75,6 +109,7 @@ void TitleScene::Draw() {
 	axis_->Draw(UVCHEKER);
 	plane_->Draw(UVCHEKER);
 	particles_->Draw(PARTICLE);
+	//particles_1->Draw(PARTICLE);
 	sprite_->Draw();
 }
 
