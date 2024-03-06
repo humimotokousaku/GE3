@@ -91,7 +91,7 @@ void Triangle::Draw() {
 	// wvp陽男のCBufferの場所を設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_.Get()->GetGPUVirtualAddress());
 	// DescriptorTableの設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, *TextureManager::GetInstance()->GetTextureSrvHandleGPU());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(1));
 	// 描画(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 	DirectXCommon::GetInstance()->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 }

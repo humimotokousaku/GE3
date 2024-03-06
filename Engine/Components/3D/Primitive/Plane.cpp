@@ -17,8 +17,12 @@ void Plane::Initialize() {
 
 	CreateVertexBufferView();
 
+	CreateIndexResource();
+	CreateIndexBufferView();
+
 	// 書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
 
 	uvTransform_ = {
 		{1.0f,1.0f,1.0f},
@@ -26,81 +30,18 @@ void Plane::Initialize() {
 		{0.0f,0.0f,0.0f}
 	};
 
-	const float kLonEvery = 1.0f / float(kSubdivision);//経度分割1つ分の角度
-	const float kLatEvery = 1.0f / float(kSubdivision);//緯度分割1つ分の角度
-	// 緯度の方向に分割
-	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
-		float lat = kLatEvery * latIndex;
-		// 経度の方向に分割しながら線を描く
-		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
-			uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
-			float lon = lonIndex * kLonEvery;
-			// 頂点データを入力する。
-#pragma region 1枚目
-			// 基準点a
-			vertexData_[start].position.x = cosf(lat) * cosf(lon);
-			vertexData_[start].position.y = 0;
-			vertexData_[start].position.z = cosf(lat) * sinf(lon);
-			vertexData_[start].position.w = 1.0f;
-			vertexData_[start].texcoord = { float(lonIndex) / float(kSubdivision) ,1.0f - float(latIndex) / float(kSubdivision) };
-			vertexData_[start].normal.x = vertexData_[start].position.x;
-			vertexData_[start].normal.y = vertexData_[start].position.y;
-			vertexData_[start].normal.z = vertexData_[start].position.z;
-			// b
-			vertexData_[start + 1].position.x = cosf(lat + kLatEvery) * cosf(lon);
-			vertexData_[start + 1].position.y = 0;
-			vertexData_[start + 1].position.z = cosf(lat + kLatEvery) * sinf(lon);
-			vertexData_[start + 1].position.w = 1.0f;
-			vertexData_[start + 1].texcoord = { vertexData_[start].texcoord.x,vertexData_[start].texcoord.y - (1.0f / kSubdivision) };
-			vertexData_[start + 1].normal.x = vertexData_[start + 1].position.x;
-			vertexData_[start + 1].normal.y = vertexData_[start + 1].position.y;
-			vertexData_[start + 1].normal.z = vertexData_[start + 1].position.z;
-			// c
-			vertexData_[start + 2].position.x = cosf(lat) * cosf(lon + kLonEvery);
-			vertexData_[start + 2].position.y = 0;
-			vertexData_[start + 2].position.z = cosf(lat) * sinf(lon + kLonEvery);
-			vertexData_[start + 2].position.w = 1.0f;
-			vertexData_[start + 2].texcoord = { vertexData_[start].texcoord.x + (1.0f / (float)kSubdivision),vertexData_[start].texcoord.y };
-			vertexData_[start + 2].normal.x = vertexData_[start + 2].position.x;
-			vertexData_[start + 2].normal.y = vertexData_[start + 2].position.y;
-			vertexData_[start + 2].normal.z = vertexData_[start + 2].position.z;
-
-#pragma endregion
-
-#pragma region 2枚目
-
-			// b
-			vertexData_[start + 3].position.x = cosf(lat + kLatEvery) * cosf(lon);
-			vertexData_[start + 3].position.y = 0;
-			vertexData_[start + 3].position.z = cosf(lat + kLatEvery) * sinf(lon);
-			vertexData_[start + 3].position.w = 1.0f;
-			vertexData_[start + 3].texcoord = { vertexData_[start].texcoord.x,vertexData_[start].texcoord.y - (1.0f / (float)kSubdivision) };
-			vertexData_[start + 3].normal.x = vertexData_[start + 3].position.x;
-			vertexData_[start + 3].normal.y = vertexData_[start + 3].position.y;
-			vertexData_[start + 3].normal.z = vertexData_[start + 3].position.z;
-			// d
-			vertexData_[start + 4].position.x = cosf(lat + kLatEvery) * cosf(lon + kLonEvery);
-			vertexData_[start + 4].position.y = 0;
-			vertexData_[start + 4].position.z = cosf(lat + kLatEvery) * sinf(lon + kLonEvery);
-			vertexData_[start + 4].position.w = 1.0f;
-			vertexData_[start + 4].texcoord = { vertexData_[start].texcoord.x + (1.0f / (float)kSubdivision),vertexData_[start].texcoord.y - (1.0f / (float)kSubdivision) };
-			vertexData_[start + 4].normal.x = vertexData_[start + 4].position.x;
-			vertexData_[start + 4].normal.y = vertexData_[start + 4].position.y;
-			vertexData_[start + 4].normal.z = vertexData_[start + 4].position.z;
-			// c
-			vertexData_[start + 5].position.x = cosf(lat) * cosf(lon + kLonEvery);
-			vertexData_[start + 5].position.y = 0;
-			vertexData_[start + 5].position.z = cosf(lat) * sinf(lon + kLonEvery);
-			vertexData_[start + 5].position.w = 1.0f;
-			vertexData_[start + 5].texcoord = { vertexData_[start].texcoord.x + (1.0f / (float)kSubdivision),vertexData_[start].texcoord.y };
-			vertexData_[start + 5].normal.x = vertexData_[start + 5].position.x;
-			vertexData_[start + 5].normal.y = vertexData_[start + 5].position.y;
-			vertexData_[start + 5].normal.z = vertexData_[start + 5].position.z;
-
-#pragma endregion
-
-		}
-	}
+	// 矩形のデータ
+	vertexData_[0].position = { 0.0f,1.0f, 0.0f, 1.0f };// 左下
+	vertexData_[1].position = { 0.0f,0.0f, 0.0f, 1.0f };// 左上
+	vertexData_[2].position = { 1.0f,1.0f, 0.0f, 1.0f };// 右下
+	vertexData_[3].position = { 1.0f,0.0f, 0.0f, 1.0f };// 右上
+	// Index
+	indexData_[0] = 0;
+	indexData_[1] = 1;
+	indexData_[2] = 2;
+	indexData_[3] = 1;
+	indexData_[4] = 3;
+	indexData_[5] = 2;
 
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	// Lightingするか
@@ -123,16 +64,17 @@ void Plane::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	DirectXCommon::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetGraphicsPipelineState()[1].Get()); // PSOを設定
 
 	// コマンドを積む
+	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
+	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
+	DirectXCommon::GetInstance()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuff_->GetGPUVirtualAddress());
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraPosResource_.Get()->GetGPUVirtualAddress());
 
-	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
-	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	// DescriptorTableの設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[UVCHEKER]);
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(1));
 
 	// マテリアルCBufferの場所を設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
@@ -140,7 +82,7 @@ void Plane::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, PointLight::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(7, SpotLight::GetInstance()->GetSpotLightResource()->GetGPUVirtualAddress());
 
-	DirectXCommon::GetInstance()->GetCommandList()->DrawInstanced(vertexIndex, 1, 0, 0);
+	DirectXCommon::GetInstance()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
 //void Plane::Release() {
@@ -184,16 +126,27 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Plane::CreateBufferResource(const Microso
 }
 
 void Plane::CreateVertexResource() {
-	vertexResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(VertexData) * vertexIndex).Get();
+	vertexResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(VertexData) * 4).Get();
 }
 
 void Plane::CreateVertexBufferView() {
 	// リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_.Get()->GetGPUVirtualAddress();
 	// 使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * vertexIndex;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 4;
 	// 1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+}
+
+void Plane::CreateIndexResource() {
+	indexResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(uint32_t) * 6).Get();
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+}
+
+void Plane::CreateIndexBufferView() {
+	indexBufferView_.BufferLocation = indexResource_.Get()->GetGPUVirtualAddress();
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 6;
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 }
 
 void Plane::CreateMaterialResource() {

@@ -1,6 +1,7 @@
 #pragma once
 #include "MathStructs.h"
 #include "ModelStructs.h"
+#include "Collision/CollisionConfig.h"
 #include "Model.h"
 #include "Camera.h"
 #include "ViewProjection.h"
@@ -30,11 +31,6 @@ struct Emitter {
 	uint32_t count;
 	float frequency;
 	float frequencyTime;
-};
-
-struct AABB {
-	Vector3 min;
-	Vector3 max;
 };
 
 struct AccField {

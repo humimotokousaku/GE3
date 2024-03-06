@@ -5,18 +5,18 @@
 #include "SpotLight.h"
 #include <cassert>
 
-Sprite::Sprite(int textureIndex) {
-	Initialize(textureIndex);
+Sprite::Sprite(std::string textureFilePath) {
+	Initialize(textureFilePath);
 }
 
-Sprite* Sprite::Create(int textureIndex)
+Sprite* Sprite::Create(std::string textureFilePath)
 {
-	Sprite* sprite = new Sprite(textureIndex);
+	Sprite* sprite = new Sprite(textureFilePath);
 
 	return sprite;
 }
 
-void Sprite::Initialize(int textureIndex = UINT32_MAX) {
+void Sprite::Initialize(std::string textureFilePath) {
 	textureManager_ = TextureManager::GetInstance();
 	psoManager_ = PipelineManager::GetInstance();
 
@@ -54,8 +54,8 @@ void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 	};
 
 	/// 頂点座標の設定
-	if (textureIndex != UINT32_MAX) {
-		textureIndex_ = textureIndex;
+	textureIndex_ = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
+	if (textureIndex_ != UINT32_MAX) {
 		AdjustTextureSize();
 		size_ = textureSize_;
 	}
@@ -79,7 +79,6 @@ void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 	indexData_[5] = 2;
 
 	ID3D12Resource* textureBuffer = textureManager_->GetTextureResource(textureIndex_).Get();
-
 	// 指定番号の画像が読み込み済みなら
 	if (textureBuffer) {
 		//// テクスチャ情報取得
@@ -147,7 +146,7 @@ void Sprite::Draw() {
 
 	/// DescriptorTableの設定
 	// texture
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[textureIndex_]);
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex_));
 	// material
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
 	// ライティング
