@@ -1,5 +1,6 @@
 #pragma once
 #include "ViewProjection.h"
+#include "WorldTransform.h"
 
 class Camera
 {
@@ -26,13 +27,17 @@ public:
 	/// 
 	
 	/// Getter
+	// worldTransformの取得
+	WorldTransform GetWorldTransform() { return worldTransform_; }
+
 	// viewProjectionの取得
 	ViewProjection GetViewProjection() { return viewProjection_; }
 
 	/// Setter
 	// カメラの座標をセット
-	void SetCameraPos(Vector3 pos) { viewProjection_.translation_ = pos; }
+	void SetCameraPos(Vector3 pos) { worldTransform_.translation_ = pos; }
 
 public:
+	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 };

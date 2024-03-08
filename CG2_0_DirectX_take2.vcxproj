@@ -209,6 +209,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="engine\postProcess\PostEffect.cpp" />
     <ClCompile Include="engine\Components\model\ModelManager.cpp" />
     <ClCompile Include="Engine\Components\3D\Object3D.cpp" />
+    <ClCompile Include="Engine\Base\SrvManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Project\GameObject\Enemy.h" />
@@ -267,6 +268,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClInclude Include="engine\Manager\Framework.h" />
     <ClInclude Include="engine\Components\model\ModelManager.h" />
     <ClInclude Include="Engine\Components\3D\Object3D.h" />
+    <ClInclude Include="Engine\Base\SrvManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\ImGui\LICENSE.txt" />

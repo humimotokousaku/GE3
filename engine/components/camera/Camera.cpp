@@ -5,6 +5,7 @@ Camera::~Camera() {
 }
 
 void Camera::Initialize() {
+	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 }
 

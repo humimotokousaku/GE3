@@ -9,15 +9,15 @@ void TitleScene::Initialize() {
 	TextureManager::GetInstance()->LoadTexture("Engine/resources/uvChecker.png");
 	TextureManager::GetInstance()->LoadTexture("Engine/resources/monsterBall.png");
 
-	// カメラの初期化
-	camera_ = std::make_unique<Camera>();
-	camera_->Initialize();
-	camera_->SetCameraPos(Vector3{ 0,5,-20 });
-
 	// objモデル
 	ModelManager::GetInstance()->LoadModel("plane.obj");
 	ModelManager::GetInstance()->LoadModel("axis.obj");
 	ModelManager::GetInstance()->LoadModel("block.obj");
+
+	// カメラの初期化
+	camera_ = std::make_unique<Camera>();
+	camera_->Initialize();
+	camera_->SetCameraPos(Vector3{ 0,5,-20 });
 
 	// 平面
 	plane_ = std::make_unique<Object3D>();
@@ -120,6 +120,9 @@ void TitleScene::Update() {
 
 	for (int i = 0; i < 2; i++) {
 		enemy_[i]->Update();
+		// 狙う対象に身体を向ける
+		float radian = atan2(player_->model_->worldTransform.translation_.x - enemy_[i]->model_->worldTransform.translation_.x, player_->model_->worldTransform.translation_.z - enemy_[i]->model_->worldTransform.translation_.z);
+		enemy_[i]->model_->worldTransform.rotation_.y = radian;
 	}
 
 	world_.UpdateMatrix();

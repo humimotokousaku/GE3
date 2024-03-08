@@ -24,6 +24,12 @@ void Player::Update() {
 	if (Input::GetInstance()->PressKey(DIK_D)) {
 		model_->worldTransform.translation_.x += 0.1f;
 	}
+	if (Input::GetInstance()->PressKey(DIK_S)) {
+		model_->worldTransform.translation_.z -= 0.1f;
+	}
+	if (Input::GetInstance()->PressKey(DIK_W)) {
+		model_->worldTransform.translation_.z += 0.1f;
+	}
 
 	if (Input::GetInstance()->PressKey(DIK_LEFT)) {
 		model_->worldTransform.rotation_.y -= 0.01f;

@@ -19,9 +19,12 @@ void Framework::Initialize() {
 	// DirectXの初期化
 	directXCommon_ = DirectXCommon::GetInstance();
 	directXCommon_->DirectXCommon::GetInstance()->Initialize(winApp_->GetHwnd());
+	// SRVマネージャの初期化
+	srvManager_ = new SrvManager();
+	srvManager_->Initialize();
 	// Textureの初期化
 	textureManager_ = TextureManager::GetInstance();
-	textureManager_->TextureManager::GetInstance()->Initialize();
+	textureManager_->TextureManager::GetInstance()->Initialize(srvManager_);
 	// PSOの初期化
 	pipelineManager_ = PipelineManager::GetInstance();
 	pipelineManager_->Initialize();
@@ -118,6 +121,7 @@ void Framework::Finalize() {
 	// ImGui
 	imGuiManager_->Finalize();
 	textureManager_->Finalize();
+	delete srvManager_;
 	directXCommon_->Finalize();
 	CloseWindow(winApp_->GetHwnd());
 	// Textureのゲーム終了処理

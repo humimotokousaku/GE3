@@ -133,7 +133,6 @@ void Audio::SoundUnload(SoundData* soundData) {
 //}
 
 void Audio::SoundPlayWave(const SoundData& soundData, X3DAUDIO_VECTOR emitterPos, float volume = 1.0f, float Semitones = 1.0f) {
-
 	HRESULT result;
 
 	// GetVoiceDetails メソッドを使用して詳細情報を取得
@@ -162,18 +161,22 @@ void Audio::SoundPlayWave(const SoundData& soundData, X3DAUDIO_VECTOR emitterPos
 	listener.Velocity = { 0.0f, 0.0f, 0.0f };
 	// ドップラー効果の設定
 	X3DAUDIO_DSP_SETTINGS DSPSettings = { 0 };
-	DSPSettings.SrcChannelCount = 1;
+	//DSPSettings.SrcChannelCount = 2;
 	DSPSettings.DstChannelCount = m_voiceDetails.InputChannels;
-	FLOAT32* matrix = new FLOAT32[m_voiceDetails.InputChannels];
+	FLOAT32* matrix = new FLOAT32[m_voiceDetails.InputChannels*2];
 	DSPSettings.pMatrixCoefficients = matrix;
+
+	for (uint32_t i = 0; i < m_voiceDetails.InputChannels*2; ++i) {
+		matrix[i] = 1.0f;
+	}
 
 	// エミッター等の設定を適用
 	X3DAudioCalculate(X3DInstance_, &listener, &emitter,
 		X3DAUDIO_CALCULATE_MATRIX | X3DAUDIO_CALCULATE_DOPPLER | X3DAUDIO_CALCULATE_LPF_DIRECT | X3DAUDIO_CALCULATE_REVERB,
 		&DSPSettings);
 
-	//result = pSourceVoice_->SetOutputMatrix(masterVoice_, 1, m_voiceDetails.InputChannels, matrix);
-	//assert(SUCCEEDED(result));
+	result = pSourceVoice_->SetOutputMatrix(masterVoice_, 2, m_voiceDetails.InputChannels, matrix);
+	assert(SUCCEEDED(result));
 	result = pSourceVoice_->SetFrequencyRatio(DSPSettings.DopplerFactor);
 	assert(SUCCEEDED(result));
 	//result = pSourceVoice_->SetOutputMatrix(pSubmixVoice_, 1, 1, &DSPSettings.ReverbLevel);

@@ -43,8 +43,8 @@ public:
 	// OBBの設定
 	void SetOBB(OBB obb) { obb_ = obb; }
 	void SetOBBCenterPos(Vector3 centerPos) { obb_.m_Pos = centerPos; }
-	void SetOBBDirect(Vector3 direct, int index) { 
-		Vector3 rotateResult = TransformNormal(direct, MakeRotateMatrix(GetRotation()));
+	void SetOBBDirect(int index) { 
+		Vector3 rotateResult = TransformNormal(obb_.m_NormaDirect[index], MakeRotateMatrix(GetRotation()));
 		obb_.m_NormaDirect[index] = Normalize(rotateResult);
 	}
 

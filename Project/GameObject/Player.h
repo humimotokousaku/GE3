@@ -40,6 +40,6 @@ public:
 	// 衝突判定
 	void OnCollision(Collider* collider)override;
 
-private:
+public:
 	std::unique_ptr<Object3D> model_;
 };

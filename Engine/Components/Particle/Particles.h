@@ -7,6 +7,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "PipelineManager.h"
+#include "SrvManager.h"
 #include <list>
 #include <random>
 
@@ -126,6 +127,8 @@ private:// 定数
 	const static uint32_t kNumMaxInstance = 6000;
 
 private:
+	//SrvManager* srvManager
+
 	// パーティクル
 	std::list<Particle> particles_;
 	// 頂点位置をもらうモデル

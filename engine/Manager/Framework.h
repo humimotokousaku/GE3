@@ -13,6 +13,7 @@
 // Base
 #include "WinApp.h"
 #include "DirectXCommon.h"
+#include "SrvManager.h"
 
 // components
 #include "DirectionalLight.h"
@@ -72,6 +73,7 @@ protected:
 	// base
 	WinApp* winApp_;
 	DirectXCommon* directXCommon_;
+	SrvManager* srvManager_;
 	// PSO
 	PipelineManager* pipelineManager_;
 	LinePSO* linePSO_;

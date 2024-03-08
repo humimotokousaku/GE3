@@ -43,8 +43,8 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 		colliderA->SetOBBCenterPos(colliderA->GetWorldPosition());
 		colliderB->SetOBBCenterPos(colliderB->GetWorldPosition());
 		for (int i = 0; i < 3; i++) {
-			colliderA->SetOBBDirect(colliderA->GetOBB().m_NormaDirect[i], i);
-			colliderB->SetOBBDirect(colliderB->GetOBB().m_NormaDirect[i], i);
+			colliderA->SetOBBDirect(i);
+			colliderB->SetOBBDirect(i);
 		}
 		if (ColOBBs(colliderA->GetOBB(), colliderB->GetOBB())) {
 			// コライダーAの衝突時コールバックを呼び出す
