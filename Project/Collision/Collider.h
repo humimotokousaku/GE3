@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3.h"
 #include "CollisionConfig.h"
+#include "MathStructs.h"
 #include <cstdint>
 
 class Collider {
@@ -16,25 +17,10 @@ public:
 	/// Getter
 	/// 
 
-#pragma region 球
-	// 球の座標,半径を取得
-	cSphere GetSphere() { return sphere_; }
 	// 半径の取得
-	float GetRadius() { return sphere_.radius; }
-	// 中心座標を取得
-	Vector3 GetSphereCenter() { return sphere_.center; }
-#pragma endregion
-
-#pragma region カプセル
-	// カプセルの始点,終点,半径を取得
-	Capsule GetCapsule() { return capsule_; }
-	// カプセルの半径の取得
-	float GetCapsuleRadius() { return capsule_.radius; }
-	// カプセルの始点を取得
-	Vector3 GetStartPos() { return capsule_.start; }
-	// カプセルの終点を取得
-	Vector3 GetEndPos() { return capsule_.end; }
-#pragma endregion
+	float GetRadius() { return radius_; }
+	// OBBの取得
+	OBB GetOBB() { return obb_; }
 
 	// 衝突属性(自分)を取得
 	uint32_t GetCollisionAttribute() { return collisionAttribute_; }
@@ -52,33 +38,15 @@ public:
 	/// Setter
 	///
 
-#pragma region 球
-	// 球の座標,半径を設定
-	void SetSphere(cSphere sphere) { sphere_ = sphere; }
 	// 半径の設定
-	void SetRadius(float radius) { sphere_.radius = radius; }
-	// 中心座標を設定
-	void SetSphereCenter(Vector3 center) { sphere_.center = center; }
-#pragma endregion
-
-#pragma region カプセル
-	// カプセルの始点,終点,半径を取得
-	void SetCapsule(Capsule capsule) {  capsule_ = capsule; }
-	// カプセルの半径の取得
-	void SetCapsuleRadius(float radius) {  capsule_.radius = radius; }
-	// カプセルの始点を取得
-	void SetStartPos(Vector3 start) {  capsule_.start = start; }
-	// カプセルの終点を取得
-	void SetEndPos(Vector3 end) {  capsule_.end = end; }
-#pragma endregion
-
-	//// OBBの設定
-	//void SetOBB(OBB obb) { obb_ = obb; }
-	//void SetOBBCenterPos(Vector3 centerPos) { obb_.m_Pos = centerPos; }
-	//void SetOBBDirect(int index) { 
-	//	Vector3 rotateResult = TransformNormal(obb_.m_NormaDirect[index], MakeRotateMatrix(GetRotation()));
-	//	obb_.m_NormaDirect[index] = Normalize(rotateResult);
-	//}
+	void SetRadius(float radius) { radius_ = radius; }
+	// OBBの設定
+	void SetOBB(OBB obb) { obb_ = obb; }
+	void SetOBBCenterPos(Vector3 centerPos) { obb_.m_Pos = centerPos; }
+	void SetOBBDirect(int index) { 
+		Vector3 rotateResult = TransformNormal(obb_.m_NormaDirect[index], MakeRotateMatrix(GetRotation()));
+		obb_.m_NormaDirect[index] = Normalize(rotateResult);
+	}
 
 	// 衝突属性(自分)を設定
 	void SetCollisionAttribute(uint32_t collisionAttribute) { collisionAttribute_ = collisionAttribute; }
@@ -97,22 +65,23 @@ public:
 	/// 
 
 	// 衝突時に呼ばれる関数
-	virtual void OnCollision() = 0;
+	virtual void OnCollision(Collider* collider) = 0;
 	// ワールド座標を取得
 	virtual Vector3 GetWorldPosition() = 0;
+	// 角度を取得
+	virtual Vector3 GetRotation() = 0;
 
 private:
 	// 衝突半径
 	float radius_ = 1.0f;
-	cSphere sphere_ = {
-		{ 0,0,0 },
-		1.0f
-	};
-	// カプセル
-	Capsule capsule_ = {
-		{0,0,0},
-		{3.0f,0,0},
-		1.0f
+	// OBB
+	OBB obb_ = {
+		{0,0,0},	// 位置
+		{1,1,1},	// 各軸方向の長さ		
+		// 方向ベクトル
+	   {{1,0,0},
+		{0,1,0},
+		{0,0,1}}
 	};
 
 	// 衝突属性(自分)

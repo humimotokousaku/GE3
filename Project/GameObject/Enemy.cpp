@@ -1,36 +1,46 @@
 #include "Enemy.h"
-#include "ImGuiManager.h"
+#include "TextureManager.h"
+#include "Collision/CollisionConfig.h"
 
-void Enemy::Init() {
-	line_ = new Line();
-	line_->Initialize();
-	line_->SetCamera(camera_);
-	SetCollisionPrimitive(kCollisionCapsule);
-	capsule_ = {
-		{-4,0,4},
-		{4,0,0},
-		1.0f
-	};
-	SetCapsule(capsule_);
+Enemy::~Enemy() {
+	//delete model_;
+}
+
+void Enemy::Initialize(Camera* camera) {
+	// colliderの設定
+	SetCollisionPrimitive(kCollisionOBB);
+
+	model_ = std::make_unique<Object3D>();
+	model_->Initialize();
+	model_->SetModel("block.obj");
+	model_->SetCamera(camera);
 }
 
 void Enemy::Update() {
-	if (GetIsOnCollision()) {
-		line_->SetRGBA(Vector4{ 1,0,0,1 });
-	}
-	else {
-		line_->SetRGBA(Vector4{ 1,1,1,1 });
-	}
+
 }
 
 void Enemy::Draw() {
-	line_->Draw(capsule_.start, capsule_.end);
+	// Enemy
+	model_->Draw(UVCHEKER);
 }
 
-void Enemy::OnCollision() {
-	//line_->SetRGBA(Vector4{ 1,0,0,1 });
+void Enemy::OnCollision(Collider* collider) {
+
+}
+
+Vector3 Enemy::GetRotation() {
+	Vector3 rotate = model_->worldTransform.rotation_;
+	return rotate;
 }
 
 Vector3 Enemy::GetWorldPosition() {
-	return Vector3{ 0,0,0 };
+	// ワールド座標を入れる変数
+	Vector3 worldPos = model_->worldTransform.translation_;
+	//// ワールド行列の平行移動成分を取得
+	//worldPos.x = model_->worldTransform.matWorld_.m[3][0];
+	//worldPos.y = model_->worldTransform.matWorld_.m[3][1];
+	//worldPos.z = model_->worldTransform.matWorld_.m[3][2];
+
+	return worldPos;
 }

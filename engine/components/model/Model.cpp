@@ -8,14 +8,6 @@
 #include  "ModelManager.h"
 #include <cassert>
 
-Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::string& filename)
-{
-	Model* model = new Model();
-	//model = ModelManager::GetInstance()->FindModel(filename);
-	model->Initialize(directoryPath, filename);
-	return model;
-}
-
 void Model::Initialize(const std::string& directoryPath, const std::string& filename) {
 	// モデルの読み込み
 	modelData_ = LoadObjFile(directoryPath, filename);
@@ -36,7 +28,7 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 
 	// Lightingするか
-	materialData_->enableLighting = false;
+	materialData_->enableLighting = true;
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	// uvTransform行列の初期化
 	materialData_->uvTransform = MakeIdentity4x4();
@@ -60,7 +52,7 @@ void Model::Draw(const ViewProjection& viewProjection, uint32_t textureNum) {
 
 	/// DescriptorTableの設定
 	// texture
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU()[textureNum]);
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureNum));
 	// material
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
 	// ライティング
@@ -68,12 +60,6 @@ void Model::Draw(const ViewProjection& viewProjection, uint32_t textureNum) {
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, PointLight::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(7, SpotLight::GetInstance()->GetSpotLightResource()->GetGPUVirtualAddress());
 	DirectXCommon::GetInstance()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-}
-
-Model* Model::SetModel(const std::string& filePath) {
-	Model* model = new Model();
-	model = ModelManager::GetInstance()->FindModel(filePath);
-	return model;
 }
 
 void Model::AdjustParameter() {

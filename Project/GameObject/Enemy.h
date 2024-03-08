@@ -1,23 +1,47 @@
 #pragma once
-#include "Line.h"
 #include "Collision/Collider.h"
+#include "Camera.h"
+#include "Object3D.h"
 
 class Enemy : public Collider
 {
 public:
-	void Init();
+	~Enemy();
+
+	/// <summary>
+	/// 初期化
+	/// <summary>
+	void Initialize(Camera* camera);
+
+	/// <summary>
+	/// 更新
+	/// <summary>
 	void Update();
+
+	/// <summary>
+	/// 描画
+	/// <summary>
 	void Draw();
 
-	void SetCamera(Camera* camera) { camera_ = camera; }
+	/// 
+	/// Setter
+	/// 
 
-	// 衝突応答
-	void OnCollision()override;
-	// ワールド座標を取得
-	Vector3 GetWorldPosition()override;
+	// 座標を指定
+	void SetWorldPosition(Vector3 pos) { model_->worldTransform.translation_ = pos; }
 
-private:
-	Line* line_;
-	Camera* camera_;
-	Capsule capsule_;
+	///
+	/// 純粋仮想関数
+	/// 
+
+	// ワールド座標
+	Vector3 GetWorldPosition() override;
+	// 角度
+	Vector3 GetRotation() override;
+	// 衝突判定
+	void OnCollision(Collider* collider)override;
+
+public:
+	std::unique_ptr<Object3D> model_;
 };
+
