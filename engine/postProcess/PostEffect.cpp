@@ -4,7 +4,7 @@
 #include "SpotLight.h"
 #include "WinApp.h" 
 
-PostEffect::PostEffect() : Sprite("Engine/resources/uvChecker.png")
+PostEffect::PostEffect() : Sprite(UVCHEKER)
 {
 
 }

@@ -32,10 +32,6 @@ private:// プライベートなメンバ関数
 
 	void CreateVertexBufferView();
 
-	void CreateIndexResource();
-
-	void CreateIndexBufferView();
-
 	void CreateMaterialResource();
 
 	void CreateWvpResource();
@@ -51,11 +47,12 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	VertexData* vertexData_;
-	// index
-	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
-	D3D12_INDEX_BUFFER_VIEW indexBufferView_;
-	uint32_t* indexData_ = nullptr;
 	// カメラ
 	Microsoft::WRL::ComPtr<ID3D12Resource> cameraPosResource_;
 	Vector3 cameraPosData_;
+
+	//分割数
+	const uint32_t kSubdivision = 5;
+	// 頂点数
+	uint32_t vertexIndex = kSubdivision * kSubdivision * 6;
 };

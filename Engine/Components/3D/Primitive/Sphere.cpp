@@ -135,7 +135,7 @@ void Sphere::Draw(const WorldTransform& worldTransform, const ViewProjection& vi
 	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
 	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	// DescriptorTableの設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, useMonsterBall_ ? TextureManager::GetInstance()->GetSrvHandleGPU(2) : TextureManager::GetInstance()->GetSrvHandleGPU(1));
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, useMonsterBall_ ? TextureManager::GetInstance()->GetTextureSrvHandleGPU()[MONSTERBALL] : TextureManager::GetInstance()->GetTextureSrvHandleGPU()[UVCHEKER]);
 
 	// マテリアルCBufferの場所を設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());

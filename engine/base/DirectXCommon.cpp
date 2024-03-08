@@ -7,12 +7,11 @@
 #include <format>
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
+
 #include "../../externals/ImGui/imgui.h"
 #include "../../externals/ImGui/imgui_impl_dx12.h"
 #include "../../externals/ImGui/imgui_impl_win32.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-const uint32_t DirectXCommon::kMaxSRVCount = 512;
 
 DirectXCommon* DirectXCommon::GetInstance() {
 	static DirectXCommon instance;
@@ -45,7 +44,7 @@ void DirectXCommon::Initialize(HWND hwnd) {
 
 	/// DescriptorHeapの作成
 	// SRV
-	srvDescriptorHeap_ = CreateDescriptorHeap(device_.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kMaxSRVCount, true).Get();
+	srvDescriptorHeap_ = CreateDescriptorHeap(device_.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true).Get();
 	// DSV
 	dsvDescriptorHeap_ = CreateDsvDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false).Get();
 	CreateDepthStencilView();

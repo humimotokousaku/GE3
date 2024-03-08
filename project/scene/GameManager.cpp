@@ -61,7 +61,6 @@ void GameManager::EndFrame() {
 void GameManager::Finalize() {
 	Framework::Finalize();
 	for (auto& scene : sceneArr_) {
-		scene->Finalize();
 		scene.reset();
 	}
 }

@@ -11,6 +11,8 @@ public:
 	Model() = default;
 	~Model() = default;
 
+	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
+
 	void Initialize(const std::string& directoryPath, const std::string& filename);
 
 	void Draw(const ViewProjection& viewProjection, uint32_t textureNum);
@@ -26,6 +28,9 @@ public:
 	ModelData GetModelData() { return modelData_; }
 
 	/// Setter
+	// モデルをセット
+	static Model* SetModel(const std::string& filePath);
+
 	void SetIsLighting(bool isActive) { materialData_->enableLighting = isActive; }
 
 private:

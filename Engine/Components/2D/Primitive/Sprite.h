@@ -13,20 +13,20 @@
 class Sprite
 {
 public:
-	Sprite(std::string textureFilePath);
+	Sprite(int textureIndex);
 	~Sprite() = default;
 
 	/// <summary>
 	/// インスタンスの生成
 	/// </summary>
 	/// <param name="size">画像の縦幅、横幅</param>
-	static Sprite* Create(std::string textureFilePath);
+	static Sprite* Create(int textureIndex);
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="size">画像の縦幅、横幅</param>
-	void Initialize(std::string textureFilePath);
+	void Initialize(int textureIndex);
 
 	//void update();
 

@@ -90,7 +90,5 @@ protected:
 	ImGuiManager* imGuiManager_;
 	Input* input_;
 	Audio* audio_;
-	SoundData soundData1_;
 
-	X3DAUDIO_VECTOR pos_;
 };

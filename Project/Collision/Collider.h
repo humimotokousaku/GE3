@@ -1,7 +1,5 @@
 #pragma once
 #include "Vector3.h"
-#include "CollisionConfig.h"
-#include "MathStructs.h"
 #include <cstdint>
 
 class Collider {
@@ -16,11 +14,9 @@ public:
 	///
 	/// Getter
 	/// 
-
+	
 	// 半径の取得
 	float GetRadius() { return radius_; }
-	// OBBの取得
-	OBB GetOBB() { return obb_; }
 
 	// 衝突属性(自分)を取得
 	uint32_t GetCollisionAttribute() { return collisionAttribute_; }
@@ -37,7 +33,7 @@ public:
 	///
 	/// Setter
 	///
-
+	
 	// 半径の設定
 	void SetRadius(float radius) { radius_ = radius; }
 	// OBBの設定
@@ -65,24 +61,13 @@ public:
 	/// 
 
 	// 衝突時に呼ばれる関数
-	virtual void OnCollision(Collider* collider) = 0;
+	virtual void OnCollision() = 0;
 	// ワールド座標を取得
 	virtual Vector3 GetWorldPosition() = 0;
-	// 角度を取得
-	virtual Vector3 GetRotation() = 0;
 
 private:
 	// 衝突半径
 	float radius_ = 1.0f;
-	// OBB
-	OBB obb_ = {
-		{0,0,0},	// 位置
-		{1,1,1},	// 各軸方向の長さ		
-		// 方向ベクトル
-	   {{1,0,0},
-		{0,1,0},
-		{0,0,1}}
-	};
 
 	// 衝突属性(自分)
 	uint32_t collisionAttribute_ = 0xffffffff;

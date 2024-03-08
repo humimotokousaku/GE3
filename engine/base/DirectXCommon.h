@@ -89,10 +89,6 @@ private:// プライベートなメンバ関数
 	// FPS固定更新
 	void UpdateFixFPS();
 
-public:
-	// 最大SRV数
-	static const uint32_t kMaxSRVCount;
-
 private:// メンバ変数
 	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_;
 	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter_;

@@ -58,30 +58,19 @@ void Framework::Initialize() {
 	spotLight_->Initialize();
 	// Audioの初期化
 	audio_ = Audio::GetInstance();
-	// 音声読み込み
-	soundData1_ = audio_->SoundLoadWave("Engine/resources/fanfare.wav");
-	pos_ = { 0,1,1 };
-	audio_->Initialize(soundData1_);
 	//HRESULT result;
 	//// Xaudio2エンジンのインスタンスを生成
 	//result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	//// マスターボイスを生成
 	//result = xAudio2_->CreateMasteringVoice(&masterVoice_);
-	// 音声再生
-	//audio_->SoundPlayWave(soundData1_, 1.0f);
+	//// 音声読み込み
+	//soundData1_ = audio_->SoundLoadWave("resources/fanfare.wav");
+	//// 音声再生
+	//audio_->SoundPlayWave(xAudio2_.Get(), soundData1_);
 }
 
 void Framework::Update() {
-	if (Input::GetInstance()->TriggerKey(DIK_0)) {
-		audio_->SoundPlayWave(soundData1_, pos_, 1.0f, 1.0f);
-	}
-	pointLight_->ImGuiAdjustParameter();
-	ImGui::Begin("Audio");
-	if (ImGui::TreeNode("Emitter")) {
-		ImGui::DragFloat3("pos", &pos_.x, 0.01f, -10, 10);
-		ImGui::TreePop();
-	}
-	ImGui::End();
+
 }
 
 void Framework::Run() {
@@ -115,8 +104,6 @@ void Framework::Run() {
 }
 
 void Framework::Finalize() {
-	audio_->Finalize();
-	audio_->SoundUnload(&soundData1_);
 	ModelManager::GetInstance()->Finalize();
 	// ImGui
 	imGuiManager_->Finalize();
