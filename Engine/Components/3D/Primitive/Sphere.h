@@ -21,7 +21,7 @@ public:
 	void Initialize();
 
 	// 描画処理
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void Draw(uint32_t textureHandle, const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 	// 解放処理
 	//void Release();

@@ -21,14 +21,14 @@ public:
 	/// <summary>
 	/// 描画
 	/// <summary>
-	void Draw();
+	void Draw(uint32_t textureHandle);
 
 	/// 
 	/// Setter
 	/// 
 
 	// 座標を指定
-	void SetWorldPosition(Vector3 pos) { model_->worldTransform.translation_ = pos; }
+	void SetWorldPosition(Vector3 pos) { model_->worldTransform.transform.translate = pos; }
 
 	///
 	/// 純粋仮想関数

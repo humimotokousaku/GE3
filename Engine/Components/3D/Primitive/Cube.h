@@ -19,7 +19,7 @@ public:
 	void Initialize();
 
 	// 三角形描画
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void Draw(uint32_t textureHandle, const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 	// Getter
 	const Microsoft::WRL::ComPtr<ID3D12Resource> GetMaterialResource() { return materialResource_.Get(); }

@@ -3,6 +3,11 @@
 
 const uint32_t SrvManager::kMaxSRVCount = 512;
 
+SrvManager* SrvManager::GetInstance() {
+	static SrvManager instance;
+	return &instance;
+}
+
 void SrvManager::Initialize() {
 	directXCommon_ = DirectXCommon::GetInstance();
 
@@ -19,7 +24,6 @@ void SrvManager::PreDraw() {
 }
 
 uint32_t SrvManager::Allocate() {
-
 	// 返り値の番号を記録
 	int index = useIndex_;
 	// 次回の溜めに番号を1進める

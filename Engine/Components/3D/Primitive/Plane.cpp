@@ -51,7 +51,7 @@ void Plane::Initialize() {
 	materialData_->shininess = 20;
 }
 
-void Plane::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+void Plane::Draw(uint32_t textureHandle, const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
 	uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
 	uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
 	uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
@@ -74,7 +74,8 @@ void Plane::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraPosResource_.Get()->GetGPUVirtualAddress());
 
 	// DescriptorTableの設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(1));
+	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(1));
+	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(2, textureHandle);
 
 	// マテリアルCBufferの場所を設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());

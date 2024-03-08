@@ -7,7 +7,7 @@ Enemy::~Enemy() {
 }
 
 void Enemy::Initialize(Camera* camera) {
-	// collider‚Ìİ’è
+	// colliderã®è¨­å®š
 	SetCollisionPrimitive(kCollisionOBB);
 
 	model_ = std::make_unique<Object3D>();
@@ -20,9 +20,9 @@ void Enemy::Update() {
 
 }
 
-void Enemy::Draw() {
+void Enemy::Draw(uint32_t textureHandle) {
 	// Enemy
-	model_->Draw(UVCHEKER);
+	model_->Draw(textureHandle);
 }
 
 void Enemy::OnCollision(Collider* collider) {
@@ -30,14 +30,14 @@ void Enemy::OnCollision(Collider* collider) {
 }
 
 Vector3 Enemy::GetRotation() {
-	Vector3 rotate = model_->worldTransform.rotation_;
+	Vector3 rotate = model_->worldTransform.transform.rotate;
 	return rotate;
 }
 
 Vector3 Enemy::GetWorldPosition() {
-	// ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
-	Vector3 worldPos = model_->worldTransform.translation_;
-	//// ƒ[ƒ‹ƒhs—ñ‚Ì•½sˆÚ“®¬•ª‚ğæ“¾
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
+	Vector3 worldPos = model_->worldTransform.transform.translate;
+	//// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†ã‚’å–å¾—
 	//worldPos.x = model_->worldTransform.matWorld_.m[3][0];
 	//worldPos.y = model_->worldTransform.matWorld_.m[3][1];
 	//worldPos.z = model_->worldTransform.matWorld_.m[3][2];

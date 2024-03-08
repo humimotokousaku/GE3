@@ -40,7 +40,7 @@ public:
 	~TextureManager() = default;
 
 	// 初期化
-	void Initialize();
+	void Initialize(SrvManager* srvManager);
 
 	// 解放処理
 	void Finalize();
@@ -61,11 +61,14 @@ public:
 	// メタデータの取得
 	//const DirectX::TexMetadata& GetMetaData(const std::string& filePath);
 	// SRVインデックスの取得
-	//uint32_t GetSrvIndex(const std::string& filePath);
+	uint32_t GetSrvIndex(const std::string& filePath);
 	// GPUハンドルの取得
 	uint32_t GetTextureIndexByFilePath(const std::string& filePath);
 	// textureResource
-	Microsoft::WRL::ComPtr<ID3D12Resource> GetTextureResource(uint32_t index) { return textureDatas_[index].resource.Get(); }
+	Microsoft::WRL::ComPtr<ID3D12Resource> GetTextureResource(const std::string& filePath) {
+		TextureData& textureData = textureDatas_[filePath];
+		return textureData.resource;
+	}
 
 private:
 	// DirectX12のTextureResourceを作る

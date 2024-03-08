@@ -1,4 +1,5 @@
 #include "ImGuiManager.h"
+#include "SrvManager.h"
 
 void ImGuiManager::Initialize(HWND hwnd) {
 	IMGUI_CHECKVERSION();
@@ -8,9 +9,10 @@ void ImGuiManager::Initialize(HWND hwnd) {
 	ImGui_ImplDX12_Init(DirectXCommon::GetInstance()->GetDevice().Get(),
 		DirectXCommon::GetInstance()->GetSwapChainDesc().BufferCount,
 		DirectXCommon::GetInstance()->GetRtvDesc().Format,
-		DirectXCommon::GetInstance()->GetSrvDescriptorHeap().Get(),
-		DirectXCommon::GetInstance()->GetSrvDescriptorHeap().Get()->GetCPUDescriptorHandleForHeapStart(),
-		DirectXCommon::GetInstance()->GetSrvDescriptorHeap().Get()->GetGPUDescriptorHandleForHeapStart());
+		SrvManager::GetInstance()->GetDescriptorHeap().Get(),
+		SrvManager::GetInstance()->GetDescriptorHeap().Get()->GetCPUDescriptorHandleForHeapStart(),
+		SrvManager::GetInstance()->GetDescriptorHeap().Get()->GetGPUDescriptorHandleForHeapStart());
+	SrvManager::GetInstance()->Allocate();
 }
 
 void ImGuiManager::PreDraw() {

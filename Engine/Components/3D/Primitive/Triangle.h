@@ -44,7 +44,7 @@ public:
 	void Initialize();
 
 	// 三角形描画
-	void Draw();
+	void Draw(uint32_t textureHandle);
 
 	void ApplyGlobalVariables();
 

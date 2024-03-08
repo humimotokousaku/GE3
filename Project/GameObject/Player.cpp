@@ -8,7 +8,7 @@ Player::~Player() {
 }
 
 void Player::Initialize(Camera* camera) {
-	// collider‚Ìİ’è
+	// colliderã®è¨­å®š
 	SetCollisionPrimitive(kCollisionOBB);
 
 	model_ = std::make_unique<Object3D>();
@@ -18,30 +18,30 @@ void Player::Initialize(Camera* camera) {
 }
 
 void Player::Update() {
-	if (Input::GetInstance()->PressKey(DIK_A)) {
-		model_->worldTransform.translation_.x -= 0.1f;
-	}
-	if (Input::GetInstance()->PressKey(DIK_D)) {
-		model_->worldTransform.translation_.x += 0.1f;
-	}
-	if (Input::GetInstance()->PressKey(DIK_S)) {
-		model_->worldTransform.translation_.z -= 0.1f;
-	}
-	if (Input::GetInstance()->PressKey(DIK_W)) {
-		model_->worldTransform.translation_.z += 0.1f;
-	}
+	//if (Input::GetInstance()->PressKey(DIK_A)) {
+	//	model_->worldTransform.translation_.x -= 0.1f;
+	//}
+	//if (Input::GetInstance()->PressKey(DIK_D)) {
+	//	model_->worldTransform.translation_.x += 0.1f;
+	//}
+	//if (Input::GetInstance()->PressKey(DIK_S)) {
+	//	model_->worldTransform.translation_.z -= 0.1f;
+	//}
+	//if (Input::GetInstance()->PressKey(DIK_W)) {
+	//	model_->worldTransform.translation_.z += 0.1f;
+	//}
 
-	if (Input::GetInstance()->PressKey(DIK_LEFT)) {
-		model_->worldTransform.rotation_.y -= 0.01f;
-	}
-	if (Input::GetInstance()->PressKey(DIK_RIGHT)) {
-		model_->worldTransform.rotation_.y += 0.01f;
-	}
+	//if (Input::GetInstance()->PressKey(DIK_LEFT)) {
+	//	model_->worldTransform.rotation_.y -= 0.01f;
+	//}
+	//if (Input::GetInstance()->PressKey(DIK_RIGHT)) {
+	//	model_->worldTransform.rotation_.y += 0.01f;
+	//}
 }
 
-void Player::Draw() {
+void Player::Draw(uint32_t textureHandle) {
 	// player
-	model_->Draw(UVCHEKER);
+	model_->Draw(textureHandle);
 }
 
 void Player::OnCollision(Collider* collider) {
@@ -49,14 +49,14 @@ void Player::OnCollision(Collider* collider) {
 }
 
 Vector3 Player::GetRotation() {
-	Vector3 rotate = model_->worldTransform.rotation_;
+	Vector3 rotate = model_->worldTransform.transform.rotate;
 	return rotate;
 }
 
 Vector3 Player::GetWorldPosition() {
-	// ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
-	Vector3 worldPos = model_->worldTransform.translation_;
-	//// ƒ[ƒ‹ƒhs—ñ‚Ì•½sˆÚ“®¬•ª‚ğæ“¾
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
+	Vector3 worldPos = model_->worldTransform.transform.translate;
+	//// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†ã‚’å–å¾—
 	//worldPos.x = model_->worldTransform.matWorld_.m[3][0];
 	//worldPos.y = model_->worldTransform.matWorld_.m[3][1];
 	//worldPos.z = model_->worldTransform.matWorld_.m[3][2];

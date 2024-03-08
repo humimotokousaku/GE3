@@ -51,6 +51,10 @@ private:
 	std::unique_ptr<Player> player_;
 	std::array<std::unique_ptr<Enemy> , 2u> enemy_;
 
+	// テクスチャ
+	uint32_t uvcheckerTexture_;
+	uint32_t monsterBallTexture_;
+
 	int textureNum_;
 	Input* input_;
 	ViewProjection viewProjection_;

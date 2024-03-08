@@ -13,7 +13,7 @@ public:
 
 	void Initialize(const std::string& directoryPath, const std::string& filename);
 
-	void Draw(const ViewProjection& viewProjection, uint32_t textureNum);
+	void Draw(const ViewProjection& viewProjection, uint32_t textureHandle);
 
 	void AdjustParameter();
 

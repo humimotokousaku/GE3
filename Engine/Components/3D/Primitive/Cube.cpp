@@ -184,7 +184,7 @@ void Cube::Initialize() {
 	materialData_->enableLighting = true;
 }
 
-void Cube::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+void Cube::Draw(uint32_t textureHandle, const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
 	//ImGui::DragFloat4("power", &materialData_->color,)
 	//uvTransformMatrix_ = MakeScaleMatrix(uvTransform_.scale);
 	//uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeRotateZMatrix(uvTransform_.rotate.z));
@@ -202,7 +202,8 @@ void Cube::Draw(const WorldTransform& worldTransform, const ViewProjection& view
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
 
 	// DescriptorTableの設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(1));
+	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(1));
+	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(2, textureHandle);
 
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, DirectionalLight::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 

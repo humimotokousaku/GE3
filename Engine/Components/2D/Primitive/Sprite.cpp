@@ -78,26 +78,26 @@ void Sprite::Initialize(std::string textureFilePath) {
 	indexData_[4] = 3;
 	indexData_[5] = 2;
 
-	ID3D12Resource* textureBuffer = textureManager_->GetTextureResource(textureIndex_).Get();
+	//ID3D12Resource* textureBuffer = textureManager_->GetTextureResource(textureIndex_).Get();
 	// 指定番号の画像が読み込み済みなら
-	if (textureBuffer) {
-		//// テクスチャ情報取得
-		D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
-		// UVの頂点
-		float tex_left = textureLeftTop_.x / resDesc.Width;
-		float tex_right = (textureLeftTop_.x + textureSize_.x) / resDesc.Width;
-		float tex_top = textureLeftTop_.y / resDesc.Height;
-		float tex_bottom = (textureLeftTop_.y + textureSize_.y) / resDesc.Height;
-		// 頂点のUVに反映
-		vertexData_[0].texcoord = { tex_left, tex_bottom };
-		vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
-		vertexData_[1].texcoord = { tex_left, tex_top };
-		vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
-		vertexData_[2].texcoord = { tex_right, tex_bottom };
-		vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
-		vertexData_[3].texcoord = { tex_right, tex_top };
-		vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
-	}
+	//if (textureBuffer) {
+	//	//// テクスチャ情報取得
+	//	D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
+	//	// UVの頂点
+	//	float tex_left = textureLeftTop_.x / resDesc.Width;
+	//	float tex_right = (textureLeftTop_.x + textureSize_.x) / resDesc.Width;
+	//	float tex_top = textureLeftTop_.y / resDesc.Height;
+	//	float tex_bottom = (textureLeftTop_.y + textureSize_.y) / resDesc.Height;
+	//	// 頂点のUVに反映
+	//	vertexData_[0].texcoord = { tex_left, tex_bottom };
+	//	vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
+	//	vertexData_[1].texcoord = { tex_left, tex_top };
+	//	vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
+	//	vertexData_[2].texcoord = { tex_right, tex_bottom };
+	//	vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
+	//	vertexData_[3].texcoord = { tex_right, tex_top };
+	//	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
+	//}
 
 	// アンカーポイントのスクリーン座標
 	worldTransform_.Initialize();
@@ -150,7 +150,8 @@ void Sprite::Draw() {
 
 	/// DescriptorTableの設定
 	// texture
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex_));
+	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex_));
+	//SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(2, textureHandle);
 	// material
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
 	// ライティング
@@ -167,12 +168,12 @@ void Sprite::Release() {
 }
 
 void Sprite::AdjustTextureSize() {
-	Microsoft::WRL::ComPtr<ID3D12Resource> textureBuffer = textureManager_->GetTextureResource(textureIndex_).Get();
-	assert(textureBuffer);
+	//Microsoft::WRL::ComPtr<ID3D12Resource> textureBuffer = textureManager_->GetTextureResource(textureIndex_).Get();
+	//assert(textureBuffer);
 
-	D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
-	textureSize_.x = static_cast<float>(resDesc.Width);
-	textureSize_.y = static_cast<float>(resDesc.Height);
+	//D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
+	//textureSize_.x = static_cast<float>(resDesc.Width);
+	//textureSize_.y = static_cast<float>(resDesc.Height);
 }
 
 void Sprite::ImGuiAdjustParameter() {

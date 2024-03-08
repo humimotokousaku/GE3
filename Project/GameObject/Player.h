@@ -28,7 +28,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// <summary>
-	void Draw();
+	void Draw(uint32_t textureHandle);
 
 	///
 	/// 純粋仮想関数

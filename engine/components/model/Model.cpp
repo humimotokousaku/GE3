@@ -39,7 +39,7 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	};
 }
 
-void Model::Draw(const ViewProjection& viewProjection, uint32_t textureNum) {
+void Model::Draw(const ViewProjection& viewProjection, uint32_t textureHandle) {
 
 	//// 形状を設定
 	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
@@ -52,7 +52,8 @@ void Model::Draw(const ViewProjection& viewProjection, uint32_t textureNum) {
 
 	/// DescriptorTableの設定
 	// texture
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureNum));
+	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureNum));
+	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(2, textureHandle);
 	// material
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
 	// ライティング

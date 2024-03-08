@@ -8,6 +8,7 @@ public:
 	/// Default Method
 	/// 
 
+	static SrvManager* GetInstance();
 	void Initialize();
 	//void Update();
 	//void Finalize();
@@ -38,6 +39,8 @@ public:
 		handleGPU.ptr += (descriptorSize_ * index);
 		return handleGPU;
 	}
+
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap() { return descriptorHeap_.Get(); }
 
 	// 読み込み可能数チェック
 	bool GetIsLimit() {

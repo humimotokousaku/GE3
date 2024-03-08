@@ -65,7 +65,7 @@ void Triangle::Initialize() {
 	//globalVariables->AddItem(groupName, "Color", materialData_->color);
 }
 
-void Triangle::Draw() {
+void Triangle::Draw(uint32_t textureHandle) {
 	//ApplyGlobalVariables();
 	//GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	//// ボタンを押したらsave
@@ -91,7 +91,8 @@ void Triangle::Draw() {
 	// wvp陽男のCBufferの場所を設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_.Get()->GetGPUVirtualAddress());
 	// DescriptorTableの設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(1));
+	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(1));
+	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(2, textureHandle);
 	// 描画(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 	DirectXCommon::GetInstance()->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 }

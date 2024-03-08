@@ -34,6 +34,11 @@ struct Emitter {
 	float frequencyTime;
 };
 
+struct AABB {
+	Vector3 min;
+	Vector3 max;
+};
+
 struct AccField {
 	Vector3 acc;  // 加速度
 	AABB area;	  // 範囲
@@ -57,7 +62,7 @@ public:
 	void Update();
 
 	// 描画
-	void Draw(int textureNum);
+	void Draw(uint32_t textureHandle);
 
 	ModelData GetModelData() { return modelData_; }
 
