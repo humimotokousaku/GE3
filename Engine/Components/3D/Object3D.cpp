@@ -4,23 +4,23 @@
 
 Object3D::~Object3D() {
 	worldTransform.constBuff_.ReleaseAndGetAddressOf();
-	viewProjection.constBuff_.ReleaseAndGetAddressOf();
+	//viewProjection.constBuff_.ReleaseAndGetAddressOf();
 }
 
 void Object3D::Initialize() {
 	worldTransform.Initialize();
 
-	viewProjection.Initialize();
+	//viewProjection.Initialize();
 }
 
 void Object3D::Draw(uint32_t textureNum) {
 	// カメラ
 	if (camera_) {
 		camera_->Update();
-		viewProjection = camera_->GetViewProjection();	
+		//viewProjection = camera_->GetViewProjection();	
 	}
 
-	viewProjection.UpdateMatrix();
+	//viewProjection.UpdateMatrix();
 	// ワールド座標の更新
 	worldTransform.UpdateMatrix();
 
@@ -35,5 +35,5 @@ void Object3D::Draw(uint32_t textureNum) {
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuff_->GetGPUVirtualAddress());
 	
 	// 見た目を描画
-	model_->Draw(viewProjection, textureNum);
+	model_->Draw(camera_->GetViewProjection(), textureNum);
 }

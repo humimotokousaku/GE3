@@ -1,6 +1,7 @@
 #pragma once
 #include "DirectXCommon.h"
 #include "MathStructs.h"
+#include "ModelStructs.h"
 #include <d3d12.h>
 #include <wrl.h>
 
@@ -18,10 +19,12 @@ struct ViewProjection{
 	ConstBufferDataViewProjection* constMap = nullptr;
 
 #pragma region ビュー行列の設定
-	// X,Y,Z軸回りのローカル回転角
-	Vector3 rotation_ = { 0, 0, 0 };
-	// ローカル座標
-	Vector3 translation_ = { 0, 0, -50 };
+	// トランスフォーム
+	Transform transform = {
+		{1,1,1},
+		{0,0,0},
+		{0,0,-50}
+	};
 #pragma endregion
 
 #pragma region 射影行列の設定
@@ -39,34 +42,4 @@ struct ViewProjection{
 	Matrix4x4 matView;
 	// 射影行列
 	Matrix4x4 matProjection;
-
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize();
-	/// <summary>
-	/// 定数バッファ生成
-	/// </summary>
-	void CreateConstBuffer();
-	/// <summary>
-	/// マッピングする
-	/// </summary>
-	void Map();
-	/// <summary>
-	/// 行列を更新する
-	/// </summary>
-	void UpdateMatrix();
-	/// <summary>
-	/// 行列を転送する
-	/// </summary>
-	void TransferMatrix();
-	/// <summary>
-	/// ビュー行列を更新する
-	/// </summary>
-	void UpdateViewMatrix();
-	/// <summary>
-	/// 射影行列を更新する
-	/// </summary>
-	void UpdateProjectionMatrix();
 };
-

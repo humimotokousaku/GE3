@@ -119,7 +119,7 @@ void Sphere::Draw(const WorldTransform& worldTransform, const ViewProjection& vi
 	uvTransformMatrix_ = Multiply(uvTransformMatrix_, MakeTranslateMatrix(uvTransform_.translate));
 	materialData_->uvTransform = uvTransformMatrix_;
 
-	cameraPosData_ = viewProjection.translation_;
+	cameraPosData_ = viewProjection.transform.translate;
 
 	// RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetRootSignature()[1].Get());

@@ -36,13 +36,13 @@ public:
 	
 	// 半径の設定
 	void SetRadius(float radius) { radius_ = radius; }
-	// OBBの設定
-	void SetOBB(OBB obb) { obb_ = obb; }
-	void SetOBBCenterPos(Vector3 centerPos) { obb_.m_Pos = centerPos; }
-	void SetOBBDirect(int index) { 
-		Vector3 rotateResult = TransformNormal(obb_.m_NormaDirect[index], MakeRotateMatrix(GetRotation()));
-		obb_.m_NormaDirect[index] = Normalize(rotateResult);
-	}
+	//// OBBの設定
+	//void SetOBB(OBB obb) { obb_ = obb; }
+	//void SetOBBCenterPos(Vector3 centerPos) { obb_.m_Pos = centerPos; }
+	//void SetOBBDirect(int index) { 
+	//	Vector3 rotateResult = TransformNormal(obb_.m_NormaDirect[index], MakeRotateMatrix(GetRotation()));
+	//	obb_.m_NormaDirect[index] = Normalize(rotateResult);
+	//}
 
 	// 衝突属性(自分)を設定
 	void SetCollisionAttribute(uint32_t collisionAttribute) { collisionAttribute_ = collisionAttribute; }

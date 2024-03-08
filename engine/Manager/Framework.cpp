@@ -24,7 +24,7 @@ void Framework::Initialize() {
 	srvManager_->Initialize();
 	// Textureの初期化
 	textureManager_ = TextureManager::GetInstance();
-	textureManager_->TextureManager::GetInstance()->Initialize(srvManager_);
+	textureManager_->TextureManager::GetInstance()->Initialize();
 	// PSOの初期化
 	pipelineManager_ = PipelineManager::GetInstance();
 	pipelineManager_->Initialize();

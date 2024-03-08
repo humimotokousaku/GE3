@@ -102,13 +102,17 @@ void Sprite::Initialize(int textureIndex = UINT32_MAX) {
 
 	// アンカーポイントのスクリーン座標
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,0,1 };
+	worldTransform_.transform.translate = { 0,0,1 };
 
 	// カメラ
-	viewProjection_.Initialize();
-	viewProjection_.constMap->view = MakeIdentity4x4();
-	viewProjection_.constMap->projection = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth_), float(WinApp::kClientHeight_), 0.0f, 100.0f);
-	cameraPosData_ = viewProjection_.translation_;
+	camera_ = std::make_unique<Camera>();
+	camera_->Initialize();
+	//viewProjection_.Initialize();
+	//viewProjection_.constMap->view = MakeIdentity4x4();
+	//viewProjection_.constMap->projection = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth_), float(WinApp::kClientHeight_), 0.0f, 100.0f);
+	//cameraPosData_ = viewProjection_.transform.translate;
+	camera_->GetViewProjection().constMap->projection = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth_), float(WinApp::kClientHeight_), 0.0f, 100.0f);
+	cameraPosData_ = camera_->GetTranslate();
 }
 
 void Sprite::Draw() {
@@ -141,7 +145,7 @@ void Sprite::Draw() {
 	// worldTransform
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform_.constBuff_->GetGPUVirtualAddress());
 	// viewProjection
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection_.constBuff_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera_->GetViewProjection().constBuff_->GetGPUVirtualAddress());
 	// カメラ位置
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraPosResource_.Get()->GetGPUVirtualAddress());
 
@@ -175,9 +179,9 @@ void Sprite::AdjustTextureSize() {
 void Sprite::ImGuiAdjustParameter() {
 	// ウィンドウの初期サイズを指定
 	ImGui::Begin("Sprite");
-	ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.5f, 0, 1280, "%.1f");
-	ImGui::DragFloat3("Scale", &worldTransform_.scale_.x, 0.1f, -5, 5, "%.1f");
-	ImGui::DragFloat3("Rotate.z", &worldTransform_.rotation_.x, 0.1f, -6.28f, 6.28f, "%.1f");
+	ImGui::DragFloat3("Translate", &worldTransform_.transform.translate.x, 0.5f, 0, 1280, "%.1f");
+	ImGui::DragFloat3("Scale", &worldTransform_.transform.scale.x, 0.1f, -5, 5, "%.1f");
+	ImGui::DragFloat3("Rotate.z", &worldTransform_.transform.rotate.x, 0.1f, -6.28f, 6.28f, "%.1f");
 	ImGui::DragFloat2("AnchorPoint", &anchorPoint_.x, 0.01f, -1.0f, 1.0f, "%.2f");
 	ImGui::DragFloat2("Size", &size_.x, 0.1f, 0, 1280, "%.1f");
 	ImGui::CheckboxFlags("isLighting", &materialData_->enableLighting, 1);

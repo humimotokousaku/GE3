@@ -164,6 +164,6 @@ private:
 
 	// カメラ
 	Camera* camera_;
-	ViewProjection viewProjection_;
+	//ViewProjection viewProjection_;
 };
 

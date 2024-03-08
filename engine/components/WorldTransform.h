@@ -1,6 +1,7 @@
 #pragma once
 #include "DirectXCommon.h"
 #include "MathStructs.h"
+#include "ModelStructs.h"
 #include <d3d12.h>
 #include <wrl.h>
 
@@ -18,12 +19,12 @@ struct WorldTransform {
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
 	// マッピング済みアドレス
 	ConstBufferDataWorldTransform* constMap = nullptr;
-	// ローカルスケール
-	Vector3 scale_ = { 1, 1, 1 };
-	// X,Y,Z軸回りのローカル回転角
-	Vector3 rotation_ = { 0, 0, 0 };
-	// ローカル座標
-	Vector3 translation_ = { 0, 0, 0 };
+	// トランスフォーム
+	Transform transform = {
+		{1,1,1},
+		{0,0,0},
+		{0,0,0}
+	};
 	// ローカル → ワールド変換行列
 	Matrix4x4 matWorld_;
 	// 親となるワールド変換へのポインタ

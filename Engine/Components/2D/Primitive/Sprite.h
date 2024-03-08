@@ -7,6 +7,7 @@
 #include "ViewProjection.h"
 #include "WinApp.h"
 #include "WorldTransform.h"
+#include "Camera.h"
 #include <d3d12.h>
 #include <wrl.h>
 
@@ -50,7 +51,7 @@ public:
 	// 縦幅、横幅
 	Vector2 GetSize() { return size_; }
 	// 座標
-	Vector2 GetPos() { return { worldTransform_.translation_.x, worldTransform_.translation_.y }; }
+	Vector2 GetPos() { return { worldTransform_.transform.translate.x, worldTransform_.transform.translate.y }; }
 	// Spriteのアンカーポイント
 	Vector2 GetAnchorPoint() { return anchorPoint_; }
 	// 画像の切り出しサイズ
@@ -61,8 +62,8 @@ public:
 	void SetSize(Vector2 size) { size_ = size; }
 	// 座標
 	void SetPos(Vector2 pos) {
-		worldTransform_.translation_.x = pos.x;
-		worldTransform_.translation_.y = pos.y;
+		worldTransform_.transform.translate.x = pos.x;
+		worldTransform_.transform.translate.y = pos.y;
 	}
 	// Spriteのアンカーポイント
 	void SetAnchorPoint(Vector2 anchorPoint) { anchorPoint_ = anchorPoint; }
@@ -93,6 +94,7 @@ protected:
 	PipelineManager* psoManager_;
 
 	// カメラ
+	std::unique_ptr<Camera> camera_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> cameraPosResource_;
 	Vector3 cameraPosData_;
 

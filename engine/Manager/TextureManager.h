@@ -28,7 +28,7 @@ public:
 	~TextureManager() = default;
 
 	// 初期化
-	void Initialize(SrvManager* srvManager);
+	void Initialize();
 
 	// textureを読んで転送する
 	void TransferTexture();

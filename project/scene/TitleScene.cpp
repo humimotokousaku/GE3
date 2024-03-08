@@ -6,7 +6,7 @@
 void TitleScene::Initialize() {
 	sceneNum = TITLE_SCENE;
 	input_ = Input::GetInstance();
-	viewProjection_.Initialize();
+	//viewProjection_.Initialize();
 
 	// カメラの初期化
 	camera_ = std::make_unique<Camera>();
@@ -41,13 +41,13 @@ void TitleScene::Initialize() {
 	//// パーティクルの発生位置を指定
 	//particles_1->SetEmitterPos(Vector3{ 0,0,0 });
 
-	camera_->SetCameraPos(Vector3{0,0,-20});
+	camera_->SetTranslate(Vector3{0,0,-20});
 
 	anim_ = std::make_unique<Animation>();
-	anim_->SetAnimData(&plane_->worldTransform.translation_, Vector3{ 0,0,0 }, Vector3{10,0,0}, 60, "PlaneAnim0", Easings::EaseOutBack);
-	anim_->SetAnimData(&plane_->worldTransform.translation_, Vector3{ 10,0,0 }, Vector3{ 0,0,0 }, 60, "PlaneAnim1",Easings::EaseOutBack);
-	anim_->SetAnimData(&plane_->worldTransform.translation_, Vector3{ 0,0,0 }, Vector3{ 0,5,0 }, 120, "PlaneAnim2",Easings::EaseOutBack);
-	anim_->SetAnimData(&plane_->worldTransform.translation_, Vector3{ 0,5,0 }, Vector3{ 0,0,0 }, 120, "PlaneAnim3",Easings::EaseOutBack);
+	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 0,0,0 }, Vector3{10,0,0}, 60, "PlaneAnim0", Easings::EaseOutBack);
+	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 10,0,0 }, Vector3{ 0,0,0 }, 60, "PlaneAnim1",Easings::EaseOutBack);
+	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 0,0,0 }, Vector3{ 0,5,0 }, 120, "PlaneAnim2",Easings::EaseOutBack);
+	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 0,5,0 }, Vector3{ 0,0,0 }, 120, "PlaneAnim3",Easings::EaseOutBack);
 }
 
 void TitleScene::Update() {
@@ -58,8 +58,10 @@ void TitleScene::Update() {
 
 	anim_->Update();
 
-	viewProjection_.UpdateViewMatrix();
-	viewProjection_.TransferMatrix();
+	//viewProjection_.UpdateViewMatrix();
+	//viewProjection_.TransferMatrix();
+
+	camera_->Update();
 
 	// パーティクルの更新処理
 	particles_->Update();
@@ -72,15 +74,15 @@ void TitleScene::Update() {
 	ImGui::Text("isStart:%d", anim_->GetIsStart());
 	ImGui::End();
 
-	ImGui::Begin("Camera");
-	ImGui::DragFloat3("translation", &camera_->viewProjection_.translation_.x, 0.1f, -100, 100);
-	ImGui::DragFloat3("rotation", &camera_->viewProjection_.rotation_.x, 0.01f, -6.28f, 6.28f);
-	ImGui::End();
+	//ImGui::Begin("Camera");
+	//ImGui::DragFloat3("translation", &camera_->viewProjection_.translation_.x, 0.1f, -100, 100);
+	//ImGui::DragFloat3("rotation", &camera_->GetRotate().x, 0.01f, -6.28f, 6.28f);
+	//ImGui::End();
 	ImGui::Begin("plane");
-	ImGui::DragFloat3("translation", &plane_->worldTransform.translation_.x, 0.01f, -100, 100);
+	ImGui::DragFloat3("translation", &plane_->worldTransform.transform.translate.x, 0.01f, -100, 100);
 	ImGui::End();
 	ImGui::Begin("axis");
-	ImGui::DragFloat3("translation", &axis_->worldTransform.translation_.x, 0.01f, -100, 100);
+	ImGui::DragFloat3("translation", &axis_->worldTransform.transform.translate.x, 0.01f, -100, 100);
 	ImGui::End();
 
 	sprite_->ImGuiAdjustParameter();
