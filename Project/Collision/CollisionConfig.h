@@ -17,7 +17,7 @@ const uint32_t kCollisionAABB = 0b10 << 1;
 const uint32_t kCollisionCapsule = 0b10 << 2;
 
 // 立方体
-struct AABB {
+struct cAABB {
 	Vector3 max = { 1.0f,1.0f,1.0f };
 	Vector3 min = { 1.0f,1.0f,1.0f };
 };

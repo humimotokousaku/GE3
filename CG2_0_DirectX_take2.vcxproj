@@ -158,8 +158,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Project\GameObject\Enemy.cpp" />
     <ClCompile Include="Engine\Components\Animation\Animation.cpp" />
     <ClCompile Include="Engine\Components\3D\Primitive\Plane.cpp" />
+    <ClCompile Include="Project\GameObject\Player.cpp" />
     <ClCompile Include="Project\Collision\Collider.cpp" />
     <ClCompile Include="Project\Collision\CollisionManager.cpp" />
     <ClCompile Include="engine\Components\camera\Camera.cpp" />
@@ -210,8 +212,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" </Command>
     <ClCompile Include="Engine\Base\SrvManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Project\GameObject\Enemy.h" />
     <ClInclude Include="Engine\Components\Animation\Animation.h" />
     <ClInclude Include="Engine\Components\3D\Primitive\Plane.h" />
+    <ClInclude Include="Project\GameObject\Player.h" />
     <ClInclude Include="Project\Collision\Collider.h" />
     <ClInclude Include="Project\Collision\CollisionConfig.h" />
     <ClInclude Include="Project\Collision\CollisionManager.h" />

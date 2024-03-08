@@ -10,6 +10,9 @@
 #include "WorldTransform.h"
 #include "Object3D.h"
 #include "Animation.h"
+#include "Collision/CollisionManager.h"
+#include "GameObject/Enemy.h"
+#include "GameObject/Player.h"
 
 class GameManager;
 
@@ -42,6 +45,9 @@ private:
 	std::unique_ptr<Particles> particles_;
 	std::unique_ptr<Particles> particles_1;
 	std::unique_ptr<Animation> anim_;
+	std::unique_ptr<Enemy> enemy_;
+	std::unique_ptr<Player> player_;
+	std::unique_ptr<CollisionManager> collisionManager_;
 
 	int textureNum_;
 	Input* input_;

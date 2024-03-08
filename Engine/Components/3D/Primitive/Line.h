@@ -4,6 +4,7 @@
 #include "DirectXCommon.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
+#include "Camera.h"
 #include <d3d12.h>
 
 class Line
@@ -20,7 +21,7 @@ public:
 	// 初期化
 	void Initialize();
 	// 描画処理
-	void Draw(Vector3 start, Vector3 end, const ViewProjection& viewProjection);
+	void Draw(Vector3 start, Vector3 end);
 	// 解放処理
 	//void Release();
 
@@ -36,6 +37,9 @@ public:
 
 	/// Setter
 	void SetRGBA(Vector4 rgba) { *materialData_ = rgba; }
+
+	// カメラの設定
+	void SetCamera(Camera* camera) { camera_ = camera; }
 
 private:// プライベートなメンバ関数
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes);
@@ -54,5 +58,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	Vector4* vertexData_;
+	// カメラ
+	Camera* camera_;
 };
 

@@ -48,6 +48,19 @@ void TitleScene::Initialize() {
 	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 10,0,0 }, Vector3{ 0,0,0 }, 60, "PlaneAnim1",Easings::EaseOutBack);
 	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 0,0,0 }, Vector3{ 0,5,0 }, 120, "PlaneAnim2",Easings::EaseOutBack);
 	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 0,5,0 }, Vector3{ 0,0,0 }, 120, "PlaneAnim3",Easings::EaseOutBack);
+
+	enemy_ = std::make_unique<Enemy>();
+	enemy_->SetCamera(camera_.get());
+	enemy_->Init();
+
+	ModelManager::GetInstance()->LoadModel("Skydome/skydome.obj");
+	player_ = std::make_unique<Player>();
+	player_->SetCamera(camera_.get());
+	player_->Init();
+
+	collisionManager_ = std::make_unique<CollisionManager>();
+	collisionManager_->SetColliderList(enemy_.get());
+	collisionManager_->SetColliderList(player_.get());
 }
 
 void TitleScene::Update() {
@@ -63,11 +76,16 @@ void TitleScene::Update() {
 
 	camera_->Update();
 
+	player_->Update();
+	enemy_->Update();
+
 	// パーティクルの更新処理
 	particles_->Update();
 
 	//// パーティクルの更新処理
 	//particles_1->Update();
+
+	collisionManager_->CheckAllCollisions();
 
 #ifdef USE_IMGUI
 	ImGui::Begin("Animation");
@@ -110,6 +128,10 @@ void TitleScene::Update() {
 void TitleScene::Draw() {
 	axis_->Draw(UVCHEKER);
 	plane_->Draw(UVCHEKER);
+
+	enemy_->Draw();
+	player_->Draw();
+
 	particles_->Draw(PARTICLE);
 	//particles_1->Draw(PARTICLE);
 	sprite_->Draw();

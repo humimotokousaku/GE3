@@ -8,32 +8,78 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 		return;
 	}
 
-	// コライダーのワールド座標を取得
-	colliderA->GetWorldPosition();
-	colliderB->GetWorldPosition();
+	//// コライダーのワールド座標を取得
+	//colliderA->GetWorldPosition();
+	//colliderB->GetWorldPosition();
 
 	/// 球体の判定
-	// 座標AとBの距離を求める
-	Vector3 a2b = {
-		colliderA->GetWorldPosition().x - colliderB->GetWorldPosition().x,
-		colliderA->GetWorldPosition().y - colliderB->GetWorldPosition().y,
-		colliderA->GetWorldPosition().z - colliderB->GetWorldPosition().z };
-	float a2bR = colliderA->GetRadius() + colliderB->GetRadius();
-	// 球と球の交差判定
-	if ((a2b.x * a2b.x) + (a2b.y * a2b.y) + (a2b.z * a2b.z) <= (a2bR * a2bR)) {
-		// コライダーAの衝突時コールバックを呼び出す
-		colliderA->OnCollision();
-		// コライダーBの衝突時コールバックを呼び出す
-		colliderB->OnCollision();
+	if (colliderA->GetCollisionPrimitive() == kCollisionSphere && colliderB->GetCollisionPrimitive() == kCollisionSphere) {
+		// 座標AとBの距離を求める
+		Vector3 a2b = {
+			colliderA->GetWorldPosition().x - colliderB->GetWorldPosition().x,
+			colliderA->GetWorldPosition().y - colliderB->GetWorldPosition().y,
+			colliderA->GetWorldPosition().z - colliderB->GetWorldPosition().z };
+		float a2bR = colliderA->GetRadius() + colliderB->GetRadius();
+		// 球と球の交差判定
+		if ((a2b.x * a2b.x) + (a2b.y * a2b.y) + (a2b.z * a2b.z) <= (a2bR * a2bR)) {
+			// コライダーAの衝突時コールバックを呼び出す
+			colliderA->OnCollision();
+			// コライダーBの衝突時コールバックを呼び出す
+			colliderB->OnCollision();
 
-		// 今当たっている
-		colliderA->SetIsOnCollision(true);
-		colliderB->SetIsOnCollision(true);
+			// 今当たっている
+			colliderA->SetIsOnCollision(true);
+			colliderB->SetIsOnCollision(true);
+		}
+		else {
+			// 今は当たっていない
+			colliderA->SetIsOnCollision(false);
+			colliderB->SetIsOnCollision(false);
+		}
 	}
-	else {
-		// 今は当たっていない
-		colliderA->SetIsOnCollision(false);
-		colliderB->SetIsOnCollision(false);
+	if ((colliderA->GetCollisionPrimitive() == kCollisionCapsule && colliderB->GetCollisionPrimitive() == kCollisionSphere)) {
+		Vector3 d = Subtract(colliderB->GetWorldPosition(),colliderA->GetStartPos());
+		Vector3 ba = Subtract(colliderA->GetEndPos(), colliderA->GetStartPos());
+		// カプセルのベクトルの長さ
+		float length = Length(ba);
+		// 正規化
+		Vector3 e = Normalize(ba);
+		// 内積
+		float dot = Dot(d, e);
+		
+		float t = dot / length;
+		if (t > 1) {
+			t = 1;
+		}
+		else if (t < 0) {
+			t = 0;
+		}
+		// 線形補間
+		Vector3 f;
+		f.x = (1.0f - t) * colliderA->GetStartPos().x + t * colliderA->GetEndPos().x;
+		f.y = (1.0f - t) * colliderA->GetStartPos().y + t * colliderA->GetEndPos().y;
+		f.z = (1.0f - t) * colliderA->GetStartPos().z + t * colliderA->GetEndPos().z;
+		
+		Vector3 c = Subtract(colliderB->GetWorldPosition(),f);
+		// 距離
+		float distance = Length(c);
+
+		// 当たっていたらplayerが赤になる
+		if (distance < colliderB->GetRadius() + colliderA->GetCapsuleRadius()) {
+			// コライダーAの衝突時コールバックを呼び出す
+			colliderA->OnCollision();
+			// コライダーBの衝突時コールバックを呼び出す
+			colliderB->OnCollision();
+
+			// 今当たっている
+			colliderA->SetIsOnCollision(true);
+			colliderB->SetIsOnCollision(true);
+		}
+		else {
+			// 今は当たっていない
+			colliderA->SetIsOnCollision(false);
+			colliderB->SetIsOnCollision(false);
+		}
 	}
 
 	// 前のフレームで当たっていたかを更新

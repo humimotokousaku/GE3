@@ -11,11 +11,9 @@ void Line::Initialize() {
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
 	*materialData_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	//worldTransform.Initialize();
 }
 
-void Line::Draw(Vector3 start, Vector3 end, const ViewProjection& viewProjection) {
+void Line::Draw(Vector3 start, Vector3 end) {
 	vertexData_[0] = { start.x,start.y ,start.z ,1 };
 	vertexData_[1] = { end.x,end.y ,end.z ,1 };
 
@@ -28,7 +26,7 @@ void Line::Draw(Vector3 start, Vector3 end, const ViewProjection& viewProjection
 	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
 
 	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuff_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, viewProjection.constBuff_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1,camera_->GetViewProjection().constBuff_->GetGPUVirtualAddress());
 
 	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
 	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);

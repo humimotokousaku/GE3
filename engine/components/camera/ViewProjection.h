@@ -23,7 +23,7 @@ struct ViewProjection{
 	Transform transform = {
 		{1,1,1},
 		{0,0,0},
-		{0,0,-50}
+		{0,0,-10}
 	};
 #pragma endregion
 
