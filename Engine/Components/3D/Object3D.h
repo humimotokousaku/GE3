@@ -41,15 +41,11 @@ public:
 	// カメラ
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
-	// カメラをセットしていないとき用
-	//void SetSubCamera(ViewProjection viewProjection) { this->viewProjection = viewProjection; }
-
 	// モデルのセット
 	void SetModel(const std::string& filePath) { model_ = ModelManager::GetInstance()->FindModel(filePath); }
 
 public:
 	WorldTransform worldTransform;
-	//ViewProjection viewProjection;
 	Camera* camera_;
 
 private:

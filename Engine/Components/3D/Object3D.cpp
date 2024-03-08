@@ -4,23 +4,18 @@
 
 Object3D::~Object3D() {
 	worldTransform.constBuff_.ReleaseAndGetAddressOf();
-	//viewProjection.constBuff_.ReleaseAndGetAddressOf();
 }
 
 void Object3D::Initialize() {
 	worldTransform.Initialize();
-
-	//viewProjection.Initialize();
 }
 
 void Object3D::Draw(uint32_t textureNum) {
 	// カメラ
 	if (camera_) {
 		camera_->Update();
-		//viewProjection = camera_->GetViewProjection();	
 	}
 
-	//viewProjection.UpdateMatrix();
 	// ワールド座標の更新
 	worldTransform.UpdateMatrix();
 
