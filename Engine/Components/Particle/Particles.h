@@ -132,8 +132,6 @@ private:// 定数
 	const static uint32_t kNumMaxInstance = 6000;
 
 private:
-	//SrvManager* srvManager
-
 	// パーティクル
 	std::list<Particle> particles_;
 	// 頂点位置をもらうモデル
@@ -162,9 +160,9 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
 	ParticleForGPU* instancingData_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource_;
+	uint32_t srvIndex_;
 
 	// カメラ
 	Camera* camera_;
-	//ViewProjection viewProjection_;
 };
 

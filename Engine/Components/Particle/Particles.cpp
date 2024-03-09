@@ -2,6 +2,7 @@
 #include "ImGuiManager.h"
 #include "GlobalVariables.h"
 #include "DirectionalLight.h"
+#include "SrvManager.h"
 #include <cassert>
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -20,7 +21,6 @@ void Particles::Initialize() {
 	modelData_.vertices.push_back({ .position = {-1.0f,-1.0f,0.0f,1.0f}, .texcoord = {0.0f,1.0f},.normal = {0.0f,0.0f,1.0f} }); // 左下
 	modelData_.vertices.push_back({ .position = {1.0f,1.0f,0.0f,1.0f}, .texcoord = {1.0f,0.0f},.normal = {0.0f,0.0f,1.0f} }); // 右上
 	modelData_.vertices.push_back({ .position = {1.0f,-1.0f,0.0f,1.0f}, .texcoord = {1.0f,1.0f},.normal = {0.0f,0.0f,1.0f} }); // 右下
-	//modelData_.material.textureFilePath = "./resources/uvChecker.png";
 
 	// Resource作成
 	instancingResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(ParticleForGPU) * kNumMaxInstance);
@@ -28,20 +28,8 @@ void Particles::Initialize() {
 	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 
 	// SRVの作成
-	uint32_t descriptorSizeSRV = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
-	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	instancingSrvDesc.Buffer.FirstElement = 0;
-	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	instancingSrvDesc.Buffer.NumElements = kNumMaxInstance;
-	instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
-	// SRVを作成するDescriptorHeapの場所を決める
-	//instancingSrvHandleCPU_ = DirectXCommon::GetInstance()->GetCPUDescriptorHandle(DirectXCommon::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV, 3);
-	//instancingSrvHandleGPU_ = DirectXCommon::GetInstance()->GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV, 3);
-	// SRVの生成
-	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
+	srvIndex_ = SrvManager::GetInstance()->Allocate();
+	SrvManager::GetInstance()->CreateSRVforStructuredBuffer(srvIndex_, instancingResource_.Get(), kNumMaxInstance, sizeof(ParticleForGPU));
 
 	// 頂点データのメモリ確保
 	CreateVertexResource();
@@ -60,9 +48,6 @@ void Particles::Initialize() {
 		{0.0f,0.0f,0.0f}
 	};
 
-	// Lightingするか
-	//materialData_->enableLighting = false;
-
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	// uvTransform行列の初期化
 	materialData_->uvTransform = MakeIdentity4x4();
@@ -77,8 +62,6 @@ void Particles::Initialize() {
 	accField_.area.min = { -10,-10,-10 };
 	accField_.area.max = { 10,10,10 };
 	accField_.isActive = true;
-
-	//viewProjection_.Initialize();
 }
 
 void Particles::Update() {
@@ -123,7 +106,6 @@ void Particles::Draw(uint32_t textureHandle) {
 	// カメラ
 	if (camera_) {
 		camera_->Update();
-		//this->viewProjection_ = camera_->GetViewProjection();
 	}
 
 	// カメラ行列
@@ -171,7 +153,8 @@ void Particles::Draw(uint32_t textureHandle) {
 	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_); // VBVを設定
 
 	// DescriptorTableの設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(1, srvIndex_);
+	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
 	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(1));
 	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(2, textureHandle);
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, DirectionalLight::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());

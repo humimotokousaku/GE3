@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "ImGuiManager.h"
 
 Camera::~Camera() {
 
@@ -30,7 +31,8 @@ void Camera::Update() {
 	}
 	if (!Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_DOWN)) {
 		transform_.translate.y -= 0.01f;
-	}else if (Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_DOWN)) {
+	}
+	else if (Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_DOWN)) {
 		transform_.translate.z -= 0.01f;
 	}
 }

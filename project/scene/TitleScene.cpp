@@ -5,9 +5,13 @@
 #include "Lerp.h"
 
 void TitleScene::Initialize() {
+	sceneNum = TITLE_SCENE;
+	input_ = Input::GetInstance();
+
 	// テクスチャの読み込み
 	TextureManager::GetInstance()->LoadTexture("Engine/resources/uvChecker.png");
 	TextureManager::GetInstance()->LoadTexture("Engine/resources/monsterBall.png");
+	// srvの番号取得
 	uvcheckerTexture_ = TextureManager::GetInstance()->GetSrvIndex("Engine/resources/uvChecker.png");
 	monsterBallTexture_ = TextureManager::GetInstance()->GetSrvIndex("Engine/resources/monsterBall.png");
 
@@ -21,6 +25,24 @@ void TitleScene::Initialize() {
 	camera_->Initialize();
 	camera_->SetTranslate(Vector3{ 0,5,-20 });
 
+	/// particle
+
+	particles_ = std::make_unique<Particles>();
+	particles_->Initialize();
+	particles_->SetCamera(camera_.get());
+	// パーティクルの発生位置を指定
+	particles_->SetEmitterPos(Vector3{ 5,5,0 });
+
+	particles_1 = std::make_unique<Particles>();
+	particles_1->Initialize();
+	particles_1->SetCamera(camera_.get());
+	// パーティクルの発生位置を指定
+	particles_1->SetEmitterPos(Vector3{ 0,0,0 });
+
+#pragma region パーティクル以外の処理
+	// Sprite
+	//sprite_.reset(Sprite::Create("Engine/resources/uvChecker.png"));
+
 	// 平面
 	plane_ = std::make_unique<Object3D>();
 	plane_->Initialize();
@@ -31,29 +53,6 @@ void TitleScene::Initialize() {
 	axis_->Initialize();
 	axis_->SetModel("axis.obj");
 	axis_->SetCamera(camera_.get());
-
-#pragma region その他の処理
-
-	sceneNum = TITLE_SCENE;
-	input_ = Input::GetInstance();
-	//viewProjection_.Initialize();
-	//world_.Initialize();
-	//world_.translation_ = { 0,0,0 };
-
-	// Sprite
-	//sprite_.reset(Sprite::Create("Engine/resources/uvChecker.png"));
-
-	// particle
-	//particles_ = std::make_unique<Particles>();
-	//particles_->Initialize();
-	//particles_->SetCamera(camera_.get());
-	//// パーティクルの発生位置を指定
-	//particles_->SetEmitterPos(Vector3{ 5,5,0 });
-	//particles_1 = std::make_unique<Particles>();
-	//particles_1->Initialize();
-	//particles_1->SetCamera(camera_.get());
-	//// パーティクルの発生位置を指定
-	//particles_1->SetEmitterPos(Vector3{ 0,0,0 });
 
 	// アニメーション
 	//anim_ = std::make_unique<Animation>();
@@ -111,6 +110,12 @@ void TitleScene::Initialize() {
 }
 
 void TitleScene::Update() {
+	// パーティクルの更新処理
+	particles_->Update();
+	// パーティクルの更新処理
+	particles_1->Update();
+
+#pragma region パーティクル以外の処理
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		//sceneNum = GAME_SCENE;
 		//anim_->SetIsStart(true);
@@ -123,19 +128,9 @@ void TitleScene::Update() {
 	for (int i = 0; i < 2; i++) {
 		enemy_[i]->Update();
 		// 狙う対象に身体を向ける
-		//float radian = atan2(player_->model_->worldTransform.translation_.x - enemy_[i]->model_->worldTransform.translation_.x, player_->model_->worldTransform.translation_.z - enemy_[i]->model_->worldTransform.translation_.z);
-		//enemy_[i]->model_->worldTransform.rotation_.y = radian;
+		float radian = atan2(player_->model_->worldTransform.transform.translate.x - enemy_[i]->model_->worldTransform.transform.translate.x, player_->model_->worldTransform.transform.translate.z - enemy_[i]->model_->worldTransform.transform.translate.z);
+		enemy_[i]->model_->worldTransform.transform.rotate.y = radian;
 	}
-
-	//world_.UpdateMatrix();
-	//viewProjection_.UpdateViewMatrix();
-	//viewProjection_.TransferMatrix();
-
-	// パーティクルの更新処理
-	//particles_->Update();
-
-	// パーティクルの更新処理
-	//particles_1->Update();
 
 	// 当たり判定
 	collisionManager_->CheckAllCollisions();
@@ -176,24 +171,28 @@ void TitleScene::Update() {
 	ImGui::Text("SPACE:scene change");
 	ImGui::End();
 #endif
+
+
+#pragma endregion
 }
 
 void TitleScene::Draw() {
+
+#pragma region パーティクル以外の処理
 	axis_->Draw(uvcheckerTexture_);
 	plane_->Draw(uvcheckerTexture_);
-#pragma region その他の処理
 	//testWater_->Draw(world_, viewProjection_);
 	player_->Draw(uvcheckerTexture_);
 	for (int i = 0; i < 2; i++) {
 		enemy_[i]->Draw(monsterBallTexture_);
 	}
-	//particles_->Draw(PARTICLE);
-	//particles_1->Draw(PARTICLE);
 	//sprite_->Draw();
 #pragma endregion
+
+	particles_->Draw(uvcheckerTexture_);
+	particles_1->Draw(monsterBallTexture_);
 }
 
 void TitleScene::Finalize() {
-	//viewProjection_.constBuff_.ReleaseAndGetAddressOf();
-	//world_.constBuff_.ReleaseAndGetAddressOf();
+
 }
