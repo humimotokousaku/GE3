@@ -19,4 +19,5 @@ private:
 	Object3D* object_;
 	Camera* camera_;
 	cSphere sphere_;
+	cAABB aabb_;
 };

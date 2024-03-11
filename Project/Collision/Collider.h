@@ -25,6 +25,15 @@ public:
 	Vector3 GetSphereCenter() { return sphere_.center; }
 #pragma endregion
 
+#pragma region 立方体
+	// 立方体を取得
+	cAABB GetAABB() { return aabb_; }
+	// minの取得
+	Vector3 GetAABB_Min() { return aabb_.min; }
+	// maxの取得
+	Vector3 GetAABB_Max() { return aabb_.max; }
+#pragma endregion
+
 #pragma region カプセル
 	// カプセルの始点,終点,半径を取得
 	Capsule GetCapsule() { return capsule_; }
@@ -59,6 +68,15 @@ public:
 	void SetRadius(float radius) { sphere_.radius = radius; }
 	// 中心座標を設定
 	void SetSphereCenter(Vector3 center) { sphere_.center = center; }
+#pragma endregion
+
+#pragma region 立方体
+	// 立方体を設定
+	void SetAABB(cAABB aabb) { aabb_ = aabb; }
+	// minの設定
+	void SetAABB_Min(Vector3 min) { aabb_.min = min; }
+	// maxの設定
+	void SetAABB_Max(Vector3 max) { aabb_.max = max; }
 #pragma endregion
 
 #pragma region カプセル
@@ -104,9 +122,15 @@ public:
 private:
 	// 衝突半径
 	float radius_ = 1.0f;
+	// 球
 	cSphere sphere_ = {
 		{ 0,0,0 },
 		1.0f
+	};
+	// 立方体
+	cAABB aabb_ = {
+		{-1.0f,-1.0f,-1.0f},
+		{1.0f,1.0f,1.0f}
 	};
 	// カプセル
 	Capsule capsule_ = {

@@ -1,6 +1,7 @@
 #pragma once
 #include "CollisionConfig.h"
 #include "Collider.h"
+#include <algorithm>
 #include <list>
 
 class CollisionManager {

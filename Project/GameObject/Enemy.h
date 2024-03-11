@@ -1,13 +1,14 @@
 #pragma once
 #include "Line.h"
 #include "Collision/Collider.h"
+#include "Object3D.h"
 
 class Enemy : public Collider
 {
 public:
 	void Init();
 	void Update();
-	void Draw();
+	void Draw(uint32_t textureHandle);
 
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
@@ -18,6 +19,8 @@ public:
 
 private:
 	Line* line_;
+	Object3D* object_;
+	cSphere sphere_;
 	Camera* camera_;
 	Capsule capsule_;
 };

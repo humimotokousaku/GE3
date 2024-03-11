@@ -49,11 +49,13 @@ void TitleScene::Initialize() {
 	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 0,0,0 }, Vector3{ 0,5,0 }, 120, "PlaneAnim2",Easings::EaseOutBack);
 	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 0,5,0 }, Vector3{ 0,0,0 }, 120, "PlaneAnim3",Easings::EaseOutBack);
 
+	ModelManager::GetInstance()->LoadModel("skydome.obj");
+	ModelManager::GetInstance()->LoadModel("block.obj");
+
 	enemy_ = std::make_unique<Enemy>();
 	enemy_->SetCamera(camera_.get());
 	enemy_->Init();
 
-	ModelManager::GetInstance()->LoadModel("Skydome/skydome.obj");
 	player_ = std::make_unique<Player>();
 	player_->SetCamera(camera_.get());
 	player_->Init();
@@ -126,15 +128,15 @@ void TitleScene::Update() {
 }
 
 void TitleScene::Draw() {
-	axis_->Draw(UVCHEKER);
-	plane_->Draw(UVCHEKER);
+	//axis_->Draw(UVCHEKER);
+	//plane_->Draw(UVCHEKER);
 
-	enemy_->Draw();
+	enemy_->Draw(UVCHEKER);
 	player_->Draw();
 
-	particles_->Draw(PARTICLE);
+//	particles_->Draw(PARTICLE);
 	//particles_1->Draw(PARTICLE);
-	sprite_->Draw();
+	//sprite_->Draw();
 }
 
 void TitleScene::Finalize() {

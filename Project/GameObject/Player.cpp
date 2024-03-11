@@ -7,14 +7,18 @@ void Player::Init() {
 
 	object_->Initialize();
 	object_->SetCamera(camera_);
-	object_->SetModel("Skydome/skydome.obj");
-	SetCollisionPrimitive(kCollisionSphere);
+	object_->SetModel("block.obj");
+	SetCollisionPrimitive(kCollisionAABB);
 	sphere_ = {
-		{0,0.-10},
+		{0,0. - 0},
 		1.0f
 	};
-	SetSphere(sphere_);
-	object_->worldTransform.transform.translate.z = -10;
+	aabb_ = {
+		{1.0f,1.0f,1.0f},
+		{-1.0f,-1.0f,-1.0f}
+	};
+	SetAABB(aabb_);
+	object_->worldTransform.transform.translate.x = -5;
 }
 
 void Player::Update() {
