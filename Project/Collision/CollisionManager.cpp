@@ -128,6 +128,8 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 		f.y = (1.0f - t) * colliderA->GetStartPos().y + t * colliderA->GetEndPos().y;
 		f.z = (1.0f - t) * colliderA->GetStartPos().z + t * colliderA->GetEndPos().z;
 
+		t_ = f;
+
 		// 最近接点
 		Vector3 closestPoint = {
 			std::min(std::max(f.x, colliderB->GetWorldPosition().x + colliderB->GetAABB_Min().x), colliderB->GetWorldPosition().x + colliderB->GetAABB_Max().x),

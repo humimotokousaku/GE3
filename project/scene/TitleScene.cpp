@@ -25,6 +25,12 @@ void TitleScene::Initialize() {
 	axis_->SetModel("teapot.obj");
 	axis_->SetCamera(camera_.get());
 
+	ModelManager::GetInstance()->LoadModel("skydome.obj");
+	sphere_ = std::make_unique<Object3D>();
+	sphere_->Initialize();
+	sphere_->SetModel("skydome.obj");
+	sphere_->SetCamera(camera_.get());
+
 	// Sprite
 	sprite_.reset(Sprite::Create(UVCHEKER));
 
@@ -49,7 +55,6 @@ void TitleScene::Initialize() {
 	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 0,0,0 }, Vector3{ 0,5,0 }, 120, "PlaneAnim2",Easings::EaseOutBack);
 	anim_->SetAnimData(&plane_->worldTransform.transform.translate, Vector3{ 0,5,0 }, Vector3{ 0,0,0 }, 120, "PlaneAnim3",Easings::EaseOutBack);
 
-	ModelManager::GetInstance()->LoadModel("skydome.obj");
 	ModelManager::GetInstance()->LoadModel("block.obj");
 
 	enemy_ = std::make_unique<Enemy>();
@@ -88,6 +93,8 @@ void TitleScene::Update() {
 	//particles_1->Update();
 
 	collisionManager_->CheckAllCollisions();
+
+	sphere_->worldTransform.transform.translate = collisionManager_->GetT();
 
 #ifdef USE_IMGUI
 	ImGui::Begin("Animation");
@@ -133,6 +140,8 @@ void TitleScene::Draw() {
 
 	enemy_->Draw(UVCHEKER);
 	player_->Draw();
+
+	sphere_->Draw(UVCHEKER);
 
 //	particles_->Draw(PARTICLE);
 	//particles_1->Draw(PARTICLE);

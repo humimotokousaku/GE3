@@ -20,6 +20,7 @@ public:
 private:
 	Line* line_;
 	Object3D* object_;
+	Object3D* s_[2];
 	cSphere sphere_;
 	Camera* camera_;
 	Capsule capsule_;

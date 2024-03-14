@@ -26,12 +26,25 @@ void Camera::Update() {
 		transform_.translate.y += 0.01f;
 	}
 	else if (Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_UP)) {
-		transform_.translate.z += 0.01f;
+		transform_.translate.z += 0.1f;
 	}
 	if (!Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_DOWN)) {
 		transform_.translate.y -= 0.01f;
 	}else if (Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_DOWN)) {
-		transform_.translate.z -= 0.01f;
+		transform_.translate.z -= 0.1f;
+	}
+
+	if (Input::GetInstance()->PressKey(DIK_W)) {
+		transform_.rotate.x -= 0.01f;
+	}
+	if (Input::GetInstance()->PressKey(DIK_S)) {
+		transform_.rotate.x += 0.01f;
+	}
+	if (Input::GetInstance()->PressKey(DIK_D)) {
+		transform_.rotate.y += 0.01f;
+	}
+	if (Input::GetInstance()->PressKey(DIK_A)) {
+		transform_.rotate.y -= 0.01f;
 	}
 }
 

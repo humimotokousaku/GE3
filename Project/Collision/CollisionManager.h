@@ -40,7 +40,11 @@ public:
 		colliders_.push_back(collider); 
 	}
 
+	/// Getter
+	Vector3 GetT() { return t_; }
+
 private:
 	// コライダーリスト
 	std::list<Collider*> colliders_;
+	Vector3 t_;
 };
