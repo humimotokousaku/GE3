@@ -29,6 +29,8 @@ void Particles::Initialize() {
 
 	// SRVの作成
 	srvIndex_ = SrvManager::GetInstance()->Allocate();
+	instancingSrvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);
+	instancingSrvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
 	SrvManager::GetInstance()->CreateSRVforStructuredBuffer(srvIndex_, instancingResource_.Get(), kNumMaxInstance, sizeof(ParticleForGPU));
 
 	// 頂点データのメモリ確保

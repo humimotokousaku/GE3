@@ -3,8 +3,9 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "WinApp.h" 
+#include "SrvManager.h"
 
-PostEffect::PostEffect() : Sprite("Engine/resources/uvChecker.png")
+PostEffect::PostEffect()
 {
 
 }
@@ -78,11 +79,13 @@ void PostEffect::Initialize() {
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 	// デスクリプタヒープにSRV作成
-	uint32_t descriptorSizeSRV{};
-	descriptorSizeSRV = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	//uint32_t descriptorSizeSRV{};
+	//descriptorSizeSRV = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	//D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU{};
-	srvHandleCPU_ = GetCPUDescriptorHandle(descHeapSRV_, descriptorSizeSRV, 0);
-	srvHandleGPU_ = GetGPUDescriptorHandle(descHeapSRV_, descriptorSizeSRV, 0);
+	srvIndex_ = SrvManager::GetInstance()->Allocate();
+	srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);//GetCPUDescriptorHandle(descHeapSRV_, descriptorSizeSRV, 0);
+	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);//GetGPUDescriptorHandle(descHeapSRV_, descriptorSizeSRV, 0);
+	SrvManager::GetInstance()->CreateSRVforPostEffect(srvIndex_, texBuff_.Get(), srvDesc.Format);
 
 	directXCommon_->GetDevice()->CreateShaderResourceView(texBuff_.Get(),
 		&srvDesc,
@@ -110,7 +113,7 @@ void PostEffect::Initialize() {
 	// 深度バッファリソース設定
 	CD3DX12_RESOURCE_DESC depthResDesc =
 		CD3DX12_RESOURCE_DESC::Tex2D(
-			DXGI_FORMAT_D32_FLOAT,
+			DXGI_FORMAT_D24_UNORM_S8_UINT,
 			WinApp::kClientWidth_,
 			WinApp::kClientHeight_,
 			1, 0,
@@ -119,7 +122,7 @@ void PostEffect::Initialize() {
 		);
 	// 深度バッファの生成
 	D3D12_HEAP_PROPERTIES depthHeapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-	D3D12_CLEAR_VALUE clearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D32_FLOAT, 1.0F, 0);
+	D3D12_CLEAR_VALUE clearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D24_UNORM_S8_UINT, 1.0F, 0);
 	result = directXCommon_->GetDevice()->CreateCommittedResource(
 		&depthHeapProperties,
 		D3D12_HEAP_FLAG_NONE,
@@ -139,7 +142,7 @@ void PostEffect::Initialize() {
 	assert(SUCCEEDED(result));
 	// デスクリプタヒープにDSV作成
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	directXCommon_->GetDevice()->CreateDepthStencilView(depthBuff_.Get(),
 		&dsvDesc,
@@ -148,9 +151,24 @@ void PostEffect::Initialize() {
 	// 描画用のDescriptorHeapの設定
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> ppHeaps[] = { descHeapSRV_.Get() };
 	directXCommon_->GetCommandList()->SetDescriptorHeaps(1, ppHeaps->GetAddressOf());
+
+	SpriteInitialize();
 }
 
 void PostEffect::Draw() {
+#pragma region スプライトの大きさを決める 
+	// アンカーポイントから見た頂点座標
+	float left = (0.0f - anchorPoint_.x) * size_.x;
+	float right = (1.0f - anchorPoint_.x) * size_.x;
+	float top = (0.0f - anchorPoint_.y) * size_.y;
+	float bottom = (1.0f - anchorPoint_.y) * size_.y;
+	// 矩形のデータ
+	vertexData_[0].position = { left,bottom, 0.0f, 1.0f };// 左下
+	vertexData_[1].position = { left,top, 0.0f, 1.0f };// 左上
+	vertexData_[2].position = { right,bottom, 0.0f, 1.0f };// 右下
+	vertexData_[3].position = { right,top, 0.0f, 1.0f };// 右上
+#pragma endregion
+
 	// ワールド座標の更新
 	worldTransform_.UpdateMatrix();
 
@@ -167,12 +185,11 @@ void PostEffect::Draw() {
 	// worldTransform
 	directXCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform_.constBuff_->GetGPUVirtualAddress());
 	// viewProjection
-	directXCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection_.constBuff_->GetGPUVirtualAddress());
+	directXCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera_->GetViewProjection().constBuff_->GetGPUVirtualAddress());
 	directXCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraPosResource_.Get()->GetGPUVirtualAddress());
 
-	/// DescriptorTableの設定
-	// texture
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, srvHandleGPU_);
+	//// texture
+	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(2, srvIndex_);
 	// material
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
 	// ライティング
@@ -217,6 +234,96 @@ void PostEffect::PostDrawScene() {
 	directXCommon_->GetCommandList()->ResourceBarrier(1, &barrier);
 }
 
+void PostEffect::SpriteInitialize() {
+	textureManager_ = TextureManager::GetInstance();
+	psoManager_ = PipelineManager::GetInstance();
+
+	/// メモリ確保
+	// 頂点データ
+	CreateVertexResource();
+	CreateVertexBufferView();
+	// Index
+	CreateIndexResource();
+	CreateIndexBufferView();
+	// material
+	CreateMaterialResource();
+
+	// 1つ分のサイズを用意する
+	cameraPosResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Vector3)).Get();
+	// 書き込むためのアドレスを取得
+	cameraPosResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraPosData_));
+
+	// 書き込むためのアドレスを取得
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+
+	/// uvの設定
+	// 色
+	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	// Lightingするか
+	materialData_->enableLighting = false;
+	// uvTransform行列の初期化
+	materialData_->uvTransform = MakeIdentity4x4();
+	// uvを動かすための座標
+	uvTransform_ = {
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f}
+	};
+
+	/// 頂点座標の設定
+	//textureIndex_ = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
+
+	// サイズ指定
+	D3D12_RESOURCE_DESC resDesc = texBuff_->GetDesc();
+	textureSize_.x = static_cast<float>(resDesc.Width);
+	textureSize_.y = static_cast<float>(resDesc.Height);
+	size_ = textureSize_;
+
+	// アンカーポイントから見た頂点座標
+	float left = (0.0f - anchorPoint_.x) * size_.x;
+	float right = (1.0f - anchorPoint_.x) * size_.x;
+	float top = (0.0f - anchorPoint_.y) * size_.y;
+	float bottom = (1.0f - anchorPoint_.y) * size_.y;
+	// 矩形のデータ
+	vertexData_[0].position = { left,bottom, 0.0f, 1.0f };// 左下
+	vertexData_[1].position = { left,top, 0.0f, 1.0f };// 左上
+	vertexData_[2].position = { right,bottom, 0.0f, 1.0f };// 右下
+	vertexData_[3].position = { right,top, 0.0f, 1.0f };// 右上
+	// Index
+	indexData_[0] = 0;
+	indexData_[1] = 1;
+	indexData_[2] = 2;
+	indexData_[3] = 1;
+	indexData_[4] = 3;
+	indexData_[5] = 2;
+
+	// UVの頂点
+	float tex_left = textureLeftTop_.x / resDesc.Width;
+	float tex_right = (textureLeftTop_.x + textureSize_.x) / resDesc.Width;
+	float tex_top = textureLeftTop_.y / resDesc.Height;
+	float tex_bottom = (textureLeftTop_.y + textureSize_.y) / resDesc.Height;
+	// 頂点のUVに反映
+	vertexData_[0].texcoord = { tex_left, tex_bottom };
+	vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
+	vertexData_[1].texcoord = { tex_left, tex_top };
+	vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
+	vertexData_[2].texcoord = { tex_right, tex_bottom };
+	vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
+	vertexData_[3].texcoord = { tex_right, tex_top };
+	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
+
+	// アンカーポイントのスクリーン座標
+	worldTransform_.Initialize();
+	worldTransform_.transform.translate = { 0,0,1 };
+
+	// カメラ
+	camera_ = std::make_unique<Camera>();
+	camera_->Initialize();
+	camera_->GetViewProjection().constMap->projection = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth_), float(WinApp::kClientHeight_), 0.0f, 100.0f);
+	cameraPosData_ = camera_->GetTranslate();
+}
+
 D3D12_CPU_DESCRIPTOR_HANDLE PostEffect::GetCPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap.Get()->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += (descriptorSize * index);
@@ -227,6 +334,66 @@ D3D12_GPU_DESCRIPTOR_HANDLE PostEffect::GetGPUDescriptorHandle(const Microsoft::
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap.Get()->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += (descriptorSize * index);
 	return handleGPU;
+}
+
+
+Microsoft::WRL::ComPtr<ID3D12Resource> PostEffect::CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes) {
+	HRESULT hr;
+	// 頂点リソース用のヒープの設定
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD; // UploadHeapを使う
+	// 頂点リソースの設定
+	D3D12_RESOURCE_DESC vertexResourceDesc{};
+	// バッファソース。テクスチャの場合はまた別の設定をする
+	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc.Width = sizeInBytes; // リソースのサイズ。今回はVector4を3頂点分
+	// バッファの場合はこれからは1にする決まり
+	vertexResourceDesc.Height = 1;
+	vertexResourceDesc.DepthOrArraySize = 1;
+	vertexResourceDesc.MipLevels = 1;
+	vertexResourceDesc.SampleDesc.Count = 1;
+	// バッファの場合はこれにする決まり
+	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
+	// 実際に頂点リソースを作る
+	hr = device.Get()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
+		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(vertexResource.GetAddressOf()));
+	assert(SUCCEEDED(hr));
+
+	return vertexResource;
+}
+
+void PostEffect::CreateVertexResource() {
+	vertexResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(VertexData) * 4).Get();
+}
+
+void PostEffect::CreateVertexBufferView() {
+	// リソースの先頭のアドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_.Get()->GetGPUVirtualAddress();
+	// 使用するリソースのサイズは頂点3つ分のサイズ
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 4;
+	// 1頂点当たりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+}
+
+void PostEffect::CreateIndexResource() {
+	indexResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(uint32_t) * 6).Get();
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+}
+
+void PostEffect::CreateIndexBufferView() {
+	indexBufferView_.BufferLocation = indexResource_.Get()->GetGPUVirtualAddress();
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 6;
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+}
+
+void PostEffect::CreateMaterialResource() {
+	materialResource_ = CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Material)).Get();
+	// マテリアルにデータを書き込む
+	materialData_ = nullptr;
+	// 書き込むためのアドレスを取得
+	materialResource_.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 }
 
 const float PostEffect::clearColor_[4] = { 0.25f, 0.5f, 0.1f, 0.0f };

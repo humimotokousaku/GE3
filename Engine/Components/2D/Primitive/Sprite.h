@@ -74,7 +74,7 @@ public:
 	void ResetTextureSize() { textureSize_ = { 512.0f,512.0f }; }
 
 	// テクスチャのサイズをスプライトに合わせる
-	void AdjustTextureSize();
+	void AdjustTextureSize(std::string textureFilePath);
 
 protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes);

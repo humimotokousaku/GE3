@@ -102,10 +102,6 @@ void DirectXCommon::PreDraw() {
 
 	// 指定した深度で画面全体をクリアする
 	commandList_.Get()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-
-	// 描画用のDescriptorHeapの設定
-	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeaps[] = { srvDescriptorHeap_.Get() };
-	//commandList_.Get()->SetDescriptorHeaps(1, descriptorHeaps->GetAddressOf());
 }
 
 void DirectXCommon::PostDraw() {

@@ -60,7 +60,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.intermediateResource = UploadTextureData(textureData.resource, mipImages);
 	textureData.srvIndex = srvManager_->Allocate();
 	textureData.srvHandleCPU = srvManager_->GetCPUDescriptorHandle(textureData.srvIndex);
-	textureData.srvHandleCPU = srvManager_->GetCPUDescriptorHandle(textureData.srvIndex);
+	textureData.srvHandleGPU = srvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
 	srvManager_->CreateSRVforTexture2D(textureData.srvIndex, textureData.resource.Get(), textureData.metdata.format, textureData.metdata.mipLevels);
 }
 

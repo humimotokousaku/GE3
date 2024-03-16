@@ -40,8 +40,8 @@ void Framework::Initialize() {
 	ModelManager::GetInstance()->Initialize();
 
 	// ポストエフェクト
-	//postEffect_ = new PostEffect();
-	//postEffect_->Initialize();
+	postEffect_ = PostEffect::GetInstance();
+	postEffect_->Initialize();
 
 	/// Components
 	// 入力(キーボードとゲームパッド)
@@ -103,9 +103,14 @@ void Framework::Run() {
 			// 更新処理
 			Update();
 
+			postEffect_->PreDrawScene();
 			// 描画処理
 			Draw();
+			postEffect_->PostDrawScene();
 
+			// DirectXCommon
+			directXCommon_->PreDraw();
+			postEffect_->Draw();
 			// 描画後の処理
 			EndFrame();
 		}
@@ -131,8 +136,7 @@ void Framework::Finalize() {
 void Framework::BeginFrame() {
 	// キーの状態を取得
 	input_->Update();
-	// DirectXCommon
-	directXCommon_->PreDraw();
+
 	// SrvManager
 	srvManager_->PreDraw();
 	// PSO
