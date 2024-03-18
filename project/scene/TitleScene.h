@@ -43,6 +43,7 @@ private:
 	std::unique_ptr<Object3D> plane_;
 	std::unique_ptr<Object3D> axis_;
 	std::unique_ptr<Sprite> sprite_;
+	std::unique_ptr<Sprite> sprite_2;
 	std::unique_ptr<Particles> particles_;
 	std::unique_ptr<Particles> particles_1;
 	std::unique_ptr<Animation> anim_;

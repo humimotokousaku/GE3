@@ -3,37 +3,18 @@
 #include "WinApp.h"
 #include "ImGuiManager.h"
 #include "TextureManager.h"
-
 #include <dxcapi.h>
-#pragma comment(lib, "dxguid.lib")
-#pragma comment(lib, "dxcompiler.lib")
 
-enum BlendMode {
-	// ブレンドなし
-	kBlendModeNone,
-	// 通常αブレンド
-	kBlendModeNormal,
-	// 加算
-	kBlendModeAdd,
-	// 減算
-	kBlendModeSubtract,
-	// 乗算
-	kBlendModeMultiply,
-	// スクリーン
-	kBlendModeScreen,
-	// 利用してはいけない
-	kCountOfBlendMode,
-};
-
-class PipelineManager {
+class PostEffectPSO
+{
 public:
 	///
 	/// Default Method
 	///
-	
-	static PipelineManager* GetInstance();
 
-	~PipelineManager() = default;
+	static PostEffectPSO* GetInstance();
+
+	~PostEffectPSO() = default;
 
 	// エンジンの初期化
 	void Initialize();
@@ -49,8 +30,8 @@ public:
 	/// 
 
 	// Getter
-	Microsoft::WRL::ComPtr<ID3D12PipelineState>* GetGraphicsPipelineState() { return graphicsPipelineState_; }
-	Microsoft::WRL::ComPtr<ID3D12RootSignature>* GetRootSignature() { return rootSignature_; }
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> GetGraphicsPipelineState() { return graphicsPipelineState_; }
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> GetRootSignature() { return rootSignature_; }
 
 private:// プライベートな関数
 	// DXCの初期化
@@ -113,31 +94,24 @@ private:
 
 	ID3DBlob* errorBlob_;
 
-	static const int kMaxPSO = 7;
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_[kMaxPSO];
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[kMaxPSO][3];
-	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc_[kMaxPSO];
-	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_[kMaxPSO];
-	ID3DBlob* signatureBlob_[kMaxPSO];
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[2];
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc_;
+	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_;
+	ID3DBlob* signatureBlob_;
 
-	D3D12_RASTERIZER_DESC rasterizerDesc_[kMaxPSO];
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDescs_[kMaxPSO];
-	D3D12_BLEND_DESC blendDesc_[kMaxPSO];
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_[kMaxPSO];
-	D3D12_ROOT_PARAMETER rootParameters_[kMaxPSO][8];
-	D3D12_DESCRIPTOR_RANGE descriptorRange_[kMaxPSO][1];
-	D3D12_STATIC_SAMPLER_DESC staticSamplers_[kMaxPSO][1];
+	D3D12_RASTERIZER_DESC rasterizerDesc_;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDescs_;
+	D3D12_BLEND_DESC blendDesc_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_;
+	D3D12_ROOT_PARAMETER rootParameters_[4];
+	D3D12_DESCRIPTOR_RANGE descriptorRange_[1];
+
+	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
 
 	// 通常
 	IDxcBlob* vertexShaderBlob_;
 	IDxcBlob* pixelShaderBlob_;
-	// particle用
-	IDxcBlob* particleVertexShaderBlob_;
-	IDxcBlob* particlePixelShaderBlob_;
-	// ポストエフェクト用
-	IDxcBlob* PostEffectVertexShaderBlob_;
-	IDxcBlob* PostEffectPixelShaderBlob_;
-	IDxcBlob* scanLinePixelShaderBlob_;
 
 	D3D12_VIEWPORT viewport_;
 	D3D12_RECT scissorRect_;

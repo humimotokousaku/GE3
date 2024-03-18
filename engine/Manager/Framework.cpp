@@ -31,6 +31,9 @@ void Framework::Initialize() {
 	// 線のPSO
 	linePSO_ = LinePSO::GetInstance();
 	linePSO_->Initialize();
+	// ポストエフェクトのPSO
+	postEffectPSO_ = PostEffectPSO::GetInstance();
+	postEffectPSO_->Initialize();
 	// ImGuiの初期化
 	imGuiManager_ = new ImGuiManager();
 	imGuiManager_->Initialize(winApp_->GetHwnd());
@@ -72,16 +75,7 @@ void Framework::Initialize() {
 }
 
 void Framework::Update() {
-	if (Input::GetInstance()->TriggerKey(DIK_0)) {
-		audio_->SoundPlayWave(soundData1_, pos_, 1.0f, 1.0f);
-	}
 	pointLight_->ImGuiAdjustParameter();
-	ImGui::Begin("Audio");
-	if (ImGui::TreeNode("Emitter")) {
-		ImGui::DragFloat3("pos", &pos_.x, 0.01f, -10, 10);
-		ImGui::TreePop();
-	}
-	ImGui::End();
 }
 
 void Framework::Run() {

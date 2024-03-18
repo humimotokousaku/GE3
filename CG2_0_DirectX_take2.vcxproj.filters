@@ -309,6 +309,9 @@
     <ClCompile Include="Engine\Base\SrvManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Pso\PostEffectPSO.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\ImGui\imconfig.h">
@@ -482,6 +485,9 @@
     <ClInclude Include="Engine\Base\SrvManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Pso\PostEffectPSO.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\ImGui\LICENSE.txt">
@@ -498,6 +504,7 @@
     <None Include="engine\resources\sharder\Line.hlsli">
       <Filter>リソース ファイル</Filter>
     </None>
+    <None Include="Engine\resources\sharder\PostEffectTest.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="engine\resources\sharder\Object3d.PS.hlsl">
@@ -518,5 +525,7 @@
     <FxCompile Include="engine\resources\sharder\LinePS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Engine\resources\sharder\PostEffectTestVS.hlsl" />
+    <FxCompile Include="Engine\resources\sharder\PostEffectTestPS.hlsl" />
   </ItemGroup>
 </Project>

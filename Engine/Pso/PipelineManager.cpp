@@ -119,22 +119,15 @@ IDxcBlob* PipelineManager::CompileShader(
 	return shaderBlob;
 
 #pragma endregion
-
 }
 
 void PipelineManager::CreateDescriptorRange() {
-	for (int i = 0; i < kMaxPSO - 1; i++) {
+	for (int i = 0; i < kMaxPSO; i++) {
 		descriptorRange_[i][0].BaseShaderRegister = 0;
 		descriptorRange_[i][0].NumDescriptors = 1;
 		descriptorRange_[i][0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 		descriptorRange_[i][0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	}
-
-	// particle用
-	descriptorRangeForInstancing_[0].BaseShaderRegister = 0;
-	descriptorRangeForInstancing_[0].NumDescriptors = 1;
-	descriptorRangeForInstancing_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRangeForInstancing_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 }
 
 void PipelineManager::SettingSampler() {
@@ -153,12 +146,15 @@ void PipelineManager::SettingSampler() {
 }
 
 void PipelineManager::CreateRootParameter() {
+	CreateDescriptorRange();
+
 	for (int i = 0; i < kMaxPSO; i++) {
 		// material
 		rootParameters_[i][0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 		rootParameters_[i][0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 		rootParameters_[i][0].Descriptor.ShaderRegister = 0;
 
+		// パーティクル以外に適用
 		if (i != 6) {
 			// worldTransform
 			rootParameters_[i][1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -188,14 +184,13 @@ void PipelineManager::CreateRootParameter() {
 		rootParameters_[i][7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 		rootParameters_[i][7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 		rootParameters_[i][7].Descriptor.ShaderRegister = 4;
-
 		// カメラ位置
 		rootParameters_[i][5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 		rootParameters_[i][5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 		rootParameters_[i][5].Descriptor.ShaderRegister = 2;
 	}
 
-	CreateDescriptorRange();
+
 	// particle用
 
 	// VS(t0)
@@ -203,13 +198,13 @@ void PipelineManager::CreateRootParameter() {
 	rootParameters_[6][1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameters_[6][1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	rootParameters_[6][1].Descriptor.ShaderRegister = 0;
-	rootParameters_[6][1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing_;
-	rootParameters_[6][1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing_);
+	rootParameters_[6][1].DescriptorTable.pDescriptorRanges = descriptorRange_[6];
+	rootParameters_[6][1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_[6]);
 	// PS()
 	rootParameters_[6][2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameters_[6][2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[6][2].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing_;
-	rootParameters_[6][2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing_);
+	rootParameters_[6][2].DescriptorTable.pDescriptorRanges = descriptorRange_[6];
+	rootParameters_[6][2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_[6]);
 	// viewProjection
 	rootParameters_[6][4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameters_[6][4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
@@ -219,8 +214,6 @@ void PipelineManager::CreateRootParameter() {
 		descriptionRootSignature_[i].pParameters = rootParameters_[i];
 		descriptionRootSignature_[i].NumParameters = _countof(rootParameters_[i]);
 	}
-
-	//CraeteDescriptorTable();
 }
 
 void PipelineManager::CreateRootSignature() {
@@ -272,19 +265,27 @@ void PipelineManager::SettingInputLayout() {
 	inputElementDescs_[6][0].SemanticIndex = 0;
 	inputElementDescs_[6][0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	inputElementDescs_[6][0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
 	inputElementDescs_[6][1].SemanticName = "TEXCOORD";
 	inputElementDescs_[6][1].SemanticIndex = 0;
 	inputElementDescs_[6][1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs_[6][1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
 	inputElementDescs_[6][2].SemanticName = "COLOR";
 	inputElementDescs_[6][2].SemanticIndex = 0;
 	inputElementDescs_[6][2].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	inputElementDescs_[6][2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
 	inputLayoutDesc_[6].pInputElementDescs = inputElementDescs_[6];
 	inputLayoutDesc_[6].NumElements = _countof(inputElementDescs_[6]);
+
+	//inputElementDescs_[7][0].SemanticName = "POSITION";
+	//inputElementDescs_[7][0].SemanticIndex = 0;
+	//inputElementDescs_[7][0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	//inputElementDescs_[7][0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+	//inputElementDescs_[7][1].SemanticName = "TEXCOORD";
+	//inputElementDescs_[7][1].SemanticIndex = 0;
+	//inputElementDescs_[7][1].Format = DXGI_FORMAT_R32G32_FLOAT;
+	//inputElementDescs_[7][1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+	//inputLayoutDesc_[7].pInputElementDescs = inputElementDescs_[7];
+	//inputLayoutDesc_[7].NumElements = _countof(inputElementDescs_[7]);
 }
 
 void PipelineManager::SettingBlendState() {
@@ -331,6 +332,11 @@ void PipelineManager::SettingBlendState() {
 	blendDesc_[6].RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 	blendDesc_[6].RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 	blendDesc_[6].RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
+
+	// ポストエフェクト
+	//blendDesc_[7].RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	//blendDesc_[7].RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	//blendDesc_[7].RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 }
 
 void PipelineManager::SettingRasterizerState() {
@@ -351,6 +357,10 @@ void PipelineManager::PixelSharder() {
 	particlePixelShaderBlob_ = CompileShader(L"engine/resources/sharder/Particle.PS.hlsl",
 		L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(particlePixelShaderBlob_ != nullptr);
+	// ポストエフェクト
+	//PostEffectPixelShaderBlob_ = CompileShader(L"engine/resources/sharder/PostEffectTestPS.hlsl",
+	//	L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
+	//assert(PostEffectPixelShaderBlob_ != nullptr);
 }
 
 void PipelineManager::VertexSharder() {
@@ -363,6 +373,11 @@ void PipelineManager::VertexSharder() {
 	particleVertexShaderBlob_ = CompileShader(L"engine/resources/sharder/Particle.VS.hlsl",
 		L"vs_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(particleVertexShaderBlob_ != nullptr);
+
+	// ポストエフェクト
+	//PostEffectVertexShaderBlob_ = CompileShader(L"Engine/resources/sharder/PostEffectTestVS.hlsl",
+	//	L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
+	//assert(PostEffectVertexShaderBlob_ != nullptr);
 }
 
 void PipelineManager::CreatePSO() {
@@ -398,15 +413,22 @@ void PipelineManager::CreatePSO() {
 			graphicsPipelineStateDescs_[i].DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		}
 		// ポストエフェクト
-		else if (i == 7) {
-			graphicsPipelineStateDescs_[i].VS = { vertexShaderBlob_->GetBufferPointer(),
-			vertexShaderBlob_->GetBufferSize() }; // vertexShader
-			graphicsPipelineStateDescs_[i].PS = { pixelShaderBlob_->GetBufferPointer(),
-			pixelShaderBlob_->GetBufferSize() }; // pixelShader
-			// DepthStencilの設定
-			graphicsPipelineStateDescs_[i].DepthStencilState = DirectXCommon::GetInstance()->GetDepthStencilDesc();
-			graphicsPipelineStateDescs_[i].DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		}
+		//if (i == 7) {
+		//	graphicsPipelineStateDescs_[i].VS = { PostEffectVertexShaderBlob_->GetBufferPointer(),
+		//	vertexShaderBlob_->GetBufferSize() }; // vertexShader
+		//	graphicsPipelineStateDescs_[i].PS = { PostEffectPixelShaderBlob_->GetBufferPointer(),
+		//	pixelShaderBlob_->GetBufferSize() }; // pixelShader
+		//	// DepthStencilの設定
+		//	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+		//	// Depthの機能を有効化する
+		//	depthStencilDesc.DepthEnable = true;
+		//	// 書き込みをします
+		//	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		//	// 比較関数はLessEqual。つまり、近ければ描画される
+		//	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;//D3D12_COMPARISON_FUNC_LESS_EQUAL;
+		//	graphicsPipelineStateDescs_[i].DepthStencilState = depthStencilDesc;
+		//	graphicsPipelineStateDescs_[i].DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		//}
 
 		graphicsPipelineStateDescs_[i].BlendState = blendDesc_[i]; // blendState
 		graphicsPipelineStateDescs_[i].RasterizerState = rasterizerDesc_[i]; // rasterizerState

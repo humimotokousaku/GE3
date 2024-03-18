@@ -18,6 +18,8 @@ PostEffect* PostEffect::GetInstance() {
 
 void PostEffect::Initialize() {
 	directXCommon_ = DirectXCommon::GetInstance();
+	postEffectPSO_ = PostEffectPSO::GetInstance();
+
 	HRESULT result;
 
 	// テクスチャリソースの設定
@@ -174,29 +176,22 @@ void PostEffect::Draw() {
 
 	/// コマンドを積む
 	// RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(psoManager_->GetRootSignature()[1].Get());
-	DirectXCommon::GetInstance()->GetCommandList()->SetPipelineState(psoManager_->GetGraphicsPipelineState()[1].Get()); // PSOを設定
+	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootSignature(postEffectPSO_->GetRootSignature().Get());
+	DirectXCommon::GetInstance()->GetCommandList()->SetPipelineState(postEffectPSO_->GetGraphicsPipelineState().Get()); // PSOを設定
 	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// VBVを設定
 	directXCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	directXCommon_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 
-	// worldTransform
-	directXCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform_.constBuff_->GetGPUVirtualAddress());
-	// viewProjection
-	directXCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera_->GetViewProjection().constBuff_->GetGPUVirtualAddress());
-	directXCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraPosResource_.Get()->GetGPUVirtualAddress());
-
-	//// texture
-	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(2, srvIndex_);
 	// material
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_.Get()->GetGPUVirtualAddress());
-	// ライティング
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, DirectionalLight::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, PointLight::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(7, SpotLight::GetInstance()->GetSpotLightResource()->GetGPUVirtualAddress());
-
+	//// texture
+	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(1, srvIndex_);
+	// worldTransform
+	directXCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, worldTransform_.constBuff_->GetGPUVirtualAddress());
+	// viewProjection
+	directXCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, camera_->GetViewProjection().constBuff_->GetGPUVirtualAddress());
 
 	// 描画(DrawCall/ドローコール)。6頂点で1つのインスタンス
 	DirectXCommon::GetInstance()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
@@ -236,7 +231,6 @@ void PostEffect::PostDrawScene() {
 
 void PostEffect::SpriteInitialize() {
 	textureManager_ = TextureManager::GetInstance();
-	psoManager_ = PipelineManager::GetInstance();
 
 	/// メモリ確保
 	// 頂点データ
@@ -315,7 +309,7 @@ void PostEffect::SpriteInitialize() {
 
 	// アンカーポイントのスクリーン座標
 	worldTransform_.Initialize();
-	worldTransform_.transform.translate = { 0,0,1 };
+	worldTransform_.transform.translate = { 640,360,1 };
 
 	// カメラ
 	camera_ = std::make_unique<Camera>();

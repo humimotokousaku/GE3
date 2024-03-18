@@ -76,12 +76,12 @@ void Particles::Update() {
 		}
 
 		if (numInstance < kNumMaxInstance) {
-			// fieldの範囲内のparticleには加速度を適用
-			if (accField_.isActive) {
-				if (IsCollision(accField_.area, (*particleIterator).transform.translate)) {
-					(*particleIterator).vel = Add((*particleIterator).vel, Multiply(kDeltaTime, accField_.acc));
-				}
-			}
+			//// fieldの範囲内のparticleには加速度を適用
+			//if (accField_.isActive) {
+			//	if (IsCollision(accField_.area, (*particleIterator).transform.translate)) {
+			//		(*particleIterator).vel = Add((*particleIterator).vel, Multiply(kDeltaTime, accField_.acc));
+			//	}
+			//}
 			// 移動処理
 			(*particleIterator).transform.translate = Add((*particleIterator).transform.translate, Multiply(kDeltaTime, (*particleIterator).vel));
 

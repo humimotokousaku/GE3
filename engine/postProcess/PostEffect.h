@@ -2,6 +2,7 @@
 #include "Sprite.h"
 #include "DirectXCommon.h"
 #include "Camera.h"
+#include "PostEffectPSO.h"
 #include <Windows.h>
 
 class PostEffect {
@@ -66,7 +67,7 @@ private:
 	// 基本機能
 	DirectXCommon* directXCommon_;
 	TextureManager* textureManager_;
-	PipelineManager* psoManager_;
+	PostEffectPSO* postEffectPSO_;
 
 	// テクスチャバッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> texBuff_;

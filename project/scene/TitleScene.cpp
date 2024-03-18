@@ -41,7 +41,8 @@ void TitleScene::Initialize() {
 
 #pragma region パーティクル以外の処理
 	// Sprite
-	//sprite_.reset(Sprite::Create("Engine/resources/uvChecker.png"));
+	sprite_.reset(Sprite::Create("Engine/resources/uvChecker.png"));
+	sprite_2.reset(Sprite::Create("Engine/resources/monsterBall.png"));
 
 	// 平面
 	plane_ = std::make_unique<Object3D>();
@@ -186,7 +187,8 @@ void TitleScene::Draw() {
 	for (int i = 0; i < 2; i++) {
 		enemy_[i]->Draw(monsterBallTexture_);
 	}
-	//sprite_->Draw();
+	sprite_->Draw();
+	sprite_2->Draw();
 #pragma endregion
 
 	particles_->Draw(uvcheckerTexture_);

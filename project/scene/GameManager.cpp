@@ -41,7 +41,7 @@ void GameManager::Update() {
 #ifdef USE_IMGUI
 	// FPSカウンターの表示
 	ImGui::Begin("Control panel");
-	//ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
+	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
 	ImGui::End();
 #endif // USE_IMGUI
 }

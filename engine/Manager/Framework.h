@@ -9,6 +9,7 @@
 // PSO
 #include "PipelineManager.h"
 #include "LinePSO.h"
+#include "PostEffectPSO.h"
 
 // Base
 #include "WinApp.h"
@@ -77,6 +78,7 @@ protected:
 	// PSO
 	PipelineManager* pipelineManager_;
 	LinePSO* linePSO_;
+	PostEffectPSO* postEffectPSO_;
 
 	PostEffect* postEffect_;
 
