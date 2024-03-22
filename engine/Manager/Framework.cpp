@@ -43,8 +43,11 @@ void Framework::Initialize() {
 	ModelManager::GetInstance()->Initialize();
 
 	// ポストエフェクト
-	postEffect_ = PostEffect::GetInstance();
+	postEffect_ = new PostEffect();
 	postEffect_->Initialize();
+	postEffect_2 = new PostEffect();
+	postEffect_2->Initialize();
+
 
 	/// Components
 	// 入力(キーボードとゲームパッド)
@@ -65,13 +68,6 @@ void Framework::Initialize() {
 	soundData1_ = audio_->SoundLoadWave("Engine/resources/fanfare.wav");
 	pos_ = { 0,1,1 };
 	audio_->Initialize(soundData1_);
-	//HRESULT result;
-	//// Xaudio2エンジンのインスタンスを生成
-	//result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
-	//// マスターボイスを生成
-	//result = xAudio2_->CreateMasteringVoice(&masterVoice_);
-	// 音声再生
-	//audio_->SoundPlayWave(soundData1_, 1.0f);
 }
 
 void Framework::Update() {
@@ -97,11 +93,22 @@ void Framework::Run() {
 			// 更新処理
 			Update();
 
+			ImGui::Begin("PostEffect");
+			ImGui::DragFloat3("pos", &postEffect_->worldTransform_.transform.translate.x, 1, -1280, 1280);
+			ImGui::End();
+
+			// 出力結果をテクスチャにする
 			postEffect_->PreDrawScene();
 			// 描画処理
 			Draw();
 			postEffect_->PostDrawScene();
 
+			// 1パス目を描画
+			//postEffect_2->PreDrawScene();
+			//postEffect_->Draw();
+			//postEffect_2->PostDrawScene();
+
+			// 2パス目を描画
 			// DirectXCommon
 			directXCommon_->PreDraw();
 			postEffect_->Draw();
@@ -119,6 +126,8 @@ void Framework::Finalize() {
 	ModelManager::GetInstance()->Finalize();
 	// ImGui
 	imGuiManager_->Finalize();
+	delete postEffect_;
+	delete postEffect_2;
 	textureManager_->Finalize();
 	//delete srvManager_;
 	directXCommon_->Finalize();

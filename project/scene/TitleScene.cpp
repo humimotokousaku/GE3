@@ -187,8 +187,8 @@ void TitleScene::Draw() {
 	for (int i = 0; i < 2; i++) {
 		enemy_[i]->Draw(monsterBallTexture_);
 	}
-	sprite_->Draw();
-	sprite_2->Draw();
+	//sprite_->Draw();
+	//sprite_2->Draw();
 #pragma endregion
 
 	particles_->Draw(uvcheckerTexture_);

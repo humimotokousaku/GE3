@@ -81,9 +81,6 @@ void PostEffect::Initialize() {
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 	// デスクリプタヒープにSRV作成
-	//uint32_t descriptorSizeSRV{};
-	//descriptorSizeSRV = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	//D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU{};
 	srvIndex_ = SrvManager::GetInstance()->Allocate();
 	srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);//GetCPUDescriptorHandle(descHeapSRV_, descriptorSizeSRV, 0);
 	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);//GetGPUDescriptorHandle(descHeapSRV_, descriptorSizeSRV, 0);

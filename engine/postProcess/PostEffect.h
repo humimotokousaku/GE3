@@ -63,6 +63,9 @@ private:
 
 	void CreateMaterialResource();
 
+public:
+	WorldTransform worldTransform_;
+
 private:
 	// 基本機能
 	DirectXCommon* directXCommon_;
@@ -106,7 +109,7 @@ private:
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_;
 	uint32_t* indexData_ = nullptr;
 	// Sprite
-	WorldTransform worldTransform_;
+
 	ViewProjection viewProjection_;
 
 	// 画像の中心点
