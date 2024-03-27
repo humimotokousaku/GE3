@@ -45,9 +45,6 @@ void Framework::Initialize() {
 	// ポストエフェクト
 	postEffect_ = new PostEffect();
 	postEffect_->Initialize();
-	//postEffect_2 = new PostEffect();
-	//postEffect_2->Initialize();
-
 
 	/// Components
 	// 入力(キーボードとゲームパッド)
@@ -103,11 +100,6 @@ void Framework::Run() {
 			Draw();
 			postEffect_->PostDrawScene();
 
-			// 1パス目を描画
-			//postEffect_2->PreDrawScene();
-			//postEffect_->Draw();
-			//postEffect_2->PostDrawScene();
-
 			// 2パス目を描画
 			// DirectXCommon
 			directXCommon_->PreDraw();
@@ -127,9 +119,7 @@ void Framework::Finalize() {
 	// ImGui
 	imGuiManager_->Finalize();
 	delete postEffect_;
-	//delete postEffect_2;
 	textureManager_->Finalize();
-	//delete srvManager_;
 	directXCommon_->Finalize();
 	CloseWindow(winApp_->GetHwnd());
 	// Textureのゲーム終了処理
