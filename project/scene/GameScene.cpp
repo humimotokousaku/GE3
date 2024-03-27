@@ -1,13 +1,18 @@
 #include "GameScene.h"
 #include "GameManager.h"
 
+GameScene::GameScene() {
+	int a = 1;
+	a;
+}
+
 void GameScene::Initialize() {
 	sceneNum = GAME_SCENE;
 }
 
 void GameScene::Update() {
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		sceneNum = GAMEOVER_SCENE;
+		sceneNum = TITLE_SCENE;
 	}
 #ifdef USE_IMGUI
 

@@ -111,8 +111,7 @@ private:// メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_;
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_;
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];
-	// srv
-	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_;
+
 	// Depth
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_;
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_;

@@ -55,6 +55,7 @@ private:
 	// テクスチャ
 	uint32_t uvcheckerTexture_;
 	uint32_t monsterBallTexture_;
+	uint32_t particleTexture_;
 
 	int textureNum_;
 	Input* input_;

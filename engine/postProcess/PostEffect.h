@@ -6,6 +6,19 @@
 #include <Windows.h>
 
 class PostEffect {
+private:// 構造体
+	struct RenderingTextureData {
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
+		uint32_t srvIndex;
+		D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU;
+		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;
+	};
+
+	enum PostEffectType {
+		NORMAL,
+		HIGHINTENSITY,
+		POSTEFFECT_COUNT
+	};
 public:
 	/// <summary>
 	/// コンストラクタ
@@ -42,13 +55,11 @@ public:
 	/// <summary>
 	/// スプライトの初期化(現状のSpriteクラスだとテクスチャの読み込みをしなくてはいけないので新たに作る)
 	/// </summary>
-	void SpriteInitialize();
+	void SpriteInitialize(RenderingTextureData texData);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descriptorHeap, uint32_t descriptorSize, uint32_t index);
-
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetSrvDescriptorHeap() { return descHeapSRV_.Get(); }
 
 private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes);
@@ -63,31 +74,44 @@ private:
 
 	void CreateMaterialResource();
 
-public:
+	// テクスチャを作成
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureBufferResource();
+
+	// SRVの作成
+	RenderingTextureData CreateSRV(RenderingTextureData texData);
+
+	// RTVの作成
+	void CreateRTV(RenderingTextureData texData, uint32_t index);
+
+	// バリアを張る
+	void SetBarrier(Microsoft::WRL::ComPtr<ID3D12Resource> texBuff, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState, UINT numBarrier);
+
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateRTVDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12Device>& device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
+
+public:// 定数
+	// 画面クリアカラー
+	static const float clearColor_[4];
+
+public:// プライベートな変数
 	WorldTransform worldTransform_;
 
-private:
+private:// パブリックな変数
 	// 基本機能
 	DirectXCommon* directXCommon_;
-	TextureManager* textureManager_;
 	PostEffectPSO* postEffectPSO_;
 
 	// テクスチャバッファ
-	Microsoft::WRL::ComPtr<ID3D12Resource> texBuff_;
-	// SRV用のデスクリプタヒープ
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapSRV_;
-	uint32_t srvIndex_;
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU_;
+	RenderingTextureData texBuff_;
+	// 高輝度テクスチャ
+	//RenderingTextureData highIntensityTexBuff_;
+
 	// 深度バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> depthBuff_;
 	// RTV用のデスクリプタヒープ
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapRTV_;
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_;
 	// DSV用のデスクリプタヒープ
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapDSV_;
-
-	// 画面クリアカラー
-	static const float clearColor_[4];
 
 #pragma region スプライト
 	// カメラ

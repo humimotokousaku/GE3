@@ -6,6 +6,7 @@ class GameScene : public IScene
 {
 public:
 	~GameScene()override = default;
+	GameScene();
 
 	// 初期化
 	void Initialize()override;

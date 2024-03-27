@@ -27,9 +27,9 @@ public:
 	// Structured Buffer用
 	void CreateSRVforStructuredBuffer(uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
 	// ポストエフェクト用
-	void CreateSRVforPostEffect(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT format);
+	void CreateSRVforPostEffect(uint32_t srvIndex, ID3D12Resource* pResource);
 
-	/// Getter
+	//*** Getter ***//
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index) {
 		D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
@@ -52,7 +52,7 @@ public:
 		return true;
 	}
 
-	/// Setter
+	//*** Setter ***//
 
 	void SetGraphicsRootDesctiptorTable(UINT rootParameterIndex, uint32_t srvIndex);
 

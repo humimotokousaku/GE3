@@ -76,6 +76,12 @@ public:
 	// テクスチャのサイズをスプライトに合わせる
 	void AdjustTextureSize(std::string textureFilePath);
 
+	// このスプライトを背景として扱う
+	void SetIsBackGround() { worldTransform_.transform.translate.z = 100000; }
+
+	// 色を設定
+	void SetColor(Vector4 color) { materialData_->color = color; }
+
 protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(const Microsoft::WRL::ComPtr<ID3D12Device>& device, size_t sizeInBytes);
 

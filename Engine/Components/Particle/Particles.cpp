@@ -89,6 +89,9 @@ void Particles::Update() {
 			float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
 			(*particleIterator).color.w = alpha;
 			instancingData_[numInstance].color = (*particleIterator).color;
+			instancingData_[numInstance].color.x = 1;
+			instancingData_[numInstance].color.y = 0;
+			instancingData_[numInstance].color.z = 0;
 			++numInstance;
 		}
 

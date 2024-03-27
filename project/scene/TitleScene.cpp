@@ -11,9 +11,11 @@ void TitleScene::Initialize() {
 	// テクスチャの読み込み
 	TextureManager::GetInstance()->LoadTexture("Engine/resources/uvChecker.png");
 	TextureManager::GetInstance()->LoadTexture("Engine/resources/monsterBall.png");
+	TextureManager::GetInstance()->LoadTexture("Engine/resources/circle.png");
 	// srvの番号取得
 	uvcheckerTexture_ = TextureManager::GetInstance()->GetSrvIndex("Engine/resources/uvChecker.png");
 	monsterBallTexture_ = TextureManager::GetInstance()->GetSrvIndex("Engine/resources/monsterBall.png");
+	particleTexture_ = TextureManager::GetInstance()->GetSrvIndex("Engine/resources/circle.png");
 
 	// objモデル
 	ModelManager::GetInstance()->LoadModel("plane.obj");
@@ -42,6 +44,12 @@ void TitleScene::Initialize() {
 #pragma region パーティクル以外の処理
 	// Sprite
 	sprite_.reset(Sprite::Create("Engine/resources/uvChecker.png"));
+	sprite_->SetIsBackGround();
+	Vector4 color = { 0,0,0,1 };
+	sprite_->SetColor(color);
+	sprite_->SetPos(Vector2{ 640,360 });
+	sprite_->SetSize(Vector2{ 1280,720 });
+
 	sprite_2.reset(Sprite::Create("Engine/resources/monsterBall.png"));
 
 	// 平面
@@ -118,7 +126,7 @@ void TitleScene::Update() {
 
 #pragma region パーティクル以外の処理
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		//sceneNum = GAME_SCENE;
+		sceneNum = GAME_SCENE;
 		//anim_->SetIsStart(true);
 	}
 
@@ -187,12 +195,12 @@ void TitleScene::Draw() {
 	for (int i = 0; i < 2; i++) {
 		enemy_[i]->Draw(monsterBallTexture_);
 	}
-	//sprite_->Draw();
+	sprite_->Draw();
 	//sprite_2->Draw();
 #pragma endregion
 
-	particles_->Draw(uvcheckerTexture_);
-	particles_1->Draw(monsterBallTexture_);
+	particles_->Draw(particleTexture_);
+	particles_1->Draw(particleTexture_);
 }
 
 void TitleScene::Finalize() {
