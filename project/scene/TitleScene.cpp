@@ -28,7 +28,7 @@ void TitleScene::Update() {
 		sceneNum = GAME_SCENE;
 	}
 
-	ImGui::Begin(" ");
+	ImGui::Begin("Scene2");
 	ImGui::Text("SPACE:Scene Change");
 	ImGui::End();
 }
