@@ -17,24 +17,24 @@ void Camera::Initialize() {
 
 void Camera::Update() {
 	UpdateMatrix();
-	if (Input::GetInstance()->PressKey(DIK_RIGHT)) {
-		transform_.translate.x += 0.01f;
-	}
-	if (Input::GetInstance()->PressKey(DIK_LEFT)) {
-		transform_.translate.x -= 0.01f;
-	}
-	if (!Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_UP)) {
-		transform_.translate.y += 0.01f;
-	}
-	else if (Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_UP)) {
-		transform_.translate.z += 0.01f;
-	}
-	if (!Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_DOWN)) {
-		transform_.translate.y -= 0.01f;
-	}
-	else if (Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_DOWN)) {
-		transform_.translate.z -= 0.01f;
-	}
+	//if (Input::GetInstance()->PressKey(DIK_RIGHT)) {
+	//	transform_.translate.x += 0.01f;
+	//}
+	//if (Input::GetInstance()->PressKey(DIK_LEFT)) {
+	//	transform_.translate.x -= 0.01f;
+	//}
+	//if (!Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_UP)) {
+	//	transform_.translate.y += 0.01f;
+	//}
+	//else if (Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_UP)) {
+	//	transform_.translate.z += 0.01f;
+	//}
+	//if (!Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_DOWN)) {
+	//	transform_.translate.y -= 0.01f;
+	//}
+	//else if (Input::GetInstance()->PressKey(DIK_SPACE) && Input::GetInstance()->PressKey(DIK_DOWN)) {
+	//	transform_.translate.z -= 0.01f;
+	//}
 }
 
 void Camera::CreateViewProjection() {

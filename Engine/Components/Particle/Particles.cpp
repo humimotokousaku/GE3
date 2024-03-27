@@ -89,9 +89,6 @@ void Particles::Update() {
 			float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
 			(*particleIterator).color.w = alpha;
 			instancingData_[numInstance].color = (*particleIterator).color;
-			instancingData_[numInstance].color.x = 1;
-			instancingData_[numInstance].color.y = 0;
-			instancingData_[numInstance].color.z = 0;
 			++numInstance;
 		}
 
@@ -159,11 +156,8 @@ void Particles::Draw(uint32_t textureHandle) {
 
 	// DescriptorTableの設定
 	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(1, srvIndex_);
-	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
-	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(1));
 	SrvManager::GetInstance()->SetGraphicsRootDesctiptorTable(2, textureHandle);
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, DirectionalLight::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
-	//DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, PointLight::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
 
 	// マテリアルCBufferの場所を設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());

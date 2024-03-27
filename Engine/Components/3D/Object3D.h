@@ -44,6 +44,9 @@ public:
 	// モデルのセット
 	void SetModel(const std::string& filePath) { model_ = ModelManager::GetInstance()->FindModel(filePath); }
 
+	// ライティングの設定
+	void SetIsLighting(bool isActive) { model_->SetIsLighting(isActive); }
+
 public:
 	WorldTransform worldTransform;
 	Camera* camera_;

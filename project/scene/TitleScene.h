@@ -28,9 +28,7 @@ public:
 	/// 
 
 private:
-	std::unique_ptr<Sprite> sprite_;
-	// テクスチャ
-	uint32_t titleNameTexture_;
+	std::array<std::unique_ptr<Sprite>, 3u> sprite_;
 
 	Input* input_;
 };
