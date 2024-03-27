@@ -71,7 +71,7 @@ void Framework::Initialize() {
 }
 
 void Framework::Update() {
-	pointLight_->ImGuiAdjustParameter();
+	//pointLight_->ImGuiAdjustParameter();
 }
 
 void Framework::Run() {
@@ -93,9 +93,9 @@ void Framework::Run() {
 			// 更新処理
 			Update();
 
-			ImGui::Begin("PostEffect");
-			ImGui::DragFloat3("pos", &postEffect_->worldTransform_.transform.translate.x, 1, -1280, 1280);
-			ImGui::End();
+			//ImGui::Begin("PostEffect");
+			//ImGui::DragFloat3("pos", &postEffect_->worldTransform_.transform.translate.x, 1, -1280, 1280);
+			//ImGui::End();
 
 			// 出力結果をテクスチャにする
 			postEffect_->PreDrawScene();
